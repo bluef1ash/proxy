@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>YY影视智能采集 - 官方网站</title>
+<link href="images/css.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="js/jquery.js"></script>
+<!--<link href="js/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="js/dist/js/bootstrap.min.js"></script>-->
+<script type="text/javascript" src="js/collection.js"></script>
+<script type="text/javascript">
+$(function(){
+	//注册出弹框
+	$( '.register' ).click( function () {
+		var obj = $( '#register' );
+		dialog( obj );
+		obj.find( 'input[type=submit]' ).hover( function () {
+			$( this ).addClass( 'reg-btn-cur' );
+		}, function () {
+			$( this ).removeClass( 'reg-btn-cur' );
+		} );
+		return false;
+	} );
+
+	$( '#login-now' ).click( function () {
+		$( '#register' ).fadeOut();
+		dialog( $( '#login' ) );
+
+		return false;
+	} );
+	//登录弹出框
+	$( '.login' ).click( function () {
+		var obj = $( '#login' );
+		dialog( obj );
+
+		obj.find( 'input[type=submit]' ).hover( function () {
+			$( this ).addClass( 'login-btn-cur' );
+		}, function () {
+			$( this ).removeClass( 'login-btn-cur' );
+		} );
+
+		return false;
+	} );
+
+	$( '#regis-now' ).click( function () {
+		$( '#login' ).fadeOut();
+		dialog( $( '#register' ) );
+
+		return false;
+	} );
+
+
+	//关闭弹出框
+	$( '.close-window' ).click( function () {
+		$( this ).parent().parent().fadeOut();
+		$( '#background' ).hide();
+
+		return false;
+	} );
+});
+function dialog (obj) {
+	obj.css( {
+		left : ( $( window ).width() - obj.width() ) / 2,
+		top : $( document ).scrollTop() + ( $( window ).height() - obj.height() ) / 2
+	} ).fadeIn();
+
+	$( '#background' ).css( {
+		opacity : 0.3,
+    	filter : 'Alpha(Opacity = 30)',
+		'height' : $( document ).height()
+	} ).show();
+	$('#myDropdown').dropdown();
+}
+function startgo(url){
+	var websiteText=document.collect.websiteText;
+	websiteText.value=url;
+}
+</script>
+</head>
+<body>
+<div class="head">
+	<div class="top-bar-right">
+		您好，欢迎来到YY影视智能采集！[<a href="#" title="登录" class="login">登录</a>] [<a href="#" title="免费注册" class="register">免费注册</a>] | <a href="#" title="新手入门">新手入门</a> <a href="#" title="偏好设置">偏好设置</a> <a href="#" title="微博">微博</a>
+	</div>
+	<div id='register' class='hidden'>
+		<div class='reg-title'>
+			<p>
+				欢迎注册YY影视智能采集
+			</p>
+			<a href="" title='关闭' class='close-window'></a>
+		</div>
+		<div id='reg-wrap'>
+			<div class='reg-left'>
+				<ul>
+					<li><span>账号注册</span></li>
+				</ul>
+				<div class='reg-l-bottom'>
+					已有账号，<a href="" id='login-now'>马上登录</a>
+				</div>
+			</div>
+			<div class='reg-right'>
+				<form action="" method='post' name='register'>
+					<ul>
+						<li>
+							<label for="reg-uname">用户名</label>
+							<input type="text" name='username' id='reg-uname'/>
+							<span>2-14个字符：字母、数字或中文</span> </li>
+						<li>
+							<label for="reg-pwd">密码</label>
+							<input type="password" name='pwd' id='reg-pwd'/>
+							<span>6-20个字符:字母、数字或下划线 _</span> </li>
+						<li>
+							<label for="reg-pwded">确认密码</label>
+							<input type="password" name='pwded' id='reg-pwded'/>
+							<span>请再次输入密码</span> </li>
+						<li>
+							<label for="reg-verify">验证码</label>
+							<input type="text" name='verify' id='reg-verify'/>
+							<img src="" width='99' height='35' alt="验证码" id='verify-img'/> <span>请输入图中的字母或数字，不区分大小写</span> </li>
+						<li class='submit'>
+							<input type="submit" value='立即注册'/>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<!----------登录框---------->
+	<div id='login' class='hidden'>
+		<div class='login-title'>
+			<p>
+				欢迎您登录YY影视智能采集
+			</p>
+			<a href="" title='关闭' class='close-window'></a>
+		</div>
+		<div class='login-form'>
+			<span id='login-msg'></span> 
+			<!-- 登录FORM -->
+			<form action="" method='post' name='login'>
+				<ul>
+					<li>
+						<label for="login-acc">账号</label>
+						<input type="text" name='account' class='input' id='login-acc'/>
+					</li>
+					<li>
+						<label for="login-pwd">密码</label>
+						<input type="password" name='pwd' class='input' id='login-pwd'/>
+					</li>
+					<li class='login-auto'>
+						<label for="auto-login">
+							<input type="checkbox" checked='checked' name='auto'  id='auto-login'/>
+							&nbsp;下一次自动登录 </label>
+						<a href="" id='regis-now'>注册新账号</a> </li>
+					<li>
+						<input type="submit" value='' id='login-btn'/>
+					</li>
+				</ul>
+			</form>
+		</div>
+	</div>
+	
+	<!--背景遮罩-->
+	<div id='background' class='hidden'>
+	</div>
+	<div class="title">
+		<div class="title"> <a href="index.html" title="访问首页"><img src="images/logo.png" alt="影片采集系统"></a> </div>
+	<a href="index.html" title="访问首页"></a></div>
+</div>
+<div class="main">
+		<form action="" method="post" name="collect">
+	<div class="nav-srh">
+			<span>
+			<input id="kw" type="text" name="websiteText">
+			</span><span>
+			<input class="bn-srh" type="submit" value="开始">
+			</span>
+     		
+		
+	</div>
+<ul class="update_way">
+					<li>更新方式：
+						<label>
+							<input name="update" type="radio" value="static" checked>
+							静态更新 </label>
+						<label>
+							<input name="update" type="radio" value="auto">
+							自动更新 </label>
+					</li>
+					<li class="collection">
+						<label style="float:left">
+							<input name="collection" type="checkbox" value="collection">
+							采集合集 </label>
+						<dl id="collection_type">
+							<dt>
+								<label>
+									<input name="collection_type" type="radio" value="odd" checked>
+									单集</label>
+								<label>
+									<input name="collection_type" type="radio" value="plural">
+									多集</label>
+							</dt>
+							<dt><a href="#" id="delete_tmp" title="清除缓存数据">清除缓存</a></dt>
+						</dl>
+					</li>
+				</ul></form>
+	<div class="about">
+		<ul class="gn">
+			<li><a href="#" title="新手入门">新手入门</a></li>
+			<li><a href="#" title="偏好设置">偏好设置</a></li>
+			<li><a href="#" title="有问必答">有问必答</a></li>
+		</ul>
+		<p class="sitefx">
+			<strong>地址示例：</strong><a href="javascript:startgo('http://www.tudou.com/programs/view/ubrrVcYGweA/');">http://www.tudou.com/programs/view/ubrrVcYGweA/</a>
+		</p>
+		<table border="1" width="700px" class="videotype">
+			<caption class="table_caption">
+			常用网址
+			</caption>
+			<tbody class="m">
+				<tr>
+					<td width="20%" height="35"><a target="_blank" href="#">电影</a></td>
+					<td width="20%"><a target="_blank" href="#">电视剧</a></td>
+					<td width="20%"><a target="_blank" href="#">动漫</a></td>
+					<td width="20%"><a target="_blank" href="#">综艺</a></td>
+					<td width="20%"><a target="_blank" href="#">音乐专辑</a></td>
+				</tr>
+				<tr>
+					<td height="35"><a target="_blank" href="http://www.youku.com/">优酷网</a></td>
+					<td height="35"><a target="_blank" href="http://www.tudou.com/">土豆网</a></td>
+					<td height="35"><a target="_blank" href="http://www.iqiyi.com/">爱奇艺</a></td>
+					<td height="35"><a target="_blank" href="http://tv.sohu.com/">搜狐视频</a></td>
+					<td height="35"><a target="_blank" href="http://v.qq.com/">腾讯视频</a></td>
+				</tr>
+				<tr>
+					<td height="35"><a target="_blank" href="http://www.letv.com/">乐视网</a></td>
+					<td height="35"><a target="_blank" href="http://www.cntv.cn/">CNTV</a></td>
+					<td height="35"><a target="_blank" href="http://www.56.com/">56网</a></td>
+					<td height="35"><a target="_blank" href="#">网易公开课</a></td>
+					<td height="35"><a target="_blank" href="http://www.kankan.com/">迅雷看看</a></td>
+				</tr>
+				<tr>
+					<td height="35"><a target="_blank" href="http://video.sina.com.cn/movie/">新浪大片</a></td>
+					<td height="35"><a target="_blank" href="http://www.pps.tv/">PPS</a></td>
+					<td height="35"><a target="_blank" href="http://www.yinyuetai.com/">音悦台</a></td>
+					<td height="35"><a target="_blank" href="http://www.pptv.com/">PPTV</a></td>
+					<td height="35"><a target="_blank" href="http://www.m1905.com/">电影网</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<hr style="border-width: 1px 0 0;height: 1px;">
+<div class="info">
+	&copy; 2013 <a href="http://380407775.qzone.qq.com/" target="_blank">我的QQ空间</a> <a target="_blank" href="http://sighttp.qq.com/authd?IDKEY=2d138f6c028e8bc9af60e0aa1ec45614a2f77165fb1814c1"><img border="0" src="http://wpa.qq.com/imgd?IDKEY=2d138f6c028e8bc9af60e0aa1ec45614a2f77165fb1814c1&pic=41" alt="点击这里给我发消息" title="点击这里给我发消息"></a><a href="mailto:liangtian_2005@163.com?subject=咨询我&amp;cc=liangtian_2005@163.com&amp;bcc=liangtian_2005@163.com">与我联系</a> <br>
+	All Rights Reserved
+</div>
+</body>
+</html>

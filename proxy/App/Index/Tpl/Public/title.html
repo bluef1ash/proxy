@@ -1,0 +1,46 @@
+		<!-- LOGO与采集提交按钮开始 -->
+		<div class="title">
+			<div class="logo"> <a href="__ROOT__" title="访问首页"><img src="{|U('__PUBLIC__/images/logo.png')}" alt="影片采集系统"></a> </div>
+			<div class="collect_input">
+				<p class="text"> 请输入所有 <a href="#" title="支持网站">支持网站</a> 的视频地址或专辑列表地址 </p>
+				<form action="{|U('Index/parse')}" method="post" name="collect">
+					<div class="input">
+						<input id="kw" type="text" name="websiteText" size="45" value="{$website}">
+							<input class="sub" type="submit" value="开始">
+							<if value="{$hd.session.username} && {$hd.session.uid}">
+								<a href="javascript:re('kw');" class="sub" id="re">替换地址</a>
+							</if>
+						<if value="{$hd.session.username} && {$hd.session.uid}">
+							<script type="text/javascript" src="__PUBLIC__/js/collection.js"></script>
+							<ul class="update_way">
+								<li>更新方式：
+									<label>
+										<input name="update" type="radio" value="static">
+										静态更新 </label>
+									<label>
+										<input name="update" type="radio" value="auto">
+										自动更新 </label>
+								</li>
+								<li class="collection">
+									<label style="margin-right: 10px; float: left;">
+										<input name="collection" type="checkbox" value="collection">
+										采集合集 </label>
+									<span id="collection_type">
+											<label>
+												<input name="ctype" type="radio" value="odd">
+												单集</label>
+											<label>
+												<input name="ctype" type="radio" value="plural">
+												多集</label>
+										<a href="" id="delete_tmp" title="清除缓存数据">清除缓存</a>
+									</span>
+								</li>
+							</ul>
+						</if>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- LOGO与采集提交按钮结束 -->
+	</div>
+	<!-- 头部结束 -->

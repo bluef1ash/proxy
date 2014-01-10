@@ -1,0 +1,58 @@
+<load file="__PUBLIC__/header.html">
+	<title>搜索结果</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/public.css">
+	<script type="text/javascript" src="__PUBLIC__/Js/public.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/Js/jquery.zclip.min.js"></script>
+	<script type="text/javascript" src="{$hd.config.CMP_ROOT}cmp.js"></script>
+	<script type="text/javascript">
+		function play_url(){
+			var list_website = "{|C('LIST_WEBSITE')}";
+			var list_fix = "{|C('LIST_FIX')}";
+			var ptr = $(this).parents("tr");
+			var path = list_website+ptr.children("td:nth-child(6)").html()+ptr.children("td:nth-child(3)").html()+list_fix;
+			path = path.replace(/<wbr>/ig,"");
+			play(path,0);
+		}
+	</script>
+	<script type="text/javascript" src="__PUBLIC__/Js/cmp.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/Js/copy.js"></script>
+</head>
+<body>
+	<table class="tab">
+		<tr>
+			<td class="th" colspan="20">视频列表</td>
+		</tr>
+		<tr class="tableTop">
+			<td class="tdLittle1">ID</td>
+			<td>中文影片名称</td>
+			<td>英文影片名称</td>
+			<td>上传用户</td>
+			<td>中文分类名称</td>
+			<td>英文分类名称</td>
+			<td>上传时间</td>
+			<td>操作</td>
+		</tr>
+		<list from="$video" name="n">
+			<tr>
+				<td>{$n.vid}</td>
+				<td>{$n.cnname}</td>
+				<td>{$n.enname}</td>
+				<td>{$n.username}</td>
+				<td>{$n.cntitleF}/{$n.cntitle}/</td>
+				<td>{$n.entitleF}/{$n.entitle}/</td>
+				<td>{$n.uploadtime|date:"Y-m-d h:i:s", @@}</td>
+				<td>
+					<a href="" class="copy">复制链接</a>
+					<a href="javascript:play_url();" class="play">播放</a>
+					<a href="{|U('Admin/Lists/alter', array('vid'=>$n['vid']))}" class="alter">修改</a>
+					<a href="{|U('Admin/Lists/delete', array('vid'=>$n['vid']))}" class="del">删除</a>
+				</td>
+			</tr>
+		</list>
+	</table>
+	<div class="page">
+		共{$count}条 &nbsp;
+		{$page}
+	</div>
+</body>
+</html>

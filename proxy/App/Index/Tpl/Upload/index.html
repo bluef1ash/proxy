@@ -1,0 +1,121 @@
+<load file="__PUBLIC__/header.html">
+	<title>当前上传视频：{$assign.vname}</title>
+	<if value="{$assign.replace}">
+		<script type="text/javascript">
+			if(confirm("文件已存在，是否替换？（一旦替换，原内容不可追回！请慎用！）")){
+				var uid = {$hd.session.uid};
+				$.post(APP+"/upload/reajax",{uid:uid},function(data){
+					if(data==1){
+						alert("替换成功！");
+					}else{
+						location = APP+"/upload/reajax?error=1";
+					}
+				});
+			}
+		</script>
+	</if>
+	<script type="text/javascript">
+	$(function(){
+		$("#urlbut").zclip({
+	        path:"__PUBLIC__/js/ZeroClipboard.swf",
+	        copy:$("#urlbut").prev().html().replace(/&amp;/ig, "&"),
+	        beforeCopy:function(){},//some code复制前执行
+	        afterCopy:function(){
+	           $.dialog({
+				    "msg":"复制成功！",
+		    		"type":"success",
+		    		"timeout":2,
+		   			"close_handler":function(){}
+				});
+	        }//beforeCopy afterCopy 是可选项
+	    });
+		$("#djbut").zclip({
+	        path:"__PUBLIC__/js/ZeroClipboard.swf",
+	        copy:$("#djbut").prev().children().val(),
+	        beforeCopy:function(){},//some code复制前执行
+	        afterCopy:function(){
+	           $.dialog({
+				    "msg":"复制成功！",
+		    		"type":"success",
+		    		"timeout":2,
+		   			"close_handler":function(){}
+				})
+	        }//beforeCopy afterCopy 是可选项
+	    });
+		$("#ejbut").zclip({
+	        path:"__PUBLIC__/js/ZeroClipboard.swf",
+	        copy:$("#ejbut").prev().children().val(),
+	        beforeCopy:function(){},//some code复制前执行
+	        afterCopy:function(){
+	           $.dialog({
+				    "msg":"复制成功！",
+		    		"type":"success",
+		    		"timeout":2,
+		   			"close_handler":function(){}
+				})
+	        }//beforeCopy afterCopy 是可选项
+	    });
+		$("#play").click(function() {
+			var xml = "{$assign.path}";
+			play(xml,0);
+		});
+	});
+	</script>
+<load file="__PUBLIC__/top.html">
+		<!-- LOGO及采集框开始 -->
+		<div class="title">
+			<div class="logo">
+				<a href="__ROOT__" title="访问首页">
+					<img src="__PUBLIC__/images/logo.png" alt="影片采集系统">
+				</a>
+			</div>
+		</div>
+		<!-- LOGO及采集框结束 -->
+	</div>
+	<!-- 导航条开始 -->
+	<load file="__PUBLIC__/nav.html">
+	<!-- 导航条结束 -->
+	<!-- 主体部分开始 -->
+	<div class="main">
+		<!-- 视频信息开始 -->
+		<div class="video_info">
+			<span>当前上传视频：</span>{$assign.vname}
+		</div>
+		<!-- 视频信息结束 -->
+		<!-- 功能按钮开始 -->
+		<div class="buttons">
+			<ul>
+				<li>
+					<form action="{|U('download/download')}" method="post" name="download">
+						<input type="hidden" name="vname" value="{$collect.vName}">
+						<input type="hidden" name="data" value="">
+						<input class="sub" type="submit" value="下载到文件">
+					</form>
+				</li>
+				<li>
+					<input class="sub" type="button" id="play" value="播放">
+				</li>
+			</ul>
+		</div>
+		<!-- 功能按钮结束 -->
+		<!-- 显示XML文件地址开始 -->
+		<ul class="site">
+			<li>
+				视频地址：
+				<span>[flash]http://afp.qiyi.com/main/c?db=qiyiafp&bid=1,1,1&cid=1,1,1&sid=0&url=http://player.qlyewu.com/cmp.swf?url=config/{$assign.userunion}.xml&lists={$assign.path}&.swf|626|500[/flash]</span>
+				<input type="button" id="urlbut" class="sub" value="复制">
+			</li>
+			<li>
+				<label>顶级频道样式：
+				<input type="text" id="dingji" value="{$assign.dingji}" size="30"></label>
+				<input type="button" id="djbut" class="sub" value="复制">
+			</li>
+			<li>
+				<label>二级频道样式：
+				<input type="text" id="erji" value="{$assign.erji}" size="30"></label>
+				<input type="button" id="ejbut" class="sub" value="复制">
+			</li>
+		</ul>
+		<!-- 显示XML文件地址结束 -->
+	</div>
+<load file="__PUBLIC__/footer.html">

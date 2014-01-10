@@ -1,0 +1,27 @@
+	<link href="__PUBLIC__/css/passport.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<!-- 头部开始 -->
+	<div id="header">
+		<ul>
+			<li>
+				<a title="点击查看修改个人资料" href="{|U('Passport/useredit')}">{$hd.session.username}</a>
+			</li>
+			<li>
+				<a href="{|U('login/out')}">退出</a>
+			</li>
+			<li>|</li>
+			<li>
+				<a href="#">升级高级会员</a>
+			</li>
+			<li>
+				<a target="_blank" href="#">偏好设置</a>
+			</li>
+			<li>
+				<a target="_blank" href="{$hd.config.WEIBO}">微博</a><a href="__ROOT__">返回首页</a>
+			</li>
+		</ul>
+		<img src="__PUBLIC__/images/mlogo.jpg" alt="个人中心">
+	</div>
+	<!-- 头部结束 -->
+	<!-- 正文开始 -->

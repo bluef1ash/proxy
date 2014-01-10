@@ -1,0 +1,30 @@
+<load file="__PUBLIC__/header.html">
+	<title>个人中心-{$hd.config.WEBNAME}</title>
+<load file="__TPL__/Passport/top.html">
+	<!-- 导航条开始 -->
+	<div id="menu">
+		<ul>
+			<li class="current_page_item"><a href="">主页</a></li>
+			<!--<li><a href="#">使用帮助</a></li>-->
+			<li><a href="#">升级高级会员</a></li>
+			<li><a href="{|U('Passport/contactus')}">联系我们</a></li>
+		</ul>
+	</div>
+	<!-- 导航条结束 -->
+	<load file="__TPL__/Passport/left.html">
+		<!-- 头部欢迎语开始 -->
+		<div class="title">
+			<h1>欢迎回来！</h1>
+			<a href="{|U('Passport/vip')}">好消息：</a>
+		</div>
+		<hr>
+		<!-- 头部欢迎语结束 -->
+		<!-- 说明开始 -->
+		<div class="about">
+			<span>什么是高级会员？</span>
+			<p>
+				高级会员是为少部分有特殊需求或者需要大量下载的专业级用户准备的增值付费服务，可以使用一些专业级工具，此外并无更多特权。对于普通用户来说基础版功能就足够了。我们会一直坚持硕鼠基础服务终身免费的承诺。
+			</p>
+		</div>
+		<!-- 说明结束 -->
+<load file="__TPL__/Passport/footer.html">

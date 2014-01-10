@@ -1,0 +1,176 @@
+<load file="__PUBLIC__/header.html">
+	<title>个人资料-{$hd.config.WEBNAME}</title>
+	<script type="text/javascript">
+		var validate = {
+			username : false,
+			pwd		 : false,
+			pwded    : false,
+			verify   : false,
+			userunion: false,
+			loginUsername : false,
+			loginPwd : false
+		}
+		var msg = '';	
+		//验证注册表单
+		$(function(){
+			//点击更换验证码图片
+			$('#verify-img').click(function() {
+				$(this).attr('src', APP + '/Register/code/' + Math.random());
+			});
+			var alterpassword = $('form[name=alterpassword]');
+			alterpassword.submit(function() {
+				var isOk = validate.username && validate.pwd && validate.pwded && valdate.userunion && validate.verify;
+				if(isOk)
+					return true;
+				//点击提交按钮依次触发失去焦点再次验证
+				$('input[name=pwd]', alterpassword).trigger('blur');
+				$('input[name=pwded]', alterpassword).trigger('blur');
+				$('input[name=userunion]', alterpassword).trigger('blur');
+				$('input[name=verify]', alterpassword).trigger('blur');
+				return false;
+			});
+			//---------验证密码-------------
+			$('input[name=pwd]', alterpassword).blur(function(){
+				var pwd = $(this).val();
+				var span = $(this).parent().next();
+				//不能为空
+				if(pwd == ''){
+					msg = '密码不能为空';
+					span.html(msg).addClass('error');
+					validate.pwd = false;
+					return;
+				}
+				//正则判断
+				if(!/^\w{6,20}$/g.test(pwd)){
+					msg = '密码必须由6-20个字母，数字，或者下划线组成';
+					span.html(msg).addClass('error');
+					validate.pwd = false;
+					return;
+				}
+				msg = '';
+				validate.pwd = true;
+				span.html(msg).removeClass('error');
+
+			});
+			//确认密码
+			$('input[name=pwded]', alterpassword).blur(function(){
+				var pwded = $(this).val();
+				var span = $(this).parent().next();
+				//确认密码不能为空
+				if(pwded == ''){
+					msg = '请确认密码';
+					span.html(msg).addClass('error');
+					validate.pwded = false;
+					return;
+				}
+				//两次密码是否相同
+				if(pwded != $('input[name=pwd]', alterpassword).val()){
+					msg = '两次密码不一致！';
+					span.html(msg).addClass('error');
+					validate.pwded = false;
+					return;
+				}
+				msg = '';
+				span.html(msg).removeClass('error');
+				validate.pwded = true;
+			});
+			//-------验证验证码-----
+			$('input[name=verify]', alterpassword).blur(function() {
+				var verify = $(this).val();
+				var span = $(this).next().next();
+				//不能为空
+				if(verify == ''){
+					msg = '请输入验证码';
+					span.html(msg).addClass('error');
+					validate.verify = false;
+					return;
+				}
+				//异步验证码判断
+				$.post(APP + "/Register/ajax_code", {verify : verify}, function(status){
+					if(status) {
+						msg = '';
+						span.html(msg).removeClass('error');
+						validate.verify = true;
+					} else {
+						msg = '验证码错误！';
+						span.html(msg).addClass('error');
+						validate.verify = false;
+					}
+				}, 'json');
+			});
+			//--------验证所在频道-----
+			$('input[name=userunion]', alterpassword).blur(function() {
+				var union = $(this).val();
+				var span = $(this).parent().next();
+				if(union==''){
+					msg = '请输入所在频道的ID';
+					span.html(msg).addClass('error');
+					validate.userunion = false;
+					return;
+				}
+				//正则判断
+				if(!/^\d{3,10}$/g.test(union)){
+					msg = '所在频道的ID必须由3-10个数字组成';
+					span.html(msg).addClass('error');
+					validate.userunion = false;
+					return;
+				}
+				msg = '';
+				validate.userunion = true;
+				span.html(msg).removeClass('error');
+			});
+		});
+	</script>
+<load file="__TPL__/Passport/top.html">
+	<!-- 导航条开始 -->
+	<div id="menu">
+		<ul>
+			<li class="current_page_item"><a href="">主页</a></li>
+			<!--<li><a href="#">使用帮助</a></li>-->
+			<li><a href="#">升级高级会员</a></li>
+			<li><a href="{|U('Passport/contactus')}">联系我们</a></li>
+		</ul>
+	</div>
+	<!-- 导航条结束 -->
+<load file="__TPL__/Passport/left.html">
+	<!-- 用户修改密码开始 -->
+	<form action="{|U('Passport/alterpassword')}" method='post' name='alterpassword'>
+		<table class="table1">
+			<thead>
+				<caption>修改密码</caption>
+			</thead>
+			<tbody>
+				<tr>
+					<td>用户名：</td>
+					<td>{$hd.session.username}</td>
+				</tr>
+				<tr>
+					<td>密码</td>
+					<td><input type="password" name='pwd'></td>
+					<td>6-20个字符:字母、数字或下划线 _</td>
+				</tr>
+				<tr>
+					<td>确认密码</td>
+					<td><input type="password" name='pwded'></td>
+					<td>请再次输入密码</td>
+				</tr>
+				<tr>
+					<td>频道ID</td>
+					<td><input type="text" name='userunion' value="{$userunion}"></td>
+					<td>2-10位数字</td>
+				</tr>
+				<tr>
+					<td>验证码</td>
+					<td><input type="text" name='verify'></td>
+					<td><img src="{|U('reg/code')}" width='99' height='35' id="verify-img" alt="验证码"></td>
+				</tr>
+				<tr>
+					<td colspan="4" class='submit'>
+						<input type="submit" class="btn btn-default" value='确定'>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+	<!-- 用户修改密码结束 -->
+<load file="__TPL__/Passport/footer.html">
