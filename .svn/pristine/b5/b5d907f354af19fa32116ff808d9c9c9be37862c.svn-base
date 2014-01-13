@@ -1,0 +1,120 @@
+<load file="__PUBLIC__/header.html">
+<title>官方网站-{$hd.config.WEBNAME}</title>
+<script type="text/javascript">
+function startgo(url){
+	$("input[name=websiteText]").val(url);
+}
+</script>
+<load file="__PUBLIC__/top.html">
+		<!-- LOGO图片开始 -->
+		<div class="title">
+			<div class="title" style="margin: 0px auto;width: 270px;height: 115px;">
+				<a href="__ROOT__" title="访问首页"><img src="{|U('__PUBLIC__/images/logo.png')}" alt="影片采集系统"></a>
+			</div>
+		</div>
+		<!-- LOGO图片开始 -->
+	</div>
+	<!-- 头部结束 -->
+	<!-- 主体开始 -->
+	<div class="main">
+		<!-- 采集地址表单开始 -->
+		<form action="{|U('Index/parse')}" method="post" name="collect">
+			<!-- 输入框及提交按钮开始 -->
+			<div class="nav-srh">
+				<input id="kw" type="text" name="websiteText" value="请填入需采集的视频地址">
+				<input class="bn-srh" type="submit" value="开始">
+				<if value="{$hd.session.username} && {$hd.session.uid}">
+					<a href="javascript:re('kw');" id="re">替换地址</a>
+				</if>
+				<span id="inf"></span>
+			</div>
+			<!-- 输入框及提交按钮结束 -->
+			<if value="{$hd.session.username} && {$hd.session.uid}">
+				<!-- 采集合集功能开始 -->
+				<script type="text/javascript" src="__PUBLIC__/js/collection.js"></script>
+				<ul class="update_way">
+					<li>更新方式：
+						<label>
+							<input name="update" type="radio" value="static">
+							静态更新 </label>
+						<label>
+							<input name="update" type="radio" value="auto">
+							自动更新 </label>
+					</li>
+					<li class="collection">
+						<label style="float:left">
+							<input name="collection" type="checkbox" value="collection">
+							采集合集 </label>
+						<dl id="collection_type">
+							<dt>
+								<label>
+									<input name="collection_type" type="radio" value="odd">
+									单集</label>
+								<label>
+									<input name="collection_type" type="radio" value="plural">
+									多集</label>
+							</dt>
+							<dt><a href="#" id="delete_tmp" title="清除缓存数据">清除缓存</a></dt>
+						</dl>
+					</li>
+				</ul>
+				<!-- 采集合集功能结束 -->
+			</if>
+		</form>
+		<!-- 采集地址表单结束 -->
+		<!-- 提示功能开始 -->
+		<div class="about">
+			<!-- 辅助手册开始 -->
+			<ul class="gn">
+				<li><a href="#" title="新手入门">新手入门</a></li>
+				<li><a href="#" title="偏好设置">偏好设置</a></li>
+				<li><a href="#" title="有问必答">有问必答</a></li>
+			</ul>
+			<p class="sitefx">
+				<strong>地址示例：</strong><a href="javascript:startgo('http://www.letv.com/ptv/vplay/1488765.html');">http://www.letv.com/ptv/vplay/1488765.html</a>
+			</p>
+			<!-- 辅助手册结束 -->
+			<!-- 常用视频网站开始 -->
+			<table border="1" class="videotype">
+				<thead>
+					<caption class="table_caption">
+					常用网址
+					</caption>
+				</thead>
+				<tbody>
+					<tr>
+						<td><a href="#">电影</a></td>
+						<td><a href="#">电视剧</a></td>
+						<td><a href="#">动漫</a></td>
+						<td><a href="#">综艺</a></td>
+						<td><a href="#">音乐专辑</a></td>
+					</tr>
+					<tr>
+						<td><a href="javascript:curl('http://www.youku.com/')">优酷网</a></td>
+						<td><a href="javascript:curl('http://www.tudou.com/')">土豆网</a></td>
+						<td><a href="javascript:curl('http://www.iqiyi.com/')">爱奇艺</a></td>
+						<td><a href="javascript:curl('http://tv.sohu.com/')">搜狐视频</a></td>
+						<td><a href="javascript:curl('http://v.qq.com/')">腾讯视频</a></td>
+					</tr>
+					<tr>
+						<td><a href="javascript:curl('http://www.letv.com/')">乐视网</a></td>
+						<td><a href="javascript:curl('http://www.cntv.cn/')">CNTV</a></td>
+						<td><a href="javascript:curl('http://www.56.com/')">56网</a></td>
+						<td><a href="javascript:curl('#')">网易公开课</a></td>
+						<td><a href="javascript:curl('http://www.kankan.com/')">迅雷看看</a></td>
+					</tr>
+					<tr>
+						<td><a href="javascript:curl('http://video.sina.com.cn/movie/')">新浪大片</a></td>
+						<td><a href="javascript:curl('http://www.pps.tv/')">PPS</a></td>
+						<td><a href="javascript:curl('http://www.yinyuetai.com/')">音悦台</a></td>
+						<td><a href="javascript:curl('http://www.pptv.com/')">PPTV</a></td>
+						<td><a href="javascript:curl('http://www.m1905.com/')">电影网</a></td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- 常用视频网站结束 -->
+		</div>
+		<!-- 提示功能结束 -->
+	</div>
+	<!-- 主体结束 -->
+<load file="__PUBLIC__/footer.html">

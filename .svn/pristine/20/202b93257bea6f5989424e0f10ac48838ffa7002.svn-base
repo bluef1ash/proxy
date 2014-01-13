@@ -1,0 +1,32 @@
+<load file="__PUBLIC__/header.html">
+	<title>修改后台用户密码</title>
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/add_category.css">
+</head>
+<body>
+	<form action="{|U('Admin/System/passwd')}" method="post">
+		<table class="tab">
+			<tr >
+				<td class="th" colspan="2">修改密码</td>
+			</tr>
+			<tr>
+				<td>用户名</td>
+				<td>{$hd.session.adminname}</td>
+			</tr>
+			<tr>
+				<td>密码：</td>
+				<td><input type="password" name="passwdF"></td>
+			</tr>
+			<tr>
+				<td>确认密码：</td>
+				<td><input type="password" name="passwdS"></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="submit" value="修改" class="input_button">
+					<input type="reset" class="input_button">
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

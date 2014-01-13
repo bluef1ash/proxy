@@ -1,0 +1,96 @@
+/*上传开始*/
+#category {
+	width: 480px;
+	height: auto;
+	overflow: hidden;
+	position: absolute;
+	z-index: 999;
+	display: none;
+	background: #fff;
+}
+#category .title {
+	margin: 0px;
+	width: 480px;
+	height: 32px;
+	line-height: 32px;
+	border-bottom: 1px solid #E0E0E0;
+	background: #FAFAFA;
+}
+#category .title span {
+	display: block;
+	width: 120px;
+	height: 32px;
+	line-height: 32px;
+	font-size: 14px;
+	font-weight: bold;
+	color: #666666;
+	float: left;
+}
+#category .title .close-window {
+	display: block;
+	border: 0px;
+	padding: 0px;
+	background: url("../images/close.png");
+    height: 25px;
+    float: right;
+    width: 25px;
+    margin-top: 3px;
+    margin-right: 10px;
+}
+#category .title .close-window:hover{
+	background-position: -25px 0;
+}
+#category .sel p {
+	clear: both;
+	width: 480px;
+	height: 60px;
+	line-height: 60px;
+	text-align: left;
+	text-indent: 10px;
+}
+#category .sel .vname {
+	width: 360px;
+	height: auto;
+	margin-top: 10px;
+	margin-bottom: 5px;
+	margin-left: auto;
+	margin-right: auto;
+	line-height: 2em;
+}
+#category .sel .vname label {
+	display: block;
+}
+#category .sel select {
+	width: 150px;
+	height: 230px;
+	float: left;
+	margin-left: 10px;
+	border: none;
+}
+#category .sel select option {
+	font-size: 14px;
+	padding: 2px;
+}
+.main #upload ul #movieClassify, .main #upload ul #tvsClassify, .main #upload ul #entertainmentClassify {
+	display: none;
+}
+#category .bottom{
+	height: 50px;
+	background:#F8F8F8;
+}
+#category .bottom #ok {
+	display: block;
+	float: right;
+	width: 70px;
+	height: 30px;
+	line-height: 30px;
+	border: 1px solid #3EAF0E;
+	background: #4CC311;
+	border-radius: 4px;
+	color: #fff;
+	font-weight: bold;
+	font-size: 14px;
+	margin-top: 10px;
+	margin-right: 10px;
+}
+/*上传结束*/

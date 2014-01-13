@@ -1,0 +1,86 @@
+@charset "utf-8";
+html{
+  background-image:url(about:blank);
+  background-attachment:fixed;
+}
+* {
+	margin: 0px;
+	padding:0px;
+}
+body {
+	background:#FFF;
+	color:#333;
+  	cursor: url("../images/mouse/droplet_arrow.cur"), auto;
+	font:12px/1.5 "arial","helvetica","sans-serif";
+	-webkit-text-size-adjust:none
+}
+img,input {
+	border: none;
+}
+ol,ul,li {
+	list-style: none;
+}
+table {
+	border-collapse:collapse;
+	border-spacing:0;
+	font-size:inherit;
+	font:100%
+}
+input,button,textarea,select,option {
+	font-family:inherit;
+	font-size:inherit;
+	font-style:inherit;
+	font-weight:inherit
+}
+input,button,textarea,select {
+	*font-size:100%;
+	line-height:1.2;
+	margin:0px;
+}
+a img,img {
+	-ms-interpolation-mode:bicubic
+}
+a {
+	color:#0063c8;
+	text-decoration:none;
+	cursor: url("../images/mouse/droplet_link.cur"), pointer;
+}
+a:hover,a:active,a:focus {
+	color:#0063c8;
+	text-decoration:underline
+}
+caption {
+	font-size: 16px;
+	font-weight: bold;
+}
+label{
+	display:inline;
+}
+.error {
+	color:#F00;
+}
+.hidden {
+	display: none;
+}
+#cmp {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	padding: 0px;
+	margin: 0px;
+}
+#register .reg-title a,#reg-wrap .reg-left ul li,#reg-wrap .reg-left ul li span,#register .reg-right ul .submit input,#login-btn{
+	background: url("../images/btn.png") no-repeat;
+}
+#login .login-title,#login .login-title a{
+	background: url("../images/login.png") no-repeat;
+}
+.nav-srh,.main .nav-srh #re,.main .nav-srh .bn-srh {
+    background: url("../images/ui_ns_sbg4.png") no-repeat;
+}
+#reg-wrap .reg-left ul li span,#register .reg-right ul li #verify-img,#register .reg-right ul .submit input,#login-btn,.main .nav-srh a,.main .nav-srh .bn-srh,.sub,#category .title .close-window,#category .bottom #ok,.passport #wrapper #page #page-bgtop #page-bgbtm #right #save{
+	cursor: url("../images/mouse/droplet_link.cur"),pointer;
+}
+.buttons a,.buttons A:visited,.buttons A:active{
+	background-image: url("../images/bg_btn.png");
+}

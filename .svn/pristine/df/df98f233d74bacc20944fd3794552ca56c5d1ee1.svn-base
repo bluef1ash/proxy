@@ -1,0 +1,56 @@
+<load file="__PUBLIC__/header.html">
+	<title>个人资料-{$hd.config.WEBNAME}</title>
+	<script type="text/javascript" src="__PUBLIC__/Js/validate.js"></script>
+<load file="__PUBLIC__/top.html">
+	<!-- 导航条开始 -->
+	<div id="menu">
+		<ul>
+			<li class="current_page_item"><a href="">主页</a></li>
+			<!--<li><a href="#">使用帮助</a></li>-->
+			<li><a href="#">升级高级会员</a></li>
+			<li><a href="{|U:('Passport/contacts/information')}">联系我们</a></li>
+		</ul>
+	</div>
+	<!-- 导航条结束 -->
+<load file="__PUBLIC__/left.html">
+	<!-- 用户修改密码开始 -->
+	<form action="{|U:('Passport/User/alterpassword')}" method="post" name="alterpassword">
+		<table class="table1">
+			<thead>
+				<caption>修改密码</caption>
+			</thead>
+			<tbody>
+				<tr>
+					<td>用户名：</td>
+					<td>{$hd.session.username}</td>
+				</tr>
+				<tr>
+					<td>密码</td>
+					<td><input type="password" name="pwd"></td>
+					<td>6-20个字符:字母、数字或下划线 _</td>
+				</tr>
+				<tr>
+					<td>确认密码</td>
+					<td><input type="password" name="pwded"></td>
+					<td>请再次输入密码</td>
+				</tr>
+				<tr>
+					<td>频道ID</td>
+					<td><input type="text" name="userunion" value="{$userunion}"></td>
+					<td>2-10位数字</td>
+				</tr>
+				<tr>
+					<td>验证码</td>
+					<td><input type="text" name="verify"></td>
+					<td><img src="{|U('Index/Register/code')}" width="99" height="35" id="verify-img" alt="验证码"></td>
+				</tr>
+				<tr>
+					<td colspan="4" class="submit">
+						<input type="submit" class="btn btn-default" value="确定">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+	<!-- 用户修改密码结束 -->
+<load file="__PUBLIC__/footer.html">

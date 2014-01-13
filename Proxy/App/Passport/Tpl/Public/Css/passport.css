@@ -1,0 +1,198 @@
+@import url("public.css");
+html{
+    background: #FFFDEA;
+}
+body {
+	background: #FFFDEA;
+    color: #464032;
+    font: 14px "Microsoft YaHei","微软雅黑","Microsoft JhengHei","华文细黑","STHeiti","MingLiu";
+}
+a {
+    color: #A7430F;
+    text-decoration: none;
+}
+a:hover {
+    color: #bababa;
+    text-decoration: underline;
+}
+h1 {
+    font-family: "Microsoft YaHei","微软雅黑","Microsoft JhengHei","华文细黑","STHeiti","MingLiu";
+    font-size: 2em;
+}
+h1, h2, h3 {
+    color: #A42903;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+/*头部开始*/
+#header {
+    height: 155px;
+    margin: 0 auto;
+    width: 940px;
+}
+/*头部用户导航条开始*/
+#header ul{
+    float: right;
+}
+#header ul li{
+    float: left;
+}
+#header ul li a {
+	margin-right: 5px;
+	margin-left: 5px;
+}
+/*头部用户导航条结束*/
+/*头部结束*/
+/*导航条开始*/
+#menu {
+    background: url("../images/img01.jpg") 0px 0px no-repeat;
+    height: 36px;
+    margin: 0px auto 10px auto;
+    width: 940px;
+}
+#menu ul {
+    line-height: normal;
+    list-style: none outside none;
+    margin: 0 0 0 10px;
+}
+#menu ul li a {
+    border: medium none;
+    color: #FFFFFF;
+    font-family: "Arial","Helvetica","sans-serif";
+    font-size: 14px;
+    font-weight: bold;
+    height: 26px;
+    line-height: 36px;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+#menu .current_page_item a, #menu a:hover {
+    background: #E0D3B3;
+    color: #2A1F0B;
+}
+#menu ul li {
+	float: left;
+}
+/*导航条结束*/
+/*正文开始*/
+#page{
+    width: 940px;
+    height: auto;
+    overflow: hidden;
+    margin: 0px auto;
+}
+/*左侧级联菜单开始*/
+#page #sidebar {
+	color: #787878;
+	float: left;
+	width: 30%;
+	text-align: left;
+}
+#page #sidebar dl{
+    padding: 0px;
+    margin: 0px;
+}
+#page #sidebar dl dt {
+	border: 1px solid #e9e3cb;
+    background: #E9E3CB;
+    color: #464032;
+    font-size: 1.8em;
+    line-height: 40px;
+    letter-spacing: -0.5px;
+    padding-bottom: 6px;
+    padding-left: 30px;
+    padding-top: 6px;
+}
+#page #sidebar dl dd {
+    text-indent: 30px;
+	padding: 10px 0px;
+    border-bottom: 1px dotted #E5E0C6;
+    border-left: medium none;
+    border-right: medium none;
+}
+/*左侧级联菜单结束*/
+/*右侧开始*/
+#page #right {
+	color: #787878;
+	float: right;
+	width: 67%;
+	padding-right: 10px;
+	text-align: center;
+}
+#page #right .title{
+    height: auto;
+    overflow: hidden;
+}
+#page #right .title h1 {
+    float:left;
+}
+#page #right .title a {
+    float:right;
+    display:block;
+    color:#ff0000;
+    line-height: 2em;
+    vertical-align:text-bottom;
+}
+#page #right hr{
+    margin: 0px 0px 10px 0px;
+}
+/*首页显示信息开始*/
+#page #right .about{
+    text-align: left;
+    height: auto;
+    overflow: hidden;
+    margin-bottom:10px;
+}
+#page #right .about span{
+    background: url(../images/tips.gif) 0px 0px no-repeat;
+    display: block;
+    text-indent: 20px;
+    margin: 0px 0px 10px 0px;
+}
+#page #right .about p {
+	text-indent: 2em;
+}
+/*首页显示信息结束*/
+/*更改XML页面开始*/
+#page #right #editxml {
+	width: 98%;
+}
+#page #right .vname{
+    font: 16px bold;
+    color: #000;
+    line-height: 1.8em;
+}
+#page #right #save {
+	margin-top: 10px;
+}
+/*更改XML页面结束*/
+/*右侧结束*/
+/*尾部开始*/
+#footer {
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+	border-top: 4px solid #EBE6D1;
+    font-family: "Arial","Helvetica","sans-serif";
+    height: 50px;
+    padding: 5px 0 15px;
+    width: 940px;
+	text-align: center;
+    line-height: 1.8em;
+}
+/*尾部结束*/
+#page p {
+	line-height: 1.8em;
+}
+#page .lianxi {
+	margin: 0 auto;
+	width: 700px;
+}
+#page .lianxi hr {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

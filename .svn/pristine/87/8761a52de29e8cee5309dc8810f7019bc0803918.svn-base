@@ -1,0 +1,90 @@
+<load file="__PUBLIC__/header.html">
+		<title>播放器全局设置</title>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/public.css">
+		<script type="text/javascript" src="__PUBLIC__/Js/inttext.js"></script>
+		<style type="text/css">
+			.table input{
+				height: 28px;
+				vertical-align: middle;
+			}
+		</style>
+		<script type="text/javascript">
+			$(function(){
+				$("#dingji_vars").click(function(){
+					var dingji = $("input[name=DINGJI_STYLE]");
+					var vars = "{dingji_var}";
+					dingji.insertContent(vars);
+				});
+				$("#erji_vars").click(function(){
+					var erji = $("input[name=ERJI_STYLE]");
+					erji.insertContent("{erji_var}");
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<form action="{|U('Admin/Common/edit')}" method="POST">
+		<table class="tab">
+			<thead></thead>
+			<tbody>
+				<tr>
+					<th colspan="2" class="th">播放器设置</th>
+				</tr>
+				<tr>
+					<td align="right">播放器根网址：</td>
+					<td>
+						<input type="text" style="width:400px;" name="CMP_ROOT" value="{$hd.config.CMP_ROOT}">
+					</td>
+				</tr>
+				<tr>
+					<td align="right">播放列表根网址：</td>
+					<td>
+						<input type="text" style="width:400px;" name="LIST_WEBSITE" value="{$hd.config.LIST_WEBSITE}">
+					</td>
+				</tr>
+				<tr>
+					<td align="right">列表更新本地路径：</td>
+					<td>
+						<input type="text" style="width:400px;" name="LIST_UPDATE_PATH" value="{$hd.config.LIST_UPDATE_PATH}">
+					</td>
+				</tr>
+				<tr>
+					<td align="right">上传文件的后缀名：</td>
+					<td>
+						<input type="text" style="width:400px;" name="LIST_FIX" value="{$hd.config.LIST_FIX}">
+					</td>
+				</tr>
+				<tr>
+					<td align="right">顶级频道样式：</td>
+					<td>
+						<input type="text" style="width:400px;" name="DINGJI_STYLE" value="{$hd.config.DINGJI_STYLE}"><a href="#" id="dingji_vars">插入影片名变量</a>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">顶级频道名称之间空格数：</td>
+					<td>
+						<input type="text" style="width:400px;" name="DING_VNAME_SPACE" value="{$hd.config.DING_VNAME_SPACE}">
+					</td>
+				</tr>
+				<tr>
+					<td align="right">二级频道样式：</td>
+					<td>
+						<input type="text" style="width:400px;" name="ERJI_STYLE" value="{$hd.config.ERJI_STYLE}"><a href="#" id="erji_vars">插入影片名变量</a>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">二级频道名称之间空格数：</td>
+					<td>
+						<input type="text" style="width:400px;" name="ER_VNAME_SPACE" value="{$hd.config.ER_VNAME_SPACE}">
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" height="60" align="center">
+						<input type="hidden" name="config" value="player">
+						<input type="submit" value="保存修改" class="input_button">
+					</td>
+				</tr>
+			</table>
+		</form>
+	</body>
+</html>

@@ -1,0 +1,28 @@
+<load file="__PUBLIC__/header.html">
+	<title>更改列表-{$hd.config.WEBNAME}</title>
+	<script type="text/javascript">
+		$(function(){
+			$("#editxml").bind("keydown keyup",function(){
+				$(this).autosize();
+			}).show().autosize();
+		});
+	</script>
+<load file="__PUBLIC__/top.html">
+	<!-- 导航条开始 -->
+	<div id="menu">
+		<ul>
+			<li class="current_page_item"><a href="">主页</a></li>
+			<!--<li><a href="#">使用帮助</a></li>-->
+			<li><a href="#">升级高级会员</a></li>
+			<li><a href="{|U('Passport/Contacts/information')}">联系我们</a></li>
+		</ul>
+	</div>
+	<!-- 导航条结束 -->
+<load file="__PUBLIC__/left.html">
+	<h1 class="vname">{$video.cnname}</h1>
+	<form action="{|U('Passport/Lists/update')}" method="post" name="update">
+		<textarea id="editxml" wrap="virtual" name="content">{$video.content}</textarea>
+		<input type="hidden" name="vid" value="{$video.vid}">
+		<input type="submit" id="save" class="btn btn-default" value="保存">
+	</form>
+<load file="__PUBLIC__/footer.html">

@@ -1,4 +1,4 @@
-<?php if(!defined("HDPHP_PATH"))exit;C("SHOW_NOTICE",FALSE);?><link href="http://localhost/proxy/proxy/App/Index/Tpl/Public/css/index.css" rel="stylesheet" type="text/css">
+<?php if(!defined("HDPHP_PATH"))exit;C("SHOW_NOTICE",FALSE);?><link href="http://localhost/proxy/./Proxy/App/Index/Tpl/Public/css/index.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<!-- 头部开始 -->
@@ -6,7 +6,7 @@
 		<!-- 注册与登录信息栏开始 -->
 		<div class="top-bar-right">
 			<?php if($_SESSION['username'] && $_SESSION['uid']){?>
-				您好，<?php echo $_SESSION['username'];?>！欢迎来到YY影视智能采集！<a href="<?php echo U('Login/out');?>" id="exit">退出</a> | <a href="<?php echo U('passport/index');?>">个人中心</a>
+				您好，<?php echo $_SESSION['username'];?>！欢迎来到YY影视智能采集！<a href="<?php echo U('Login/out');?>" id="exit">退出</a> | <a href="<?php echo U('Passport/Index/index');?>">个人中心</a>
 			<?php  }else{ ?>
 				您好，欢迎来到YY影视智能采集！[<a href="#" title="登录" class="login">登录</a>] [<a href="#" title="免费注册" class="register">免费注册</a>]
 			<?php }?>
