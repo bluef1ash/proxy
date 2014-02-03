@@ -47,7 +47,7 @@
 		</style>
 	</head>
 	<body>
-		<form action="<?php echo U('Admin/Common/edit');?>" method="POST">
+		<form action="<?php echo U('Admin/Common/edit');?>" method="post">
 			<table class="tab">
 				<thead></thead>
 				<tbody>
@@ -76,13 +76,13 @@
 						<td align="right">作者：</td>
 						<td>
 							<input type="text" style="width:400px;" name="AUTHOR" value="<?php echo C("AUTHOR");?>">
-						</td> 
+						</td>
 					</tr>
 					<tr>
 						<td align="right">版权信息：</td>
 						<td>
 							<input type="text" style="width:400px;" name="COPY" value="<?php echo C("COPY");?>">
-						</td> 
+						</td>
 					</tr>
 					<tr>
 						<td align="right">备案号：</td>
@@ -118,13 +118,13 @@
 						<td align="right">是否开放注册功能：</td>
 						<?php if(C("RES_ON") == 1){?>
 							<td>
-								<input type="radio" name="RES_ON" value="1" checked="checked">开启
-								<input type="radio" name="RES_ON" value="0">关闭
+								<label><input type="radio" name="RES_ON" value="1" checked="checked">开启</label>
+								<label><input type="radio" name="RES_ON" value="0">关闭</label>
 							</td>
 						<?php  }else{ ?>
 							<td>
-								<input type="radio" name="RES_ON" value="1">开启
-								<input type="radio" name="RES_ON" value="0" checked="checked">关闭
+								<label><input type="radio" name="RES_ON" value="1">开启</label>
+								<label><input type="radio" name="RES_ON" value="0" checked="checked">关闭</label>
 							</td>
 						<?php }?>
 					</tr>
@@ -132,13 +132,13 @@
 						<td align="right">网站状态：</td>
 						<?php if(C("WEB_ON") == 1){?>
 							<td>
-								<input type="radio" name="WEB_ON" value="1" checked="checked">开启
-								<input type="radio" name="WEB_ON" value="0">关闭
+								<label><input type="radio" name="WEB_ON" value="1" checked="checked">开启</label>
+								<label><input type="radio" name="WEB_ON" value="0">关闭</label>
 							</td>
 						<?php  }else{ ?>
 							<td>
-								<input type="radio" name="WEB_ON" value="1">开启
-								<input type="radio" name="WEB_ON" value="0" checked="checked">关闭
+								<label><input type="radio" name="WEB_ON" value="1">开启</label>
+								<label><input type="radio" name="WEB_ON" value="0" checked="checked">关闭</label>
 							</td>
 						<?php }?>
 					</tr>

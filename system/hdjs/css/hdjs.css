@@ -14,6 +14,7 @@
 * {
     padding: 0px;
     margin: 0px;
+    font-size: 12px;
 }
 
 .l {
@@ -34,6 +35,7 @@ li {
 
 a, a:hover, a:focus {
     text-decoration: none;
+    color: #266AAE;
 }
 
 ul, ol {
@@ -47,6 +49,7 @@ ul, ol {
 
 img {
     border: none;
+    vertical-align: middle
 }
 
 iframe {
@@ -112,9 +115,7 @@ div.line {
 }
 
 .hd-form select {
-    height: 32px;
-    line-height: 18px;
-    padding: 5px 3px;
+    padding: 3px 3px 0px;
 }
 
 /* ====================================================================================
@@ -161,6 +162,20 @@ div.tab ul.tab_menu li a:hover {
     text-decoration: none;
 }
 
+div.wrap {
+    background: #f3f3f3;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    padding: 10px;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: -9999;
+}
+
 /**内容块**/
 div.tab_content {
     position: relative;
@@ -175,7 +190,7 @@ div.tab_content div.hd_tab_content_div {
     height: auto;
     overflow: hidden;
     display: none;
-    padding: 8px 0px;
+    padding: 0px;
     margin-top: -1px;
 }
 
@@ -216,16 +231,41 @@ div.menu_list ul li a.action {
 }
 
 /*表格菜单*/
-div.table_title {
+div.title-header {
     background: none repeat scroll 0 0 #E6E6E6;
     border-bottom: 1px solid #FFFFFF;
     border-top: 1px solid #DDDDDD;
     color: #666666;
     font-size: 12px;
-    /*font-weight: 700;*/
     padding: 5px 9px;
 }
 
+/* ====================================================================================
+/* ===================================--|帮助|--====================================
+/* ====================================================================================*/
+
+div.help {
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: #666;
+    font-weight: normal;
+    line-height: 2em;
+}
+div.help ul li{
+    height: 18px;
+    font-size:12px;
+    color:#666;
+    list-style-type: circle;
+    margin-left: 10px;
+}
+div.help p {
+    height: 20px;
+}
+
+div.help p a:hover {
+    text-decoration: underline;
+}
 /* ====================================================================================
 /* ===================================--|表格Table1|--====================================
 /* ====================================================================================*/
@@ -237,7 +277,7 @@ table.table1 {
 table.table1 tr, table.table1 th, table.table1 td {
     background: url("../img/tr_border.png") repeat-x scroll 0 bottom rgba(0, 0, 0, 0);
     vertical-align: middle;
-    padding: 6px 15px;
+    padding: 8px 15px;
 }
 
 table.table1 tr th {
@@ -248,7 +288,7 @@ table.table1 tr th {
     color: #666;
     line-height: 24px;
     padding: 7px 10px 9px;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 table.table1 tr.header {
@@ -285,21 +325,28 @@ table.table2 tr, table.table2 th, table.table2 td {
 }
 
 /***************************table3表格************************/
-.table3 {
+table.table3 {
     width: 100%;
 }
 
-.table3, .table3 td {
-    border: solid 1px #ccc;
+table.table3 {
+    border: none;
+    background: none;
+}
+
+table.table3 tr {
+
+}
+
+table.table3 tr td {
     padding: 5px 8px;
 }
 
-.table3 th {
-    border: solid 1px #ccc;
+table.table3 tr th {
     width: 100px;
 }
 
-.table3 thead tr td {
+table.table3 thead tr td {
     background: #eee;
     color: #333;
 }
@@ -362,58 +409,6 @@ table.table2 tr, table.table2 th, table.table2 td {
     background: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#bbbbbb));;
 }
 
-.btn4 {
-    display: inline-block;
-    margin-right: 10px;
-    background-color: #006DCC;
-    background-image: linear-gradient(to bottom, #0088CC, #0044CC);
-    background-repeat: repeat-x;
-    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-    color: #FFFFFF;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-    border-image: none;
-    border-radius: 4px;
-    border-style: solid;
-    border-width: 1px;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-    cursor: pointer;
-    font-size: 14px;
-    line-height: 20px;
-    margin-bottom: 0;
-    padding: 4px 12px;
-    text-align: center;
-    vertical-align: middle;
-}
-.btn4:hover{
-    background-image: linear-gradient(to bottom, #0088EE, #0044EE);
-}
-.btn5 {
-    margin-right: 10px;
-    background-color: #F5F5F5;
-    background-image: linear-gradient(to bottom, #FFFFFF, #E6E6E6);
-    background-repeat: repeat-x;
-    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) #B3B3B3;
-    border-image: none;
-    border-radius: 4px;
-    border-style: solid;
-    border-width: 1px;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-    color: #333333;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 14px;
-    line-height: 20px;
-    margin-bottom: 0;
-    padding: 4px 12px;
-    text-align: center;
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-    vertical-align: middle;
-}
-
-.btn5:hover {
-    background-image: linear-gradient(to bottom, #FFFFFF, #dcdcdc);
-}
-
 /* ====================================================================================
 /* ===================================--|尺寸|--========================================
 /* ====================================================================================*/
@@ -447,6 +442,10 @@ table.table2 tr, table.table2 th, table.table2 td {
 
 .w100 {
     width: 100px;
+}
+
+.w120 {
+    width: 120px;
 }
 
 .w150 {
@@ -485,16 +484,32 @@ table.table2 tr, table.table2 th, table.table2 td {
     width: 500px;
 }
 
+.w550 {
+    width: 550px;
+}
+
 .w600 {
     width: 600px;
+}
+
+.w650 {
+    width: 650px;
 }
 
 .w700 {
     width: 700px;
 }
 
+.w750 {
+    width: 750px;
+}
+
 .w800 {
     width: 800px;
+}
+
+.w850 {
+    width: 850px;
 }
 
 .h60 {
@@ -568,6 +583,7 @@ div.page1 {
     margin-top: 20px;
     margin-left: 10px;
     float: right;
+    color:#666;
 }
 
 /*当前页*/
@@ -627,18 +643,24 @@ div.page1 span.count {
     padding: 3px 10px;
 }
 
+.message {
+    background-color: #999999;
+    border-radius: 3px;
+    color: #FFFFFF;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 14px;
+    margin-left: 15px;
+    padding: 2px 4px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    vertical-align: baseline;
+    white-space: nowrap;
+}
+
 /* ====================================================================================
 /* ===================================--|验证提示信息|--========================================
 /* ====================================================================================*/
-.label, .message {
-    font-size: 12px;
-    display: inline-block;
-    margin-left: 15px;
-}
-
-.message {
-    color: red;
-}
 
 .validation {
     font-size: 12px;
@@ -648,7 +670,30 @@ div.page1 span.count {
     line-height: 25px;
 }
 
-.success {
+.position-bottom {
+    position: fixed;
+    background: none repeat scroll 0 0 #F0F0F0;
+    border-color: #DCDCDC -moz-use-text-color -moz-use-text-color;
+    border-image: none;
+    border-right: medium none;
+    border-style: solid none none;
+    border-width: 1px medium medium;
+    bottom: 0;
+    height: 25px;
+    left: 0;
+    overflow: hidden;
+    padding: 8px 30px 10px;
+    right: 0;
+    text-align: left;
+    z-index: 100;
+}
+
+.validate-message {
+    font-size: 12px;
+    color: #999;
+}
+
+.validate-success {
     font-size: 12px;
     color: #999999;
     display: inline-block;
@@ -658,12 +703,12 @@ div.page1 span.count {
     margin-left: 5px;
 }
 
-.input_error {
+.input-error {
     background-color: #FFE7E7;
     box-shadow: none;
 }
 
-.error {
+.validate-error {
     font-size: 12px;
     color: #999999;
     display: inline-block;
@@ -707,7 +752,7 @@ div.menu span {
 }
 
 /***********简单信息框******************/
-div#hd_message_bg {
+div#hd_dialog_message_bg {
     background: #f3f3f3;
     position: fixed;
     left: 0px;
@@ -715,9 +760,10 @@ div#hd_message_bg {
     right: 0px;
     bottom: 0px;
     z-index: 1000;
+
 }
 
-div#hd_message {
+div#hd_dialog_message {
     position: fixed;
     top: 50px;
     left: 50%;
@@ -735,7 +781,8 @@ div#hd_message {
     border-image: none;
     border-radius: 3px;
     border-style: solid;
-    border-width: 0px;
+    border-width: 1px;
+    border-color: #03565E;
     box-shadow: 0px 0px 16px #999;
 }
 
@@ -772,8 +819,25 @@ div.modal div.modal_title {
     text-indent: 20px;
 }
 
+div.modal div.modal_title button.close {
+    margin-top: 2px;
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: 0 none;
+    cursor: pointer;
+    padding: 0;
+    color: #000000;
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 25px;
+    opacity: 0.2;
+    text-shadow: 0 1px 0 #FFFFFF;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
 div.modal div.content {
-    padding: 5px;
+    padding: 0px;
     overflow: auto;
 }
 
@@ -782,12 +846,14 @@ div.modal div.modal_footer {
     border-top: 1px solid #DDDDDD;
     box-shadow: 0 1px 0 #FFFFFF inset;
     margin-bottom: 0;
-    padding: 12px 15px 12px;
     text-align: right;
     position: absolute;
     bottom: 0px;
     left: 0px;
     right: 0px;
+    padding: 8px 15px;
+    height: 30px;
+    overflow: hidden;
 }
 
 div.modal_message strong {
@@ -821,7 +887,7 @@ div.modal_message strong.error {
 }
 
 /*确定按钮*/
-div.modal a.hd_success {
+.hd-success {
     display: inline-block;
     margin-right: 20px;
     background-color: #006DCC;
@@ -839,13 +905,17 @@ div.modal a.hd_success {
     font-size: 14px;
     line-height: 20px;
     margin-bottom: 0;
-    padding: 4px 12px;
+    padding: 3px 12px;
     text-align: center;
     vertical-align: middle;
 }
 
-/*模态关闭按钮*/
-div.modal a.hd_close {
+.hd-success:hover, .hd-success:focus {
+    background-position: 0 30px;
+}
+
+/*关闭按钮*/
+.hd-cancel {
     background-color: #F5F5F5;
     background-image: linear-gradient(to bottom, #FFFFFF, #E6E6E6);
     background-repeat: repeat-x;
@@ -861,10 +931,36 @@ div.modal a.hd_close {
     font-size: 14px;
     line-height: 20px;
     margin-bottom: 0;
-    padding: 4px 12px;
+    padding: 3px 12px;
     text-align: center;
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
     vertical-align: middle;
+}
+
+.hd-cancel-small {
+    background-color: #F5F5F5;
+    background-image: linear-gradient(to bottom, #FFFFFF, #E6E6E6);
+    background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) #B3B3B3;
+    border-image: none;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #333333;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 12px;
+    line-height: 20px;
+    margin-bottom: 0;
+    padding: 3px 6px;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    vertical-align: middle;
+}
+
+.hd-cancel:hover, .hd-cancel:focus {
+    background-position: 0 -115px;
 }
 
 /**********弹出对话框**************/

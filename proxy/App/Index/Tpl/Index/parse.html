@@ -24,7 +24,7 @@
 		        copy : $("#editxml").val(),
 		        afterCopy:function(){
 		           $.dialog({
-					    "msg":"复制成功！",
+					    "message":"复制成功！",
 			    		"type":"success",
 			    		"timeout":2
 					});
@@ -188,7 +188,7 @@
 					<select name="cate-one" size="16">
 						<list from="$categorytop" name="n">
 							<option value="{$n.entitle}">{$n.cntitle}</option>
-						</list> 
+						</list>
 					</select>
 					<select name="cate-two" size="16" class="hidden"></select>
 					<p class="vname">
@@ -208,6 +208,7 @@
 			</div>
 			<!-- 弹出分类框结束 -->
 			</form>
+			<div id="background"></div>
 			<script type="text/javascript" src="__PUBLIC__/js/upload.js"></script>
 		</if>
 	</div>

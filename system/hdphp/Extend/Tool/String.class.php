@@ -15,7 +15,6 @@
  * @package     tools_class
  * @author      后盾向军 <houdunwangxj@gmail.com>
  */
-
 final class String
 {
 
@@ -186,7 +185,8 @@ final class String
         if ($_Num > 0 && $_Num < 160)
             return chr($_Num);
         elseif ($_Num < -20319 || $_Num > -10247)
-            return ''; else {
+            return '';
+        else {
             foreach ($_Data as $k => $v) {
                 if ($v <= $_Num)
                     break;
@@ -197,7 +197,7 @@ final class String
 
     /**
      * 去除标点符号
-     * @param type $string             要去除标题的字符串
+     * @param type $string 要去除标题的字符串
      * @return string                  去除后的字符
      */
 
@@ -219,8 +219,13 @@ final class String
      */
     static public function splitWord($string, $source_charset = 'utf-8', $target_charset = 'utf-8', $load_all = TRUE, $source = '')
     {
-        require_cache(HDPHP_EXTEND_PATH.'/Org/SplitWord/SplitWord.class.php');
-        return SplitWord::splitWord($string, $source_charset = 'utf-8', $target_charset = 'utf-8', $load_all = TRUE, $source = '');
+        require_cache(HDPHP_EXTEND_PATH . '/Org/SplitWord/SplitWord.class.php');
+        $words = SplitWord::splitWord($string, $source_charset = 'utf-8', $target_charset = 'utf-8', $load_all = TRUE, $source = '');
+        //按词频从大向小排序
+        if (is_array($words))
+            array_multisort($words, SORT_DESC);
+        return $words;
+
     }
 
 }

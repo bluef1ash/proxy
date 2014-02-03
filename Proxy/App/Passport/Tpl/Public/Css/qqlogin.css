@@ -1,0 +1,41 @@
+@import url(public.css);
+.qqlogin{
+	width: 940px;
+	margin: 0px auto;
+	height: auto;
+	overflow: hidden;
+}
+.qqlogin h1{
+	color: #A42903;
+	line-height: 40px;
+}
+.qqlogin .log .title{
+	height: auto;
+	overflow: hidden;
+	border-bottom: 1px solid #ccc;
+}
+.qqlogin .log .title li{
+	float: left;
+	border: 1px solid #ccc;
+	border-bottom: none;
+	margin: 0px 30px;
+}
+.qqlogin .log .title li a{
+	display: block;
+	padding: 0px 155px;
+	line-height: 40px;
+}
+.qqlogin .log .title li .de{
+	background-color: #F6F6F6;
+}
+.qqlogin .log .tab-content #creative .table tr td{
+	text-align: center;
+}
+.qqlogin .log .tab-content #creative .table tr td input{
+	width: 310px;
+	height: 25px;
+}
+.qqlogin .log .tab-content #creative .table tr td .btn-primary{
+	width: 310px;
+	height: 30px;
+}

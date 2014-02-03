@@ -18,15 +18,18 @@ $(function () {
     });
 })
 //新窗口打开链接
-function _open(url) {
-    window.open(url, "");
+function hd_open_window(url) {
+    window.open(url, '');
 }
-//关闭窗口
-function _close(msg) {
-    if (msg) {
-        if (!confirm(msg))return;
-    }
-    window.close()
+/**
+ * 关闭窗口
+ * @param msg 提示信息
+ * @private
+ */
+function hd_close_window(msg) {
+    msg = msg || '确定关闭吗？';
+    if (confirm(msg))
+        window.close()
 }
 /**
  * 获得对象在页面中心的位置
@@ -87,7 +90,7 @@ $.extend({
     "dialog": function (options) {
         var _default = {
             "type": "success"//类型 CSS样式
-            , "msg": "msg属性配置错误"//提示信息
+            , "message": "message属性配置错误"//提示信息
             , "timeout": 2//自动关闭时间
             , "close_handler": function () {
             }//关闭时的回调函数
@@ -101,7 +104,7 @@ $.extend({
             div += '<a href="#" title="关闭">×</a></div>';
             div += '<h2 id="dialog_title">提示信息</h2>';
             div += '<div class="con ' + opt.type + '"><strong>ico</strong>';
-            div += '<span>' + opt.msg + '</span>';
+            div += '<span>' + opt.message + '</span>';
             div += '</div>';
             div += '</div>';
             div += '<div class="dialog_bg"></div>'
@@ -132,17 +135,23 @@ $.extend({
 })
 //简单提示框
 function dialog_message(message, timeOut) {
-    var timeOut = timeOut ? timeOut * 1000 : 2000;
-    //创建背景色
-    var html = '<div id="hd_message_bg"></div>';
-    html += "<div id='hd_message'>" + message + "</div>";
-    $("body").append(html);
-    //改变背景色
-    $("div#hd_message_bg").css({opacity: 0.9});
-    setTimeout(function () {
-        $("div#hd_message").fadeOut("fast");
-        $("div#hd_message_bg").remove();
-    }, timeOut);
+    //删除提示框
+    if (message === false) {
+        $('#hd_dialog_message').remove();
+        $('#hd_dialog_message_bg').remove();
+    } else {
+        var timeOut = timeOut ? timeOut * 1000 : 2000;
+        //创建背景色
+        var html = '<div id="hd_dialog_message_bg"></div>';
+        html += "<div id='hd_dialog_message'>" + message + "</div>";
+        $("body").append(html);
+        //改变背景色
+        $("div#hd_dialog_message_bg").css({opacity: 0.8});
+        setTimeout(function () {
+            $("div#hd_dialog_message").fadeOut("fast");
+            $("div#hd_dialog_message_bg").remove();
+        }, timeOut);
+    }
 }
 /**
  * 模态对话框
@@ -151,49 +160,66 @@ function dialog_message(message, timeOut) {
 $.extend({
     "modal": function (options) {
         var _default = {
-            title: '', content: false, width: 650, button: true,
-            send_title: "确定",
-            cancel_title: "关闭",
+            title: '',
+            content: '',
+            height: 400,
+            width: 600,
+            button_success: '',
+            button_cancel: '',
             message: false,
             type: "success",
             cancel: false,//事件
-            send: false,//事件
+            success: false,//事件
             show: true//是否显示
         };
         var opt = $.extend(_default, options);
-        //删除所有弹出框
+        //----------删除所有弹出框
         $("div.modal").remove();
         var div = '';
         var show = opt.show ? "" : ";display:none;"
         div += '<div class="modal" style="position:fixed;left:50%;top:50px;margin-left:-' + (opt['width'] / 2) + 'px;width:' + opt['width'] + 'px;' + show + 'height:' + opt['height'] + 'px;z-index:1000">';
+        //---------------标题设置
         if (opt['title']) {
-            div += '<div class="modal_title">' + opt['title'] + '</div>';
+            div += '<div class="modal_title">' + opt['title'];
+            //---------x关闭按钮
+            div += '<button class="close" aria-hidden="true" data-dismiss="modal" type="button" onclick="$.removeModal()">×</button>';
+            div += '</div>';
         }
-        var con_h = opt['height'] - (opt['title'] ? 35 : 0) - (opt.button ? 55 : 0);
-        div += '<div class="content" style="height:' + (con_h) + 'px;">';
+        //--------------内容区域
+        content_height = opt.height - 32;
+        if (opt.button_success || opt.button_cancel) {
+            content_height -= 46;
+        }
+        div += '<div class="content" style="height:' + content_height + 'px">';
         if (opt.message) {
             div += '<div class="modal_message"><strong class="' + opt.type + '"></strong><span>' + opt.message + '</span></div>';
         } else {
             div += opt.content;
         }
         div += '</div>';
-        if (opt.button) {
+        //------------按钮处理
+        if (opt.button_success || opt.button_cancel) {
             div += '<div class="modal_footer" ' + (opt.message ? 'style="text-align:center"' : "") + '>';
-            div += '<a href="javascript:;" class="btn btn-primary hd_success">' + opt.send_title + '</a>';
-            if (opt.cancel_title)
-                div += '<a href="javascript:;" class="btn hd_close">' + opt.cancel_title + '</a>';
+            //确定按钮
+            if (opt.button_success) {
+                div += '<a href="javascript:;" class="btn btn-primary hd-success">' + opt.button_success + '</a>';
+            }
+            //放弃按钮
+            if (opt.button_cancel) {
+                div += '<a href="javascript:;" class="btn hd-cancel">' + opt.button_cancel + '</a>';
+            }
             div += '</div>';
         }
         div += '</div>';
-        div += '<div class="modal_bg"></div>';
+        div += '<div class="modal_bg" style="' + show + '"></div>';
         $(div).appendTo("body");
         var pos = center_pos($(".modal"));
         //点击确定
-        $("div.modal_footer a.hd_success").click(function () {
-            if (opt.send) {
-                opt.send();
+        $("div.modal_footer a.hd-success").click(function () {
+            if (opt.success) {
+                opt.success();
             } else {
-                $("div.modal_footer a.hd_close").trigger("click");
+                $("div.modal_footer a.hd-cancel").trigger("click");
             }
         })
         var _w = $(document).width();
@@ -204,9 +230,9 @@ $.extend({
         }
         //点击关闭modal
         if (opt.cancel) {
-            $("div.modal_footer a.hd_close").live("click", opt.cancel);
+            $("div.modal_footer a.hd-cancel").live("click", opt.cancel);
         } else {
-            $("div.modal_footer a.hd_close").bind("click", function () {
+            $("div.modal_footer a.hd-cancel").bind("click", function () {
                 $.removeModal();
                 return false;
             })
@@ -215,6 +241,12 @@ $.extend({
     "removeModal": function () {
         $("div.modal").fadeOut().remove();
         $("div.modal_bg").remove();
+    },
+    modalShow: function (func) {
+        $("div.modal").show();
+        $("div.modal_bg").show();
+        if (typeof func == 'function')
+            func();
     }
 });
 // ====================================================================================
@@ -483,20 +515,20 @@ $.fn.extend({
                 var obj = data.obj;//表单对象
                 var rule = data.rule;//规则
                 var spanObj = data.spanObj;//提示信息表单
-                $(data.spanObj).removeClass("error success").addClass("validation").html("");
-                $(obj).removeClass("input_error");
+                $(data.spanObj).removeClass("validate-error validate-success validate-message").addClass("validation").html("");
+                $(obj).removeClass("input-error");
                 if (stat) {
                     //验证通过
                     //添加表单属性validation
                     obj.removeAttr("validation");
-                    //设置正确提示信息a
+                    //设置正确提示信息
                     var msg = (options[data.name].success || options[data.name].message);
                     //如果非必填项，且内容为空时，为没有错误
                     if (!data.required && data.obj.val() == '') {
                         msg = options[data.name].message || '';
                         $(data.spanObj).html(msg);
                     } else if (options[data.name].success) {
-                        $(data.spanObj).addClass("success").html(msg);
+                        $(data.spanObj).addClass("validate-success").html(msg);
                     } else {
                         $(data.spanObj).html(msg);
                     }
@@ -508,8 +540,8 @@ $.fn.extend({
                         var msg = (options[data.name].error[data.rule]);
                     else
                         var msg = "输入错误";
-                    $(obj).addClass("input_error");
-                    $(data.spanObj).addClass("error");
+                    $(obj).addClass("input-error");
+                    $(data.spanObj).addClass("validate-error");
                     $(data.spanObj).html(msg);
                 }
 
@@ -528,7 +560,7 @@ $.fn.extend({
                 //获得焦点时设置默认值
                 fieldObj.live("focus", function (event, send) {
                     var msg = options[name].message || "";
-                    spanObj.removeClass('error success').html(msg);
+                    spanObj.removeClass('validate-error validate-success').addClass('validate-message').html(msg);
                 })
                 //必须验证字段与确认密码加validation属性
                 if (options[name].rule.required) {
@@ -540,7 +572,7 @@ $.fn.extend({
                 if (options[name]['rule']['confirm']) {
                     $(fieldObj).attr("confirm", 1);
                 }
-                fieldObj.live("blur", function (event, send) {
+                fieldObj.live("blur change", function (event, send) {
                     //没有设置required必须验证时，默认为不用验证
                     options[name].rule.required || (options[name].rule.required = false);
                     var required = options[name].rule.required;
@@ -568,7 +600,7 @@ $.fn.extend({
             setDefaultMessage: function (name, spanObj) {
                 var defaultMessage = options[name].message;
                 if (defaultMessage) {
-                    spanObj.html(defaultMessage);
+                    spanObj.addClass('validate-message').html(defaultMessage);
                 }
             },
 
@@ -576,12 +608,12 @@ $.fn.extend({
             getSpanElement: function (name) {
                 var fieldObj = $("[name='" + name + "']");
                 var spanId = "hd_" + name;//span提示信息表单的id
-                if ($("#" + spanId).length == 0) {
+                if ($("[id='" + spanId + "']").length == 0) {
                     fieldObj.after("<span id='" + spanId + "' class='validation'></span>");
                 } else {//如果span已经存在，添加validation类
-                    $("#" + spanId).removeClass("validation").addClass("validation");
+                    $("[id='" + spanId + "']").removeClass("validation").addClass("validation");
                 }
-                spanObj = $("#" + spanId);
+                spanObj = $("[id='" + spanId + "']");
                 return [fieldObj, spanObj];
             }
         };
@@ -626,7 +658,7 @@ $.fn.extend({
 });
 
 /**
- * 笛卡儿积组合
+ * 笛卡尔乘积
  * @param object list 对象
  * @returns {*}
  * <code>
@@ -686,7 +718,7 @@ function descarte(list) {
  * jQuery增强函数
  */
 jQuery.extend({
-    //过小空数组
+    //过滤空数组
     "array_filter": function (arr) {
         return $.grep(arr, function (n, i) {
             if ($.trim(n)) {
@@ -695,12 +727,210 @@ jQuery.extend({
         })
     }
 })
+/**
+ * 异步提交操作
+ * @param obj
+ * @param url
+ * @returns {boolean}
+ */
+function hd_ajax(requestUrl, postData, url) {
+    $.ajax({
+        type: "POST",
+        url: requestUrl,
+        cache: false,
+        data: postData || {},
+        success: function (data) {
+            if (data.substr(0, 1) == '{') {
+                data = jQuery.parseJSON(data);
+                if (data.state == 1) {
+                    $.dialog({
+                        message: data.message,
+                        timeout: data.timeout || 3,
+                        type: "success",
+                        close_handler: function () {
+                            if (url) {
+                                location.href = url
+                            } else {
+                                window.location.reload(true);
+                            }
+                        }
+                    });
+                } else {
+                    $.dialog({
+                        message: data.message || "操作失败",
+                        timeout: data.timeout || 3,
+                        type: "error"
+                    });
+                }
+            } else {
+                $.dialog({
+                    message: '操作失败',
+                    timeout: 3,
+                    type: "error"
+                });
+            }
+        }
+    })
+}
+/**
+ * 表单提交，没有确定按钮，倒计时关闭窗口
+ * @param obj form表单对象
+ * @param url 成功时的跳转url
+ * @returns {boolean}
+ */
+function hd_submit(obj, url) {
+    if ($(obj).is_validate()) {
+        var post = $(obj).serialize();
+        $.ajax({
+            type: "POST",
+            url: $(obj).attr("action"),
+            cache: false,
+            data: post,
+            success: function (data) {
+                if (data.substr(0, 1) == '{') {
+                    data = jQuery.parseJSON(data);
+                    if (data.state == 1) {
+                        $.dialog({
+                            message: data.message,
+                            timeout: data.timeout || 3,
+                            type: "success",
+                            close_handler: function () {
+                                if (url) {
+                                    location.href = url
+                                } else {
+                                    window.location.reload(true);
+                                }
+                            }
+                        });
+                    } else {
+                        $.dialog({
+                            message: data.message || "操作失败",
+                            timeout: data.timeout || 3,
+                            type: "error"
+                        });
+                    }
+                } else {
+                    $.dialog({
+                        message: '操作失败',
+                        timeout: 3,
+                        type: "error"
+                    });
+                }
+            }
+        })
+    }
+    return false;
+}
+/**
+ * 表单提交，有确定按钮，需要点击确定按钮关闭窗口
+ * @param obj form表单对象
+ * @param url 成功时的跳转url
+ * @returns {boolean}
+ */
+function hd_submit_confirm(obj, url) {
+    if ($(obj).is_validate()) {
+        var _post = $(obj).serialize();
+        $.ajax({
+            type: "POST",
+            url: $(obj).attr("action"),
+            cache: false,
+            data: _post,
+            success: function (data) {
+                if (data.substr(0, 1) == '{') {
+                    data = jQuery.parseJSON(data);
+                    if (data.state == 1) {
+                        $.modal({
+                            width: 250,
+                            height: 180,
+                            title: '温馨提示',
+                            button_cancel: "关闭",
+                            message: data.message,
+                            type: "success",
+                            //点击确定窗口
+                            cancel: function () {
+                                if (url) {
+                                    location.href = url
+                                } else {
+                                    window.location.reload(true);
+                                }
+                            }
+
+                        })
+                    } else {
+                        $.dialog({
+                            message: data.message || "操作失败",
+                            type: "error",
+                            close_handler: function () {
+                                location.href = url;
+                            }
+                        });
+                    }
+                } else {
+                    $.dialog({
+                        message: "操作失败",
+                        type: "error",
+                        close_handler: function () {
+                            location.href = url;
+                        }
+                    });
+                }
+            }
+        })
+    }
+    return false;
+}
+
+//＝＝＝＝＝＝加入收藏夹＝＝＝＝＝＝＝＝＝＝＝
+function AddFavorite(sURL, sTitle) {
+    try {
+        window.external.addFavorite(sURL, sTitle);
+    }
+    catch (e) {
+        try {
+            window.sidebar.addPanel(sTitle, sURL, "");
+        }
+        catch (e) {
+            alert("加入收藏失败，请使用Ctrl+D进行添加");
+        }
+    }
+}
+function SetHome(obj, vrl) {
+    try {
+        obj.style.behavior = 'url(#default#homepage)';
+        obj.setHomePage(vrl);
+    }
+    catch (e) {
+        if (window.netscape) {
+            try {
+                netscape.security.PRivilegeManager.enablePrivilege("UniversalXPConnect");
+            }
+            catch (e) {
+                alert("此操作被浏览器拒绝！\n请在浏览器地址栏输入'about:config'并回车\n然后将[signed.applets.codebase_principal_support]设置为'true'");
+            }
+            var prefs = Components.classes['@mozilla.org/preferences-service;1'].getService(Components.interfaces.nsIPrefBranch);
+            prefs.setCharPref('browser.startup.homepage', vrl);
+        }
+    }
+}
+//＝＝＝＝＝＝加入收藏夹＝＝＝＝＝＝＝＝＝＝＝
 
 
-
-
-
-
+/**
+ * 全选
+ * @param element
+ */
+function select_all(element) {
+    $(element).find($("[type='checkbox']")).attr("checked", "checked");
+}
+/**
+ * 反选
+ * @param element
+ */
+function reverse_select(element) {
+    $(element).find($("[type='checkbox']")).attr("checked", function () {
+        return !$(this).attr("checked") == 1
+    });
+}
 
 
 

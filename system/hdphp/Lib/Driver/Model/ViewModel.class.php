@@ -38,7 +38,7 @@ class ViewModel extends Model
     private function check_join($table)
     {
         //验证表
-        if (is_null($this->joinTable)) {
+        if ($this->joinTable===false) {
             return false;
         } else if (is_array($this->joinTable) && !empty($this->joinTable) && !in_array($table, $this->joinTable)) {
             return false;
@@ -67,7 +67,7 @@ class ViewModel extends Model
     public function setJoinTable()
     {
         //不存在关联定义或不关联时
-        if (is_null($this->joinTable) || empty($this->view)) {
+        if ($this->joinTable===false || empty($this->view)) {
             return;
         }
         //关联from 语句
@@ -83,7 +83,7 @@ class ViewModel extends Model
             $from .= $set['type'] . " " . $_table . " ";
             $from .= " ON " . $set['on'] . " ";
         }
-        $this->db->opt['table'] = $from;
+        $this->db->opt['table'] = preg_replace('@(\w+?\.[a-z]+?)@i', C('DB_PREFIX') . '\1', $from);
     }
 
     //查询

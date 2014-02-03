@@ -31,7 +31,9 @@ function play(url, xml){
 	$.modal({
 		width: 626,
 		height: 500,
+		title: "正在播放：" + vname,
 		button: true,
+		button_cancel: "关闭",
 		content: htm
 	});
 }

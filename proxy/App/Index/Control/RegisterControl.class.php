@@ -41,6 +41,7 @@ class RegisterControl extends Control{
 			"username"	=> Q("post.username"),
 			"password"	=> Q("post.pwd", null, "md5"),
 			"userunion" => Q("post.userunion"),
+			"qqau"      => Q("post.qqau"),
 			"restime"	=> time()
 		);
 		M("user")->add($data);

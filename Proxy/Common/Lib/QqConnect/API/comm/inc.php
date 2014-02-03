@@ -1,0 +1,2 @@
+<?php die('forbidden'); ?>
+{"appid":"101006840","appkey":"77916004bec8f7df765917480c7b85f2","callback":"http://proxy.qlyewu.com/Passport/Qqlogin/callback","scope":"get_user_info","errorReport":true,"storageType":"file","host":"localhost","user":"root","password":"root","database":"test"}

@@ -1,5 +1,4 @@
 <?php
-if (!defined("HDPHP_PATH")) exit('No direct script access allowed');
 /**
  * Copyright    [HDPHP框架] (C)2011-2012 houdunwang.com ,Inc.
  * Licensed     www.apache.org/licenses/LICENSE-2.0
@@ -9,7 +8,7 @@ if (!defined("HDPHP_PATH")) exit('No direct script access allowed');
  * Link         www.hdphp.com
  */
 //session控制器
-class SessionControl extends SetupControl
+class SessionControl extends AuthControl
 {
     function index()
     {

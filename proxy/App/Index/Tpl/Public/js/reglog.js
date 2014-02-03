@@ -8,7 +8,7 @@ $(function(){
 		}, function () {
 			$( this ).removeClass( "reg-btn-cur" );
 		} );
-		document.getElementById("reg-uname").focus();
+		$("#reg-uname").focus();
 		return false;
 	} );
 	$( "#login-now" ).click( function () {

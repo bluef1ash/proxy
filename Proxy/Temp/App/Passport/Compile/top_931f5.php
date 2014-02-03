@@ -1,4 +1,4 @@
-<?php if(!defined("HDPHP_PATH"))exit;C("SHOW_NOTICE",FALSE);?>		<link href="http://localhost/proxy/./Proxy/App/Passport/Tpl/Public/Css/passport.css" rel="stylesheet" type="text/css">
+<?php if(!defined("HDPHP_PATH"))exit;C("SHOW_NOTICE",FALSE);?>		<link href="http://127.0.0.1/proxy/./Proxy/App/Passport/Tpl/Public/Css/passport.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
 		<!-- 头部开始 -->
@@ -18,10 +18,10 @@
 					<a target="_blank" href="#">偏好设置</a>
 				</li>
 				<li>
-					<a target="_blank" href="<?php echo C("WEIBO");?>">微博</a><a href="http://localhost/proxy">返回首页</a>
+					<a target="_blank" href="<?php echo C("WEIBO");?>">微博</a><a href="http://127.0.0.1/proxy">返回首页</a>
 				</li>
 			</ul>
-			<img src="http://localhost/proxy/./Proxy/App/Passport/Tpl/Public/Images/mlogo.jpg" alt="个人中心">
+			<img src="http://127.0.0.1/proxy/./Proxy/App/Passport/Tpl/Public/Images/mlogo.jpg" alt="个人中心">
 		</div>
 		<!-- 头部结束 -->
 		<!-- 正文开始 -->

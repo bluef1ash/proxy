@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<link rel="shortcut icon" type="image/x-icon" href="http://localhost/proxy/./Proxy/App/Admin/Tpl/Public/images/favicon.ico">
 		<script type='text/javascript' src='http://localhost/proxy/System/hdphp/../hdjs/jquery-1.8.2.min.js'></script>
 <link href='http://localhost/proxy/System/hdphp/../hdjs/css/hdjs.css' rel='stylesheet' media='screen'>
 <script src='http://localhost/proxy/System/hdphp/../hdjs/js/hdjs.js'></script>
@@ -19,7 +20,7 @@
 		APP = 'http://localhost/proxy/index.php/Admin';
 		CONTROL = 'http://localhost/proxy/index.php/Admin/Index';
 		METH = 'http://localhost/proxy/index.php/Admin/Index/index';
-		GROUP = 'http://localhost/proxy/./Proxy/';
+		GROUP = 'http://localhost/proxy/./Proxy';
 		TPL = 'http://localhost/proxy/./Proxy/App/Admin/Tpl';
 		CONTROLTPL = 'http://localhost/proxy/./Proxy/App/Admin/Tpl/Index';
 		STATIC = 'http://localhost/proxy/Static';
@@ -53,6 +54,17 @@
 				var str = dates.toLocaleString();
 				return str;
 			}
+			function SetCwinHeight(iframeObj){
+				if (document.getElementById){
+			  		if (iframeObj && !window.opera){
+						if (iframeObj.contentDocument && iframeObj.contentDocument.body.offsetHeight){
+							iframeObj.height = iframeObj.contentDocument.body.offsetHeight;
+			    		}else if(document.frames[iframeObj.name].document && document.frames[iframeObj.name].document.body.scrollHeight){
+			    			iframeObj.height = document.frames[iframeObj.name].document.body.scrollHeight;
+		    			}
+					}
+				}
+			}
 		</script>
 		<!-- 默认打开目标 -->
 		<base target="iframe">
@@ -66,9 +78,9 @@
 					<li>
 						<a href="http://localhost/proxy" target="_blank">前台首页</a>
 					</li>
-					<li><a href="<?php echo U('Admin/Category/category');?>">查看栏目</a></li> 
+					<li><a href="<?php echo U('Admin/Category/category');?>">查看栏目</a></li>
 					<li><a href="<?php echo U('Admin/User/index');?>">用户列表</a></li>
-					<li><a href="<?php echo U('Admin/System/web_set');?>">网站配置</a></li>				
+					<li><a href="<?php echo U('Admin/System/web_set');?>">网站配置</a></li>
 				</ul>
 			</div>
 			<div class="top_bar">
@@ -96,8 +108,8 @@
 				<div class="text">
 					<ul class="con">
 				        <li class="nav_u">
-				        	<a href="<?php echo U('Admin/User/index');?>" class="pos">用户的列表</a>				        	
-				        </li> 
+				        	<a href="<?php echo U('Admin/User/index');?>" class="pos">用户的列表</a>
+				        </li>
 				    </ul>
 				</div>
 			</div>
@@ -112,6 +124,11 @@
 				    <ul class="con">
 				    	<li class="nav_u">
 				    		<a href="<?php echo U('Admin/Lists/search');?>" class="pos">搜索列表</a>
+				    	</li>
+				    </ul>
+				    <ul class="con">
+				    	<li class="nav_u">
+				    		<a href="<?php echo U('Admin/Lists/add');?>" class="pos">增加列表</a>
 				    	</li>
 				    </ul>
 				</div>
@@ -162,11 +179,10 @@
 				    </ul>
 				</div>
 			</div>
-			
 		</div>
 		<!-- 右侧 -->
 		<div id="right">
-			<iframe frameboder="0" border="0" scrolling="no" name="iframe" src="<?php echo U('Admin/Index/copy');?>"></iframe>
+			<iframe frameboder="0" border="0" scrolling="no" name="iframe" onload="SetCwinHeight(this)" src="<?php echo U('Admin/Index/copy');?>"></iframe>
 		</div>
 		<!-- 底部 -->
 		<div id="foot_box">

@@ -5,7 +5,6 @@
 class IndexControl extends CommonControl{
 	/**
 	 * 默认显示后台首页
-	 * @return [type] [description]
 	 */
     public function index(){
       	$this->display();
@@ -17,6 +16,8 @@ class IndexControl extends CommonControl{
     	$aid = Q("session.aid", null, "intval");
     	$admin = M("admin")->where(array("aid"=>$aid))->field("logintime,loginip")->find();
     	$this->assign("admin", $admin);
+      $mysqlinfo = M()->getVersion();
+      $this->assign("mysqlinfo", $mysqlinfo);
     	$this->display();
     }
 }

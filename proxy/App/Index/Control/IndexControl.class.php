@@ -19,7 +19,7 @@ class IndexControl extends Control {
 		// 采集
 		if (Q ( "post.websiteText" )) {
 			$url = Q ( "post.websiteText" );
-			$update = $this->_post ( "update" );
+			$update = Q ( "update" );
 			$collect = A ( "Data/Proxy/index", array ( $url, $update ) );
 			$this->assign ( "collect", $collect );
 			$update == "auto" ? $ufs = 1 : $ufs = 0;

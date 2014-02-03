@@ -1,0 +1,20 @@
+<load file="__PUBLIC__/header.html">
+		<title>QQ登录-{$hd.config.WEBNAME}</title>
+		<script type="text/javascript">
+			$(function(){
+				var username = "{$qqau.username}";
+				var password = "{$qqau.password}";
+				$.post(WEB + "/Index/Login/login", {username : username, pwd : password}, function(data) {
+						if (data) {
+							location.href = APP + "/Qqlogin/messenger/msg/1";
+						}else{
+							location.href = APP + "/Qqlogin/messenger/msg/0";
+						}
+					}
+				});
+			});
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

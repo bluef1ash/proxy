@@ -30,11 +30,15 @@ class M1905Control extends Control{
 	 * @return array 视频列表及视频名称
 	 */
 	public function listpage($id){
-		$url = file_data("http://www.m1905.com/vod/play/".$id.".shtml");
-		preg_match("/title\s*:\s*'(.*)',.*iosurl\s*:\s*'(.*)',/iUs", $url, $arr);
-		$flv = str_replace("m3u8", "flv", base64_decode($arr[2])); //这行删除就是mu38的视频。
-		$xml = '<m type="" src="http://flv1.vodfile.m1905.com/movie'.$flv.'?start={start_bytes}" stream="true" label="'.$arr[1]."\" />\n";
-		return array("xml"=>"<list>\n".$xml."</list>","xml_m"=>$xml,"vName"=>$arr[1]);
+		$t_id = array(
+			substr($id, 0, 1),
+			substr($id, 1, 1)
+		);
+		$url = "http://static.m1905.com/profile/vod/" . $t_id[0] . "/" . $t_id[1] . "/" . $id  . "_1.xml";
+		$page = file_data($url);
+		preg_match('/<playlist.*title="(.*)".*<item.*url="(.*)".*<\/playlist>/iUs', $page, $arr);
+		$xml = '<m type="" src="' . $arr[2] . '?start={start_seconds}" stream="true" label="' . $arr[1] . "\" />\n";
+		return array("xml" => "<list>\n" . $xml . "</list>", "xml_m" => $xml, "vName" => $arr[1]);
 	}
 }
 ?>

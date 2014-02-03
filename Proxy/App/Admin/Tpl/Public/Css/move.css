@@ -40,6 +40,10 @@
 #category .title .close-window:hover{
 	background-position: -25px 0;
 }
+#category .sel{
+	height: auto;
+	overflow: hidden;
+}
 #category .sel p {
 	clear: both;
 	width: 480px;

@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<link rel="shortcut icon" type="image/x-icon" href="http://localhost/proxy/./Proxy/App/Admin/Tpl/Public/images/favicon.ico">
 		<script type='text/javascript' src='http://localhost/proxy/System/hdphp/../hdjs/jquery-1.8.2.min.js'></script>
 <link href='http://localhost/proxy/System/hdphp/../hdjs/css/hdjs.css' rel='stylesheet' media='screen'>
 <script src='http://localhost/proxy/System/hdphp/../hdjs/js/hdjs.js'></script>
@@ -19,7 +20,7 @@
 		APP = 'http://localhost/proxy/index.php/Admin';
 		CONTROL = 'http://localhost/proxy/index.php/Admin/Index';
 		METH = 'http://localhost/proxy/index.php/Admin/Index/copy';
-		GROUP = 'http://localhost/proxy/./Proxy/';
+		GROUP = 'http://localhost/proxy/./Proxy';
 		TPL = 'http://localhost/proxy/./Proxy/App/Admin/Tpl';
 		CONTROLTPL = 'http://localhost/proxy/./Proxy/App/Admin/Tpl/Index';
 		STATIC = 'http://localhost/proxy/Static';
@@ -55,11 +56,11 @@
 			</tr>
 			<tr>
 				<td>服务器IP</td>
-				<td><?php echo $_SERVER['SERVER_ADDR'];?></td>
+				<td><?php echo $_SERVER['LOCAL_ADDR'];?></td>
 			</tr>
 			<tr>
 				<td>数据库信息</td>
-				<td><?php echo mysql_get_server_info()?></td>
+				<td><?php echo $mysqlinfo;?></td>
 			</tr>
 			<tr>
 				<td colspan=2 class="th"><span class="span_people">管理员信息</span></td>

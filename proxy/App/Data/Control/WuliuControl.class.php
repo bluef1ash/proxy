@@ -5,16 +5,22 @@
 class WuliuControl extends Control {
 	/**
 	 * 默认执行
-	 * @return [type] [description]
 	 */
 	public function index() {
 		header ( 'Content-type:text/xml;charset:utf-8;filename:56代理.xml' ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
-		if (Q ( "get.id" )) { // 是否向地址栏传递URL参数
-			if (preg_match("/^\d{4,6}$/iUs", Q ( "get.id" ))){
-				echo $this->listpage ( Q ( "get.id" ) )["xml"];
+		if ($id = Q ( "get.id" )) { // 是否向地址栏传递URL参数
+			$xml = $this->cache_collect("tudou_" . $id);
+			if ($xml != 1 && !$xml) {
+				echo $xml;
 			}else{
-				echo $this->one(Q ( "get.id" ))["xml"];
+				if (preg_match("/^\d{4,6}$/iUs", $id)){
+					$xml = $this->listpage ( $id )["xml"];
+				}else{
+					$xml = $this->one($id)["xml"];
+				}
+				$this->cache_collect($id, 1, $xml, "tudou_");
+				echo $xml;
 			}
 		} elseif (Q ( "get.top" )) {
 			echo $this->top ( Q ( "get.top" ) );

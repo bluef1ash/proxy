@@ -2,11 +2,13 @@
 /**
  * 登录控制器
  */
-class LoginControl extends Control{
+class LoginControl extends AuthControl{
 	/**
 	 * 显示登录页
 	 */
 	public function index(){
+		if(Q ( "session.adminname" ) || Q ( "session.aid" ))
+			go("Admin/Index/index");
 		$this->display();
 	}
 	/**

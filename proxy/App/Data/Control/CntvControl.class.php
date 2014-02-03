@@ -2,17 +2,21 @@
 /**
  * CNTV采集控制器
  */
-class CntvControl extends Control{
+class CntvControl extends AuthControl{
 	/**
 	 * 默认执行
-	 * @return [type] [description]
 	 */
 	public function index(){
 		header ( 'Content-type:text/xml;charset:utf-8;filename:CNTV代理.xml' ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
-		if ( Q ("get.id")) {
-			$id = Q("get.id");
-			echo $this->listpage($id)["xml"];
+		if ( $id = Q ("get.id")) {
+			if ($xml = S("cntv_" . $id)) {
+				echo $xml;
+			}else{
+				$xml = $this->listpage($id)["xml"];
+				S($id, $xml, 3600, array("prefix" => "cntv_"));
+				echo $xml;
+			}
 		} elseif ( Q ("get.vname") ) {
 			echo $this->listpage ( Q ("get.vname") )["vName"];
 		} else {

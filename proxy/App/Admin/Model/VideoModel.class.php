@@ -3,7 +3,7 @@ class videoModel extends ViewModel {
 	public $view = array(
 		"user" => array(
 			"type" => INNER_JOIN,
-			"field" => "username",
+			"field" => "username,userunion",
 			"on" => "user.uid=video.uid"
 		),
 		"category" => array(

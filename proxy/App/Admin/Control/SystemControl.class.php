@@ -33,7 +33,7 @@ class SystemControl extends CommonControl{
 			if($passwdF != $passwdS)
 				$this->error("两次密码不相同！");
 			$aid = Q("session.aid", null, "intval");
-			M("admin")->where(array("aid"=>$aid))->save(array("passwd"=>md5($passwdF)));
+			M("admin")->where(array("aid"=>$aid))->save(array("password"=>md5($passwdF)));
 			$this->success("修改成功！");
 		}
 		$this->display();

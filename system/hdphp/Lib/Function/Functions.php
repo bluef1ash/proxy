@@ -33,16 +33,14 @@ function M($table = null, $full = null)
 
 /**
  * 生成扩展模型
- * @param $class 模型类
- * @param mixed $table 表名
- * @param mixed $param 参数
+ * @param $class 扩展类名
+ * @param array $param __init()方法参数
  * @return mixed
  */
-function K($class, $table = false, $param = array())
+function K($class, $param = array())
 {
-    $table = $table === false ? strtolower($class) : $table;
     $class .= "Model";
-    return new $class($table, $param);
+    return new $class(null, null, null, $param);
 }
 
 /**
@@ -52,7 +50,7 @@ function K($class, $table = false, $param = array())
  */
 function R($tableName = null, $full = null)
 {
-    return new relationModel($tableName, $full);
+    return new RelationModel($tableName, $full);
 }
 
 /**
@@ -585,7 +583,7 @@ function Q($var, $default = null, $filter = null)
         //对参数进行过滤的函数
         $funcArr = is_null($filter) ? C("FILTER_FUNCTION") : $filter;
         //参数过滤函数
-        if (is_string($funcArr)) {
+        if (is_string($funcArr) && !empty($funcArr)) {
             $funcArr = explode(",", $funcArr);
         }
         //是否存在过滤函数
@@ -1056,4 +1054,25 @@ function date_before($time, $unit = null)
     }
 }
 
+/**
+ * 获得唯一uuid值
+ * @param string $sep 分隔符
+ * @return string
+ */
+function get_uuid($sep = '')
+{
+    if (function_exists('com_create_guid')) {
+        return com_create_guid();
+    } else {
+        mt_srand((double)microtime() * 10000); //optional for php 4.2.0 and up.
+        $id = strtoupper(md5(uniqid(rand(), true)));
+        $sep = ''; // "-"
+        $uuid = substr($id, 0, 8) . $sep
+            . substr($id, 8, 4) . $sep
+            . substr($id, 12, 4) . $sep
+            . substr($id, 16, 4) . $sep
+            . substr($id, 20, 12);
+        return $uuid;
+    }
+}
 

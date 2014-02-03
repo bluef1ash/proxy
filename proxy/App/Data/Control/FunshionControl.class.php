@@ -5,13 +5,19 @@
 class FunshionControl extends Control {
 	/**
 	 * 默认执行
-	 * @return [type] [description]
 	 */
 	public function index() {
 		header ( 'Content-type:text/xml;charset:utf-8;filename:风行代理.xml' ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
-		if ( Q ("get.id")) {
-			echo $this->listpage ( Q ("get.id") )["xml"];
+		if ($id = Q("get.id")) {
+			$xml = $this->cache_collect("funshion_" . $id);
+			if ($xml != 1 && !$xml) {
+				echo $xml;
+			}else{
+				$xml = $this->listpage($id)["xml"];
+				$this->cache_collect($id, 1, $xml, "funshion_");
+				echo $xml;
+			}
 		} elseif ( Q ("get.vname") ) {
 			echo $this->listpage ( Q ("get.vname") )["vName"];
 		} else {

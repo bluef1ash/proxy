@@ -1,5 +1,6 @@
 <?php
 if (!defined("HDPHP_PATH")) exit('No direct script access allowed');
+
 /**
  * Copyright    [HDPHP框架] (C)2011-2012 houdunwang.com ,Inc.
  * Licensed     www.apache.org/licenses/LICENSE-2.0
@@ -8,7 +9,8 @@ if (!defined("HDPHP_PATH")) exit('No direct script access allowed');
  * @author      向军  houdunwangxj@gmail.com
  * Link         www.hdphp.com
  */
-class RoleModel extends Model {
+class RoleModel extends Model
+{
 
     public $view = array(
         "user_role" => array(

@@ -1,8 +1,5 @@
 <?php
 
-if (!defined("HDPHP_PATH"))
-    exit('No direct script access allowed');
-
 /**
  * Copyright    [HDPHP框架] (C)2011-2012 houdunwang.com ,Inc.
  * Licensed     www.apache.org/licenses/LICENSE-2.0
@@ -12,8 +9,12 @@ if (!defined("HDPHP_PATH"))
  * Link         www.hdphp.com
  */
 //rbac控制器
-class RbacControl extends SetupControl
+class RbacControl extends AuthControl
 {
+    public function __init()
+    {
+        parent::__init();
+    }
 
     function index()
     {
@@ -23,7 +24,7 @@ class RbacControl extends SetupControl
     //设置配置文件
     function setconfig()
     {
-        $this->assign("Config", C());
+        $this->field = C();
         $this->display();
     }
 
@@ -66,7 +67,7 @@ class RbacControl extends SetupControl
     private function checkDb()
     {
         $stat = mysql_connect(C("db_host") . ':' . C("db_port"), C("db_user"), C("db_password"));
-        mysql_query("CREATE DATABASE IF NOT EXISTS ".C("db_database"));
+        mysql_query("CREATE DATABASE IF NOT EXISTS " . C("db_database"));
         if (!$stat || !mysql_select_db(C("db_database"))) {
             $this->error("数据库连接错误，请修改配置项", "setconfig");
         }
@@ -125,6 +126,7 @@ class RbacControl extends SetupControl
         $this->display();
     }
 
+    //添加用户组
     function addentrance()
     {
         $this->checkDb(); //验证数据库
@@ -147,7 +149,7 @@ class RbacControl extends SetupControl
         }
     }
 
-//添加用户视图
+    //添加用户视图
     function showadduser()
     {
         $this->checkDb(); //验证数据库
@@ -160,10 +162,10 @@ class RbacControl extends SetupControl
         $this->display();
     }
 
-//添加用户
+    //添加用户
     function adduser()
     {
-        $this->checkDb(); //验证数据库
+
         $db = M("user");
         $_POST['password'] = md5($_POST['password']);
         if ($db->add()) {
@@ -171,21 +173,20 @@ class RbacControl extends SetupControl
             if (!$newUid) {
                 $this->error("添加用户失败，请重试");
             }
-            $db->table = "user_role";
             $_POST['uid'] = $newUid;
-            $db->add();
+            $db->table('user_role')->add();
             $this->success("添加成功", "index");
         } else {
             $this->error("添加用户失败");
         }
     }
 
-//查看用户
+    //查看用户
     function showuser()
     {
         $this->checkDb(); //验证数据库
-        $db = k('user');
-        $row = $db->field(array("uid", "username"))->findall();
+        $db = k('User');
+        $row = $db->field()->findall();
         if (!$row) {
             $this->error("没有用户信息，请先设置", "showadduser");
         }
@@ -193,16 +194,13 @@ class RbacControl extends SetupControl
         $this->display();
     }
 
-//删除用户
+    //删除用户
     function deluser()
     {
         $this->checkDb(); //验证数据库
-        $db = M("user");
+        $db = K("User");
         if ($db->del($_GET['uid'])) {
-            $db->table = "user_role";
-            if ($db->del("uid=" . $_GET['uid'])) {
-                $this->success("删除用户成功", "index");
-            }
+            $this->success("删除用户成功", "index");
         } else {
             $this->error("删除用户失败");
         }
@@ -295,9 +293,7 @@ class RbacControl extends SetupControl
         $this->display();
     }
 
-    /**
-     * 添加角色权限
-     */
+    //添加角色权限
     function addaccess()
     {
         $db = M("access");

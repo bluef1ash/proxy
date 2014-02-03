@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<link rel="shortcut icon" type="image/x-icon" href="http://localhost/proxy/./Proxy/App/Admin/Tpl/Public/images/favicon.ico">
 		<script type='text/javascript' src='http://localhost/proxy/System/hdphp/../hdjs/jquery-1.8.2.min.js'></script>
 <link href='http://localhost/proxy/System/hdphp/../hdjs/css/hdjs.css' rel='stylesheet' media='screen'>
 <script src='http://localhost/proxy/System/hdphp/../hdjs/js/hdjs.js'></script>
@@ -19,7 +20,7 @@
 		APP = 'http://localhost/proxy/index.php/Admin';
 		CONTROL = 'http://localhost/proxy/index.php/Admin/Index';
 		METH = 'http://localhost/proxy/index.php/Admin/Index/index';
-		GROUP = 'http://localhost/proxy/./Proxy/';
+		GROUP = 'http://localhost/proxy/./Proxy';
 		TPL = 'http://localhost/proxy/./Proxy/App/Admin/Tpl';
 		CONTROLTPL = 'http://localhost/proxy/./Proxy/App/Admin/Tpl/Index';
 		STATIC = 'http://localhost/proxy/Static';

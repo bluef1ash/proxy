@@ -45,6 +45,11 @@
 						<else/>
 							<a href="{|U('Admin/User/lock_user', array('uid'=>$n['uid']))}">锁定</a>
 						</if>
+						<if value="$n['usergroup'] eq 1">
+							<a href="{|U('Admin/User/unupload', array('uid'=>$n['uid']))}">不允许上传</a>
+						<else/>
+							<a href="{|U('Admin/User/upload', array('uid'=>$n['uid']))}">允许上传</a>
+						</if>
 					</td>
 				</tr>
 			</list>

@@ -15,6 +15,17 @@
 				var str = dates.toLocaleString();
 				return str;
 			}
+			function SetCwinHeight(iframeObj){
+				if (document.getElementById){
+			  		if (iframeObj && !window.opera){
+						if (iframeObj.contentDocument && iframeObj.contentDocument.body.offsetHeight){
+							iframeObj.height = iframeObj.contentDocument.body.offsetHeight;
+			    		}else if(document.frames[iframeObj.name].document && document.frames[iframeObj.name].document.body.scrollHeight){
+			    			iframeObj.height = document.frames[iframeObj.name].document.body.scrollHeight;
+		    			}
+					}
+				}
+			}
 		</script>
 		<!-- 默认打开目标 -->
 		<base target="iframe">
@@ -28,9 +39,9 @@
 					<li>
 						<a href="__ROOT__" target="_blank">前台首页</a>
 					</li>
-					<li><a href="{|U('Admin/Category/category')}">查看栏目</a></li> 
+					<li><a href="{|U('Admin/Category/category')}">查看栏目</a></li>
 					<li><a href="{|U('Admin/User/index')}">用户列表</a></li>
-					<li><a href="{|U('Admin/System/web_set')}">网站配置</a></li>				
+					<li><a href="{|U('Admin/System/web_set')}">网站配置</a></li>
 				</ul>
 			</div>
 			<div class="top_bar">
@@ -58,8 +69,8 @@
 				<div class="text">
 					<ul class="con">
 				        <li class="nav_u">
-				        	<a href="{|U('Admin/User/index')}" class="pos">用户的列表</a>				        	
-				        </li> 
+				        	<a href="{|U('Admin/User/index')}" class="pos">用户的列表</a>
+				        </li>
 				    </ul>
 				</div>
 			</div>
@@ -74,6 +85,11 @@
 				    <ul class="con">
 				    	<li class="nav_u">
 				    		<a href="{|U('Admin/Lists/search')}" class="pos">搜索列表</a>
+				    	</li>
+				    </ul>
+				    <ul class="con">
+				    	<li class="nav_u">
+				    		<a href="{|U('Admin/Lists/add')}" class="pos">增加列表</a>
 				    	</li>
 				    </ul>
 				</div>
@@ -127,7 +143,7 @@
 		</div>
 		<!-- 右侧 -->
 		<div id="right">
-			<iframe frameboder="0" border="0" scrolling="no" name="iframe" src="{|U('Admin/Index/copy')}"></iframe>
+			<iframe frameboder="0" border="0" scrolling="no" name="iframe" onload="SetCwinHeight(this)" src="{|U('Admin/Index/copy')}"></iframe>
 		</div>
 		<!-- 底部 -->
 		<div id="foot_box">

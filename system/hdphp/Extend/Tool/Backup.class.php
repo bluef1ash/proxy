@@ -32,33 +32,35 @@ final class Backup
     //还原数据
     static public function recovery($option)
     {
-        $dir = Q("get._dirname") ? str_replace('@','/',Q("get._dirname")) : $option['dir'];
+        $dir = session("backup_dir",$option['dir']);
         self::$config = require($dir . '/config.php');
         //文件id
-        $fid = Q("get._fid", NULL, "intval");
+        $fid = session("backup_fid", NULL, "intval");
         //表前缀
         $db = M();
         $db_prefix = C("DB_PREFIX");
         if (is_null($fid)) {
-            $url=isset($option['url'])?$option['url']:'';
-            $step_time=(isset($option['step_time'])?$option['step_time']:0.5)*1000;
+            $url = isset($option['url']) ? $option['url'] : '';
+            $step_time = (isset($option['step_time']) ? $option['step_time'] : 0.5) * 1000;
             //还原表结构
             if (is_file($dir . '/structure.php')) {
                 require $dir . '/structure.php';
             }
-            $html = "<script>setTimeout(function(){location.href='" . __METH__ . "&_dirname=" . str_replace('/','@',$dir) . "&_fid=1';},{$step_time});</script>";
+            session('backup_fid',1);
+            $html = "<script>setTimeout(function(){location.href='" . __METH__ . "';},{$step_time});</script>";
             $html .= "<html><head><meta charset='utf-8'/></head><body><div style='text-align:center;font-size:14px;margin-top: 50px;'>还原数据初始化...</div>";
             $html .= '</body></html>';
-            cookie('backup_history_url',$url);
-            cookie('backup_step_time',$step_time);
+            session('backup_history_url', $url);
+            session('backup_step_time', $step_time);
             echo $html;
             exit;
         }
-        $step_time=cookie('backup_step_time');
+        $step_time = session('backup_step_time');
         foreach (glob($dir . '/*') as $d) {
             if (preg_match("@_bk_$fid\.php$@", $d)) {
                 require $d;
-                $html = "<script>setTimeout(function(){location.href='" . __METH__ . "&_dirname=" . str_replace('/','@',$dir) . "&_fid=" . ($fid + 1) . "';},{$step_time});</script>";
+                $_SESSION['backup_fid']+=1;
+                $html = "<script>setTimeout(function(){location.href='" . __METH__ . "';},{$step_time});</script>";
                 $html .= "<html><head><meta charset='utf-8'/></head><body><div style='text-align:center;font-size:14px;margin-top: 50px;'>分卷{$fid}还原完毕!</div>";
                 $html .= "</body></html>";
                 echo $html;
@@ -66,22 +68,29 @@ final class Backup
             }
         }
         $html = "<html><head><meta charset='utf-8'/></head><body><div style='text-align:center;font-size:14px;margin-top: 50px;'>所有分卷还原完毕!";
-        $url=cookie('backup_history_url');
+        $url = session('backup_history_url');
         if (!empty($url))
             $html .= "<a href='javascript:parent.location.href=\"" . $url . "\"' class='btn'>返回</a>";
         $html .= '</div></body></html>';
         self::success($html);
     }
+
     //备份数据表
     static public function backup($config = array())
     {
-        if ($dirname = Q("get._dirname")) {
-            self::$dir = str_replace('@','/',$dirname);
+        $dir = session("backup_dir");
+        if (!is_file($dir . '/config.php')) {
+            session('backup_dir', NULL);
+            $dir = NULL;
+        }
+        if ($dir) {
+            self::$dir = $dir;
             if (is_file(self::$dir . '/config.php')) {
                 self::$config = require(self::$dir . '/config.php');
             } else {
                 if (DEBUG) {
                     halt('数据库备份配置文件不存在，请重新执行备份操作');
+
                 } else {
                     return false;
                 }
@@ -94,7 +103,8 @@ final class Backup
             if ($structure) {
                 self::backup_structure();
             }
-            $html = "<script>setTimeout(function(){location.href='" . __METH__ . "&_dirname=" . str_replace('/','@',self::$dir) . "';},500);</script>";
+            session('backup_dir', self::$dir);
+            $html = "<script>setTimeout(function(){location.href='" . __METH__ . "';},500);</script>";
             $html .= "<html><head><meta charset='utf-8'/></head><body><div style='text-align:center;font-size:14px;margin-top: 50px;'>正在进行备份初始化...</div></body></html>";
             echo $html;
             exit;
@@ -151,6 +161,8 @@ final class Backup
         }
         //更新配置文件
         $html = "<html><head><meta charset='utf-8'/></head><body><div style='text-align:center;font-size:14px;margin-top: 50px;'>完成所有数据备份!";
+        session('backup_dir',NULL);
+        session('backup_fid',NULL);
         if (!empty($config['url']))
             $html .= "<a href='javascript:parent.location.href=\"" . $config['url'] . "\"' class='btn'>返回备份列表</a>";
         $html .= '</div></body></html>';
@@ -160,8 +172,7 @@ final class Backup
     //写入备份数据
     static private function write_backup_data($table, $data, $current_row)
     {
-        $fid = Q("get._fid") ? Q("get._fid") : 1;
-        $_GET['_fid']=$fid;
+        $fid = Q("session.backup_fid",1,'intval');
         file_put_contents(self::$dir . "/{$table}_bk_{$fid}.php", "<?php if(!defined('HDPHP_PATH'))EXIT;\n{$data}");
         self::next_backup($current_row, $table);
     }
@@ -177,11 +188,11 @@ final class Backup
         if (!headers_sent()) {
             header("Content-type:text/html;charset=utf-8");
         }
-        $fid = Q("get._fid");
         //还原时间
-        $c=current(self::$config);
+        $c = current(self::$config);
         $step_time = $c['step_time'];
-        $html = "<script>setTimeout(function(){location.href='" . __METH__ . "&_dirname=" . str_replace('/','@',self::$dir) . "&_fid=" . ($fid + 1) . "';},{$step_time});</script>";
+        $_SESSION['backup_fid']+=1;
+        $html = "<script>setTimeout(function(){location.href='" . __METH__ . "';},{$step_time});</script>";
         $html .= "<html><head><meta charset='utf-8'/></head><body><div style='text-align:center;font-size:14px;margin-top: 50px;'>完成到{$current_row}条记录的备份，继续备份{$table}表</div></body></html>";
         echo $html;
         exit;
@@ -238,7 +249,7 @@ final class Backup
             self::$config[$table]['current_row'] = 0;
             self::$config[$table]['size'] = $config['size'] * 1000;
             self::$config[$table]['url'] = $config['url'];
-            self::$config[$table]['step_time'] = isset($config['step_time'])?$config['step_time']*1000:500;
+            self::$config[$table]['step_time'] = isset($config['step_time']) ? $config['step_time'] * 1000 : 500;
             self::$config[$table]['database'] = $config['database'];
         }
         self::update_config_file();

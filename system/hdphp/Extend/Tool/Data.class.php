@@ -18,29 +18,30 @@
 final class Data
 {
     /**
-     * 本函数即将废弃
-     * @param $data
-     * @param string $fieldPri
-     * @param string $fieldPid
-     * @param int $pid
-     * @param null $sid
-     * @param int $type 1 获得多层栏目  | 2 获得所有子栏目 3 获得父级栏目 4 判断是否为子栏目
-     * @param string $html
-     * @param int $level
-     * @return array|bool
+     * 返回多层栏目
+     * @param $data 操作的数组
+     * @param int $pid 一级PID的值
+     * @param string $html 栏目名称前缀
+     * @param string $fieldPri 唯一键名，如果是表则是表的主键
+     * @param string $fieldPid 父ID键名
+     * @param int $level 不需要传参数（执行时调用）
+     * @return array
      */
-    static public function channel($data, $fieldPri = 'cid', $fieldPid = 'pid', $pid = 0, $sid = null, $type = 2, $html = "&nbsp;", $level = 1)
+    static public function channelLevel($data, $pid = 0, $html = "&nbsp;", $fieldPri = 'cid', $fieldPid = 'pid', $level = 1)
     {
-        switch ($type) {
-            case 1:
-                return self::channelLevel($data, $pid, $html, $fieldPri, $fieldPid, $level);
-            case 2:
-                return self::channelList($data, $pid, $html, $fieldPri, $fieldPid, $level);
-            case 3:
-                return self::parentChannel($data, $sid, $html, $fieldPri, $fieldPid, $level);
-            case 4:
-                return self::isChild($data, $sid, $pid, $fieldPri, $fieldPid);
+        if (empty($data)) {
+            return array();
         }
+        $arr = array();
+        foreach ($data as $v) {
+            if ($v[$fieldPid] == $pid) {
+                $arr[$v[$fieldPri]] = $v;
+                $arr[$v[$fieldPri]]['_level'] = $level;
+                $arr[$v[$fieldPri]]['_html'] = str_repeat($html, $level - 1);
+                $arr[$v[$fieldPri]]["_data"] = self::channelLevel($data, $v[$fieldPri], $html, $fieldPri, $fieldPid, $level + 1);
+            }
+        }
+        return $arr;
     }
 
     /**
@@ -55,35 +56,36 @@ final class Data
      */
     static public function channelList($data, $pid = 0, $html = "&nbsp;", $fieldPri = 'cid', $fieldPid = 'pid', $level = 1)
     {
-        if (empty($data) || !is_array($data) || !is_array(current($data))) {
-            return array();
-        }
-        $arr = array();
-        $id = 0;
-        foreach ($data as $v) {
-            if ($v[$fieldPid] == $pid) {
-                $arr[$id] = $v;
-                $arr[$id]['level'] = $level;
-                $arr[$id]['html'] = str_repeat($html, $level - 1);
-                $sArr = self::channelList($data, $v[$fieldPri], $html, $fieldPri, $fieldPid, $level + 1);
-                $arr = array_merge($arr, $sArr);
-                $id = count($arr);
+        $data = self::_channelList($data, $pid, $html, $fieldPri, $fieldPid, $level);
+        if (empty($data)) return $data;
+        foreach ($data as $n => $m) {
+            if ($m['_level'] == 1) continue;
+            $data[$n]['_first'] = false;
+            $data[$n]['_end'] = false;
+            if (!isset($data[$n - 1]) || $data[$n - 1]['_level'] != $m['_level']) {
+                $data[$n]['_first'] = true;
+            }
+            if (isset($data[$n + 1]) && $data[$n]['_level'] > $data[$n + 1]['_level']) {
+                $data[$n]['_end'] = true;
             }
         }
-        if (count($data) == $id) {
-            foreach ($arr as $n => $m) {
-                //第一层不处理
-                if ($m['level'] == 1) {
-                    $arr[$n]['_end'] = $arr[$n]['_pre'] = true;
-                    continue;
-                }
-                $arr[$n]['_end'] = $arr[$n]['_pre'] = false;
-                if (isset($arr[$n + 1]) && $arr[$n]['level'] > $arr[$n + 1]['level']) {
-                    $arr[$n]['_end'] = true;
-                }
-                if ($arr[$n - 1]['level'] != $m['level']) {
-                    $arr[$n]['_pre'] = true;
-                }
+        return $data;
+    }
+
+    //只供channelList方法使用
+    static private function _channelList($data, $pid = 0, $html = "&nbsp;", $fieldPri = 'cid', $fieldPid = 'pid', $level = 1)
+    {
+        if (empty($data))
+            return array();
+        $arr = array();
+        foreach ($data as $v) {
+            $id = $v[$fieldPri];
+            if ($v[$fieldPid] == $pid) {
+                $v['_level'] = $level;
+                $v['_html'] = str_repeat($html, $level - 1);
+                array_push($arr, $v);
+                $tmp = self::_channelList($data, $id, $html, $fieldPri, $fieldPid, $level + 1);
+                $arr = array_merge($arr, $tmp);
             }
         }
         return $arr;
@@ -100,52 +102,31 @@ final class Data
     static public function tree($data, $title, $fieldPri = 'cid', $fieldPid = 'pid')
     {
         if (!is_array($data) || empty($data)) return array();
-        $arr = Data::channelList($data, 0, "", $fieldPri, $fieldPid);
+        $arr = Data::channelList($data, 0, '', $fieldPri, $fieldPid);
         foreach ($arr as $k => $v) {
             $str = "";
-            if ($v['level'] > 2) {
-                for ($i = 1; $i < $v['level'] - 1; $i++) {
-                    $str .= "│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            if ($v['_level'] > 2) {
+                for ($i = 1; $i < $v['_level'] - 1; $i++) {
+                    $str .= "│&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
             }
-            if ($v['level'] != 1) {
+            if ($v['_level'] != 1) {
                 $t = $title ? $v[$title] : "";
-                if (isset($arr[$k + 1]) && $arr[$k + 1]['level'] >= $arr[$k]['level']) {
-                    $arr[$k]['_name'] = $str . "┝─" . $v['html'] . $t;
+                if (isset($arr[$k + 1]) && $arr[$k + 1]['_level'] >= $arr[$k]['_level']) {
+                    $arr[$k]['_name'] = $str . "├─ " . $v['_html'] . $t;
                 } else {
-                    $arr[$k]['_name'] = $str . "└─" . $v['html'] . $t;
+                    $arr[$k]['_name'] = $str . "└─ " . $v['_html'] . $t;
                 }
-            }else{
-                $arr[$k]['_name']=$v[$title];
+            } else {
+                $arr[$k]['_name'] = $v[$title];
             }
         }
-        return $arr;
-    }
-
-    /**
-     * 返回多层栏目
-     * @param $data 操作的数组
-     * @param int $pid 一级PID的值
-     * @param string $html 栏目名称前缀
-     * @param string $fieldPri 唯一键名，如果是表则是表的主键
-     * @param string $fieldPid 父ID键名
-     * @param int $level 不需要传参数（执行时调用）
-     * @return array
-     */
-    static public function channelLevel($data, $pid = 0, $html = "&nbsp;", $fieldPri = 'cid', $fieldPid = 'pid', $level = 1)
-    {
-        if (!$data) {
-            return array();
+        //设置主键为$fieldPri
+        $data = array();
+        foreach ($arr as $d) {
+            $data[$d[$fieldPri]] = $d;
         }
-        $arr = array();
-        foreach ($data as $v) {
-            if ($v[$fieldPid] == $pid) {
-                $arr[$v[$fieldPri]] = $v;
-                $arr[$v[$fieldPri]]['html'] = str_repeat($html, $level - 1);
-                $arr[$v[$fieldPri]]["data"] = self::channelLevel($data, $v[$fieldPri], $html, $fieldPri, $fieldPid, $level + 1);
-            }
-        }
-        return $arr;
+        return $data;
     }
 
 

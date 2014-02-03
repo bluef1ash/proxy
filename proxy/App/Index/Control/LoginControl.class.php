@@ -38,6 +38,9 @@ class LoginControl extends Control{
 			"logintime"	=> time(),
 			"loginip" => ip::getClientIp(),
 		);
+		$qqau = Q("post.qqau");
+		if($qqau)
+			$loginData["qqau"] = $qqau;
 		M("user")->where(array("uid"=>$user["uid"]))->save($loginData);
 		// p($_POST);
 		$auto = Q("post.auto");
@@ -70,5 +73,4 @@ class LoginControl extends Control{
 		session_destroy();
 		$this->success("退出成功！",U(__WEB__));
 	}
-
 }

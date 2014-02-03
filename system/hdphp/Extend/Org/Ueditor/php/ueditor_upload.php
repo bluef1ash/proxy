@@ -20,7 +20,6 @@ if ($_GET['maximagewidth'] != 'false' || $_GET['maximageheight'] != 'false') {
     //最大图片宽度
     $maximagewidth = intval($_GET['maximagewidth']);
     $maximagewidth = $maximagewidth ? $maximagewidth : C("UPLOAD_IMG_MAX_WIDTH");
-
     C("UPLOAD_IMG_RESIZE_ON", true);
     C("UPLOAD_IMG_MAX_WIDTH", $maximagewidth);
     C("UPLOAD_IMG_MAX_HEIGHT", $maximageheight);
@@ -40,9 +39,8 @@ $file = $upload->upload();
 if (!$file) {
     echo "{'title':'" . $upload->error . "','state':'" . $upload->error . "'}";
 } else {
-    $info = $file[0];
-    $info['url'] = __ROOT__ . '/' . $info['path'];
-    $info["state"] = "SUCCESS";
-    echo "{'url':'" . $info['url'] . "','title':'" . $title . "','original':'" . $info["filename"] . "','state':'" . $info["state"] . "'}";
+    $file['url'] = __ROOT__ . '/' . $file['path'];
+    $file["state"] = "SUCCESS";
+    echo "{'url':'" . $file['url'] . "','title':'" . $title . "','original':'" . $file["filename"] . "','state':'" . $file["state"] . "'}";
 }
 exit;

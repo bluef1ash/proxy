@@ -4,21 +4,26 @@
 		<!-- 头部开始 -->
 		<div id="header">
 			<ul>
+				<if value="session.UserInfo">
+					<li>{$hd.session.UserInfo}</li>
+				<else/>
+					<li>
+						<a title="点击查看修改个人资料" href="{|U('Passport/User/index')}">{$hd.session.username}</a>
+					</li>
+				</if>
 				<li>
-					<a title="点击查看修改个人资料" href="{|U('Passport/User/index')}">{$hd.session.username}</a>
-				</li>
-				<li>
-					<a href="{|U('Index/Login/out')}">退出</a>
+					<a href="{|U('Index/Login/out')}" title="退出">退出</a>
 				</li>
 				<li>|</li>
 				<li>
-					<a href="#">升级高级会员</a>
+					<a href="#" title="升级高级会员">升级高级会员</a>
 				</li>
 				<li>
-					<a target="_blank" href="#">偏好设置</a>
+					<a target="_blank" href="#" title="偏好设置">偏好设置</a>
 				</li>
 				<li>
-					<a target="_blank" href="{$hd.config.WEIBO}">微博</a><a href="__ROOT__">返回首页</a>
+					<a target="_blank" href="{$hd.config.WEIBO}" title="微博">微博</a>
+					<a href="__ROOT__" title="返回首页">返回首页</a>
 				</li>
 			</ul>
 			<img src="__PUBLIC__/Images/mlogo.jpg" alt="个人中心">

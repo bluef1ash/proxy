@@ -235,27 +235,10 @@ function GetArrLv($arr) {
 	}*/
 }
 /**
- * 获取分类目录
- * @param array $arr 完整分类数组
- * @param int $pid 当前分类ID
- * @return array $array 返回内容数组  
- */
-function father_cate($arr, $pid){
-	$array = array();
-	foreach ($arr as $value){
-		if ($value["cid"] == $pid){
-			$array[] = $value;
-			if ($value[$pid] != null)
-				$array = array_merge($array,father_cate($arr, $value[$pid]));
-		}
-	}
-	return $array;
-}
-/**
  * 添加数组元素
  * @param string $val 新元素键值
  * @param unknown $key 新元素键名
- * @param unknown $param 
+ * @param unknown $param
  */
 function addkey(&$val,$key, $param){
 	$val[$param["key"]] = $param["val"];

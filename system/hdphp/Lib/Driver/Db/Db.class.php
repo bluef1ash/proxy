@@ -20,16 +20,16 @@
 abstract class Db implements DbInterface
 {
 
-    protected   $table      = NULL; //表名
-    public      $fieldArr;          //字段数组
-    public      $lastQuery;         //最后发送的查询结果集
-    public      $pri        = null; //默认表主键
-    public      $opt        = array(); //SQL 操作
-    public      $opt_old    = array();
-    public      $lastSql;           //最后发送的SQL
-    public      $error      = NULL; //错误信息
-    protected   $cacheTime  = NULL; //查询操作缓存时间单位秒
-    protected   $dbPrefix;          //表前缀
+    protected $table = NULL; //表名
+    public $fieldArr; //字段数组
+    public $lastQuery; //最后发送的查询结果集
+    public $pri = null; //默认表主键
+    public $opt = array(); //SQL 操作
+    public $opt_old = array();
+    public $lastSql; //最后发送的SQL
+    public $error = NULL; //错误信息
+    protected $cacheTime = NULL; //查询操作缓存时间单位秒
+    protected $dbPrefix; //表前缀
 
     /**
      * 将eq等替换为标准的SQL语法
@@ -54,10 +54,9 @@ abstract class Db implements DbInterface
             if (!is_null($table)) {
                 $this->dbPrefix = C("DB_PREFIX");
                 $this->table($table);
-                $this->table    = $table;
-                $this->pri      = $this->opt['pri'];
+                $this->table = $table;
+                $this->pri = $this->opt['pri'];
                 $this->fieldArr = $this->opt['fieldArr'];
-                $this->cacheTime=NULL;
                 $this->optInit(); //初始始化WHERE等参数
             } else {
                 $this->optInit();
@@ -225,15 +224,15 @@ abstract class Db implements DbInterface
             $this->error("没有可操作的数据表");
             return false;
         }
-        if (!empty($where)) {
+        //设置条件
+        if (!empty($where))
             $this->where($where);
-        }
-        //添加表前缀
-        $chain = array("table", "group", "field", "order");
-        foreach ($chain as $v) {
-            $this->opt[$v] = $this->addTableFix($this->opt[$v]);
-        }
-        $sql = "SELECT " . $this->opt['field'] . " FROM " . $this->opt['table'] .
+//        //添加表前缀
+//        $chain = array('table', 'group','field','order');
+//        foreach ($chain as $v) {
+//            $this->opt[$v] = $this->addTableFix($this->opt[$v]);
+//        }
+        $sql = 'SELECT ' . $this->opt['field'] . ' FROM ' . $this->opt['table'] .
             $this->opt['where'] . $this->opt['group'] . $this->opt['having'] .
             $this->opt['order'] . $this->opt['limit'];
         $data = $this->query($sql);
@@ -246,10 +245,10 @@ abstract class Db implements DbInterface
      * @param string $sql
      * @return string   格式化后的SQL
      */
-    public function addTableFix($sql)
-    {
-        return preg_replace("@(\w+?\.[a-z]+?)@i", C("DB_PREFIX") . '\1', $sql);
-    }
+//    public function addTableFix($sql)
+//    {
+//        return preg_replace('@(\w+?\.[a-z]+?)@i', C('DB_PREFIX') . '\1', $sql);
+//    }
 
     /**
      * SQL中的REPLACE方法，如果存在与插入记录相同的主键或unique字段进行更新操作
@@ -257,7 +256,7 @@ abstract class Db implements DbInterface
      * @param string $type
      * @return array|bool
      */
-    public function insert($data, $type = "INSERT")
+    public function insert($data, $type = 'INSERT')
     {
         $value = $this->formatField($data);
         if (empty($value)) {
@@ -285,17 +284,17 @@ abstract class Db implements DbInterface
                 continue;
             }
             $data['fields'][] = "`" . $k . "`";
-            $v = $this->addslashes_d($v);
+            $v = $this->escapeString($v);
             $data['values'][] = is_numeric($v) ? $v : "\"" . $v . "\"";
         }
         return $data;
     }
 
     //转义数据
-    private function addslashes_d($v)
-    {
-        return MAGIC_QUOTES_GPC ? $v : addslashes_d($v);
-    }
+//    private function addslashes_d($v)
+//    {
+//        return MAGIC_QUOTES_GPC ? $v : addslashes_d($v);
+//    }
 
     /**
      * 更新数据
@@ -321,6 +320,7 @@ abstract class Db implements DbInterface
             $sql .= $field . "=" . $data['values'][$n] . ',';
         }
         $sql = trim($sql, ',') . $this->opt['where'] . $this->opt['limit'];
+
         return $this->exe($sql);
     }
 
@@ -365,6 +365,27 @@ abstract class Db implements DbInterface
         $this->statistics(__FUNCTION__, $data);
         $result = $this->select("");
         return is_array($result) && !empty($result) ? intval(current($result[0])) : NULL;
+    }
+
+    /**
+     * 判断表名是否存在
+     * @param $table 表名
+     * @param bool $full 是否加表前缀
+     * @return bool
+     */
+    public function isTable($table, $full = true)
+    {
+        //不为全表名时加表前缀
+        if (!$full)
+            $table = C('DB_PREFIX') . $table;
+        $table = strtolower($table);
+        $info = $this->query('show tables');
+        foreach ($info as $n => $d) {
+            if ($table == current($d)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //查找最大的值
@@ -425,15 +446,15 @@ abstract class Db implements DbInterface
      */
     public function where($opt)
     {
-        $where = "";
+        $where = '';
         if (empty($opt)) {
             return false;
         } else if (is_numeric($opt)) {
-            $where .= " " . $this->opt['pri'] . "=$opt ";
+            $where .= ' ' . $this->opt['pri'] . "=$opt ";
         } else if (is_string($opt)) {
             $where .= " $opt ";
         } else if (is_numeric(key($opt)) && is_numeric(current($opt))) {
-            $where .= " " . $this->opt['pri'] . " IN(" . implode(",", $opt) . ")";
+            $where .= ' ' . $this->opt['pri'] . ' IN(' . implode(',', $opt) . ')';
         } else if (is_array($opt)) {
             foreach ($opt as $k => $v) {
                 if (method_exists($this, $k)) {
@@ -443,37 +464,35 @@ abstract class Db implements DbInterface
                         if (isset($this->condition[$n])) {
                             $where .= " $k" . $this->condition[$n] . (is_numeric($m) ? $m : "'$m'");
                         } else if (in_array(strtoupper($m), array("OR", "AND"))) {
-                            if (preg_match("@(or|and)\s*$@i", $where)) {
+                            if (preg_match('@(OR|AND)\s*$@i', $where)) {
                                 $where = substr($where, 0, -4);
                             }
-                            $where .= strtoupper($m) . " ";
+                            $where .= strtoupper($m) . ' ';
                         } else {
                             if (is_numeric($m)) {
-                                $where .= " $k in(" . implode(",", $v) . ") ";
+                                $where .= " $k in(" . implode(',', $v) . ") ";
                             } else {
                                 $where .= " $k in('" . implode("','", $v) . "') ";
                             }
                             break;
                         }
-                        if (!preg_match("@(or|and)\s*$@i", $where)) {
-                            $where .= " AND ";
+                        if (!preg_match('@(or|and)\s*$@i', $where)) {
+                            $where .= ' AND ';
                         }
                     }
+                    if (!preg_match('@(or|and)\s*$@i', $where)) {
+                        $where .= ' AND ';
+                    }
                 } else {
-                    if (is_numeric($k) && in_array(strtoupper($v), array("OR", "AND"))) {
-                        if (preg_match("@(or|and)\s*$@i", $where)) {
+                    if (is_numeric($k) && in_array(strtoupper($v), array('OR', 'AND'))) {
+                        if (preg_match('@(or|and)\s*$@i', $where)) {
                             $where = substr($where, 0, -4);
                         }
-                        if (preg_match("@(or|and)\s*$@i", $where)) {
-                            $where = substr($where, 0, -4);
-                        }
-                        $where .= strtoupper($v) . " ";
-                    } else if (is_string($k) && !empty($v)) {
-                        $where .= (is_numeric($v) ? " $k=$v " : " $k='$v' ") . " AND ";
+                        $where .= strtoupper($v) . ' ';
                     } else if (is_numeric($k) && is_string($v)) {
-                        $where .= $v . " AND ";
-                    } else if (!empty($v) || $v === 0) {
-                        $where .= "'" . $v . "' AND ";
+                        $where .= $v . ' AND ';
+                    } else if (is_string($k)) {
+                        $where .= (is_numeric($v) ? " $k=$v " : " $k='$v' ") . ' AND ';
                     }
                 }
             }
@@ -482,11 +501,11 @@ abstract class Db implements DbInterface
         if (!empty($where)) {
             if (empty($this->opt['where'])) {
                 $this->opt['where'] = " WHERE $where";
-            } elseif (!preg_match("@^\s*(or|and)@i", $where)) {
-                $this->opt['where'] .= " AND " . $where;
+            } elseif (!preg_match('@^\s*(or|and)@i', $where)) {
+                $this->opt['where'] .= ' AND ' . $where;
             }
         }
-        $this->opt['where'] = preg_replace("@(or|and)\s*$@i", "", $this->opt['where']);
+        $this->opt['where'] = preg_replace('@(or|and)\s*$@i', '', $this->opt['where']);
     }
 
     /**
@@ -530,7 +549,7 @@ abstract class Db implements DbInterface
         if (is_string($data)) {
             $data = explode(",", $data);
         }
-        $field = trim($this->opt['field']) =='*'? '' : $this->opt['field'] . ',';
+        $field = trim($this->opt['field']) == '*' ? '' : $this->opt['field'] . ',';
         foreach ($data as $d) {
             $a = explode("|", $d);
             $field .= trim($a[0]);

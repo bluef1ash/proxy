@@ -43,8 +43,8 @@ class AdminControl extends CommonControl {
 			if ($stat)
 				$this->error ( "用户已经存在，请更换用户名！" );
 			$data = array (
-					"username" => $username,
-					"passwd" => md5 ( $passwdF ) 
+				"username" => $username,
+				"password" => md5 ( $passwdF )
 			);
 			M ( "admin" )->add ( $data );
 			$this->success ( "添加成功！" );

@@ -58,13 +58,13 @@
 						<td align="right">是否开放上传功能：</td>
 						<?php if(C("UPLOAD_ON") == 1){?>
 							<td>
-								<input type="radio" name="UPLOAD_ON" value="1" checked="checked">开启
-								<input type="radio" name="UPLOAD_ON" value="0">关闭
+								<label><input type="radio" name="UPLOAD_ON" value="1" checked="checked">开启</label>
+								<label><input type="radio" name="UPLOAD_ON" value="0">关闭</label>
 							</td>
 						<?php  }else{ ?>
 							<td>
-								<input type="radio" name="UPLOAD_ON" value="1">开启
-								<input type="radio" name="UPLOAD_ON" value="0" checked="checked">关闭
+								<label><input type="radio" name="UPLOAD_ON" value="1">开启</label>
+								<label><input type="radio" name="UPLOAD_ON" value="0" checked="checked">关闭</label>
 							</td>
 						<?php }?>
 					</tr>

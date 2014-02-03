@@ -57,6 +57,19 @@ a.showMinus{
 	height: 15px;
 	margin-left: 5px;
 }
+/*背景遮罩*/
+#background {
+    width : 100%;
+    position : absolute;
+    top : 0;
+    left : 0;
+    z-index : 998;
+    background-color : #000000;
+}
+/*背景遮罩结束*/
+.hidden{
+	display: none;
+}
 /*表格样式1*/
 .tableTop{font-weight: 700;text-align: left;}
 .tdLittle0{width: 30px;}
@@ -73,6 +86,7 @@ a.showMinus{
 .tab,.tab td{border:solid 1px #ccc;}
 .tab th{border:solid 1px #ccc;width:100px;text-align: center;}
 .tab thead tr td{background: #eee;color:#333;}
+.tab tbody tr td label{display: inline;padding: 0px 5px;}
 /*span小图标样式*/
 .span_server{
 	background: url(../Images/base.png) no-repeat;
@@ -83,7 +97,7 @@ a.showMinus{
 	padding-left: 20px;
 }
 /*input样式*/
-.input_button{
+.tab tbody tr td .input_button{
 	width: 61px;
 	height: 28px;
 	background: #3B96CB;

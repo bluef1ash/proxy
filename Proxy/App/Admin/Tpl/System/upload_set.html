@@ -20,13 +20,34 @@
 						<td align="right">是否开放上传功能：</td>
 						<if value="{$hd.config.UPLOAD_ON} eq 1">
 							<td>
-								<input type="radio" name="UPLOAD_ON" value="1" checked="checked">开启
-								<input type="radio" name="UPLOAD_ON" value="0">关闭
+								<label><input type="radio" name="UPLOAD_ON" value="1" checked="checked">开启</label>
+								<label><input type="radio" name="UPLOAD_ON" value="0">关闭</label>
 							</td>
 						<else/>
 							<td>
-								<input type="radio" name="UPLOAD_ON" value="1">开启
-								<input type="radio" name="UPLOAD_ON" value="0" checked="checked">关闭
+								<label><input type="radio" name="UPLOAD_ON" value="1">开启</label>
+								<label><input type="radio" name="UPLOAD_ON" value="0" checked="checked">关闭</label>
+							</td>
+						</if>
+					</tr>
+					<tr>
+						<td align="right">上传地址跳转前缀：</td>
+						<td>
+							 <input type="text" name="UPLOAD_URL_PREFIX" value="{$hd.config.UPLOAD_URL_PREFIX}">
+							 <span></span>
+						</td>
+					</tr>
+					<tr>
+						<td align="right">上传真实地址替换跳转地址：</td>
+						<if value="{$hd.config.UPLOAD_REPLACE_ON} eq 1">
+							<td>
+								<label><input type="radio" name="UPLOAD_REPLACE_ON" value="1" checked="checked">开启</label>
+								<label><input type="radio" name="UPLOAD_REPLACE_ON" value="0">关闭</label>
+							</td>
+						<else/>
+							<td>
+								<label><input type="radio" name="UPLOAD_REPLACE_ON" value="1">开启</label>
+								<label><input type="radio" name="UPLOAD_REPLACE_ON" value="0" checked="checked">关闭</label>
 							</td>
 						</if>
 					</tr>

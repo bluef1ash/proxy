@@ -39,7 +39,7 @@ $(function() {
 			});
 			return false;
 		}
-		if (!userunion.val() || userunion.val() == "请输入频道ID") {
+		if (userunion.val() == "" || userunion.val() == "请输入频道ID") {
 			$.dialog({
 			    "msg" : "请输入频道ID！",
 	    		"type" : "error",

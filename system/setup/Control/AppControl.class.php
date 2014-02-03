@@ -8,7 +8,7 @@ if (!defined("PATH_HD")) exit('No direct script access allowed');
  * @author      向军  houdunwangxj@gmail.com
  * Link         www.hdphp.com
  */
-class AppControl extends SetupControl {
+class AppControl extends AuthControl {
 
     function index() {
         $this->display();
@@ -29,7 +29,7 @@ class AppControl extends SetupControl {
 
         $url = $post['root'].'/'.basename($file);
         $appDir = PATH_ROOT . '/' . $appgroup . $post['appname'];
-       //删除缓存
+        //删除缓存
         $cachefiles = glob($_POST['path_root'].'/temp/*');
 
         foreach ($cachefiles as $v) {

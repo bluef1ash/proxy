@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<link rel="shortcut icon" type="image/x-icon" href="http://localhost/proxy/./Proxy/App/Admin/Tpl/Public/images/favicon.ico">
 		<script type='text/javascript' src='http://localhost/proxy/System/hdphp/../hdjs/jquery-1.8.2.min.js'></script>
 <link href='http://localhost/proxy/System/hdphp/../hdjs/css/hdjs.css' rel='stylesheet' media='screen'>
 <script src='http://localhost/proxy/System/hdphp/../hdjs/js/hdjs.js'></script>
@@ -19,7 +20,7 @@
 		APP = 'http://localhost/proxy/index.php/Admin';
 		CONTROL = 'http://localhost/proxy/index.php/Admin/Login';
 		METH = 'http://localhost/proxy/index.php/Admin/Login/index';
-		GROUP = 'http://localhost/proxy/./Proxy/';
+		GROUP = 'http://localhost/proxy/./Proxy';
 		TPL = 'http://localhost/proxy/./Proxy/App/Admin/Tpl';
 		CONTROLTPL = 'http://localhost/proxy/./Proxy/App/Admin/Tpl/Login';
 		STATIC = 'http://localhost/proxy/Static';
@@ -37,37 +38,34 @@
 			var CMP4 = "http://localhost/proxy/Player/Cmp/cmp.swf";
 			var LIST_FIX = "<?php echo C("LIST_FIX");?>";
 		</script>
-	<title>登陆页面-智能采集后台管理系统</title>
-	<link rel="stylesheet" type="text/css" href="http://localhost/proxy/./Proxy/App/Admin/Tpl/Public/Css/login.css">
-	<script type="text/javascript" src="http://localhost/proxy/./Proxy/App/Admin/Tpl/Public/Js/login.js"></script>
-</head>
-<body>
-	<div id="divBox">
-		<form action="<?php echo U('Admin/Login/login');?>" method="POST" id="login">
-			<input type="text" id="userName" name="username">
-			<input type="password" id="psd" name="password">
-			<input type="" value="" id="verify" name="verify">
-			<input type="submit" id="sub" value="">
-			<img src="<?php echo U('Admin/Login/code');?>" id="verify_img">
-		</form>
-		<div class="four_bj">			
-			<p class="f_lt"></p>
-			<p class="f_rt"></p>
-			<p class="f_lb"></p>
-			<p class="f_rb"></p>
+		<title>登陆页面-智能采集后台管理系统</title>
+		<link rel="stylesheet" type="text/css" href="http://localhost/proxy/./Proxy/App/Admin/Tpl/Public/Css/login.css">
+		<script type="text/javascript" src="http://localhost/proxy/./Proxy/App/Admin/Tpl/Public/Js/login.js"></script>
+	</head>
+	<body>
+		<div id="divBox">
+			<form action="<?php echo U('Admin/Login/login');?>" method="post" id="login">
+				<input type="text" id="username" name="username">
+				<input type="password" id="psd" name="password">
+				<input type="" value="" id="verify" name="verify">
+				<input type="submit" id="sub" value="">
+				<img src="<?php echo U('Admin/Login/code');?>" id="verify_img">
+			</form>
+			<div class="four_bj">
+				<p class="f_lt"></p>
+				<p class="f_rt"></p>
+				<p class="f_lb"></p>
+				<p class="f_rb"></p>
+			</div>
+			<ul id="peo"></ul>
+			<ul id="psd"></ul>
+			<ul id="ver"></ul>
 		</div>
-		<ul id="peo">			
-		</ul>
-		<ul id="psd">			
-		</ul>
-		<ul id="ver">			
-		</ul>
-	</div>
-<!--[if IE 6]>
-    <script type="text/javascript" src="http://localhost/proxy/./Proxy/App/Admin/Tpl/Public/Js/iepng.js"></script>
-    <script type="text/javascript">
-        DD_belatedPNG.fix("form", "background");
-    </script>
-<![endif]-->
-</body>
+		<!--[if IE 6]>
+		    <script type="text/javascript" src="http://localhost/proxy/./Proxy/App/Admin/Tpl/Public/Js/iepng.js"></script>
+		    <script type="text/javascript">
+		        DD_belatedPNG.fix("form", "background");
+		    </script>
+		<![endif]-->
+	</body>
 </html>

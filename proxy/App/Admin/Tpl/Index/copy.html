@@ -9,7 +9,7 @@
 			</tr>
 			<tr>
 				<td>服务器环境</td>
-				<td>{$_SERVER.SERVER_SOFTWARE}</td>
+				<td>{$hd.server.SERVER_SOFTWARE}</td>
 			</tr>
 			<tr>
 				<td>PHP版本</td>
@@ -17,11 +17,11 @@
 			</tr>
 			<tr>
 				<td>服务器IP</td>
-				<td>{$_SERVER.SERVER_ADDR}</td>
+				<td>{$hd.server.LOCAL_ADDR}</td>
 			</tr>
 			<tr>
 				<td>数据库信息</td>
-				<td><?php echo mysql_get_server_info()?></td>
+				<td>{$mysqlinfo}</td>
 			</tr>
 			<tr>
 				<td colspan=2 class="th"><span class="span_people">管理员信息</span></td>

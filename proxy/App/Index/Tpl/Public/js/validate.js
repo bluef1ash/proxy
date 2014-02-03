@@ -7,7 +7,7 @@ var validate = {
 	loginUsername : false,
 	loginPwd : false
 }
-var msg = "";	
+var msg = "";
 //验证注册表单
 $(function(){
 	//点击更换验证码图片
@@ -148,14 +148,14 @@ $(function(){
 		validate.userunion = true;
 		span.html(msg).removeClass("error");
 	});
-	//登录form表单验证 
+	//登录form表单验证
 	var login = $("form[name=login]");
 	var span = $("#login-msg");
 	//登录提交事件
 	login.submit(function() {
 		if(validate.loginUsername && validate.loginPwd){
 			return true;
-		} 
+		}
 		//依次触发失去焦点动作
 		$("input[name=username]", login).trigger("blur");
 		$("input[name=pwd]", login).trigger("blur");
@@ -173,15 +173,8 @@ $(function(){
 	});
 	//回车提交
 	$("input[name=pwd]", login).keyup(function(event){
-		if(event.keyCode == 13){
-			if ($("input[name=pwd]", login), trigger("blur")) {
-				login.trigger("submit");
-			}else{
-				span.html("用户名或者密码不正确");
-				validate.loginUsername = false;
-				validate.loginPwd = false;
-			}
-		}
+		if(event.keyCode == 13)
+			login.trigger("submit");
 	});
 	//验证密码
 	$("input[name=pwd]", login).blur(function(){
@@ -194,7 +187,7 @@ $(function(){
 		}
 		var data = {
 			username : $("input[name=username]", login).val(),
-			pwd : pwd 
+			pwd : pwd
 		}
 		$.post(APP + "/Login/ajax_login", data, function(status){
 			if(status){

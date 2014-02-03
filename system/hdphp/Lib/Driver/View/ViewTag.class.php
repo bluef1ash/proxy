@@ -325,6 +325,7 @@ class ViewTag
         $wordCount = isset($attr['wordcount']) ? $attr['wordcount'] : "true"; //是否开启字数统计
         $maxword = isset($attr['maxword']) ? $attr['maxword'] : C("EDITOR_MAX_STR"); //允许的最大字符数
         $imageupload = isset($attr['imageupload']) && $attr['imageupload'] == 'true' ? '"insertimage",' : ''; //图片上传按钮
+        $phpScript = isset($attr['php']) ? $attr['php'] : __CONTROL__ . '&m=ueditor_upload'; //PHP处理文件
         //图片按钮
         if ($style == 2) {
             $toolbars = "[['FullScreen', 'Source', 'Undo', 'Redo','Bold','test',{$imageupload}'insertcode','preview']]";
@@ -355,7 +356,7 @@ class ViewTag
         <script type='text/javascript'>
         $(function(){
                 var ue = UE.getEditor('hd_{$name}',{
-                imageUrl:'" . __CONTROL__ . "&m=ueditor_upload&water={$water}&uploadsize={$uploadsize}&maximagewidth={$maximagewidth}&maximageheight={$maximageheight}'//处理上传脚本
+                imageUrl:'" . $phpScript . "&water={$water}&uploadsize={$uploadsize}&maximagewidth={$maximagewidth}&maximageheight={$maximageheight}'//处理上传脚本
                 ,zIndex : 0
                 ,autoClearinitialContent:{$autoClear}
                 ,initialFrameWidth:{$width} //宽度1000
@@ -367,6 +368,7 @@ class ViewTag
                 ,wordCount:{$wordCount} //是否开启字数统计
                 ,imagePath:''//图片修正地址
                 , toolbars:$toolbars//工具按钮
+                , initialStyle:'p{line-height:1em; font-size: 14px; }'
             });
         })
         </script>";
@@ -639,7 +641,7 @@ class ViewTag
     }
 
     //bootstrap
-    public function _bootstrap($attr,$content)
+    public function _bootstrap($attr, $content)
     {
         $str = '';
         $str .= '<link href="__HDPHP_EXTEND__/Org/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">';
@@ -670,32 +672,48 @@ class ViewTag
     //js轮换版
     public function _slide($attr, $content)
     {
-        return '<script src="__HDPHP_EXTEND__/Org/hdui/js/slide.js"></script>';
+        //是否引入jquery
+        $jquery = isset($attr['jquery']) ? intval($attr['jquery']) : 1;
+        $php = '';
+        if ($jquery == 1) {
+            $php .= "<script type='text/javascript' src='__HDPHP__/../hdjs/jquery-1.8.2.min.js'></script>\n";
+
+        }
+        return $php.'<script src="__HDPHP__/../hdjs/js/slide.js"></script>';
     }
 
     //jquery
     public function _jquery($attr, $content)
     {
-        $file = '__HDPHP_EXTEND__/Org/Jquery/jquery-1.8.2.min.js';
-        return "<script type='text/javascript' src='$file'></script>";
+        return "<script type='text/javascript' src='__HDPHP__/../hdjs/jquery-1.8.2.min.js'></script>\n";
     }
+
     //日历
-    public function _cal($attr,$content){
-        return "<script src='__HDPHP__/../hdjs/org/cal/lhgcalendar.min.js'></script>\n";
+    public function _cal($attr, $content)
+    {
+        //是否引入jquery
+        $jquery = isset($attr['jquery']) ? intval($attr['jquery']) : 1;
+        $php = '';
+        if ($jquery == 1) {
+            $php .= "<script type='text/javascript' src='__HDPHP__/../hdjs/jquery-1.8.2.min.js'></script>\n";
+
+        }
+        return $php."<script src='__HDPHP__/../hdjs/org/cal/lhgcalendar.min.js'></script>\n";
     }
+
     //HdUi
     public function _hdjs($attr, $content)
     {
         $bootstrap = isset($attr['bootstrap']) ? $attr['bootstrap'] : false;
-        $str = '';
-        $str .= "<script type='text/javascript' src='__HDPHP__/../hdjs/jquery-1.8.2.min.js'></script>\n";
-        $str .= "<link href='__HDPHP__/../hdjs/css/hdjs.css' rel='stylesheet' media='screen'>\n";
-        $str .= "<script src='__HDPHP__/../hdjs/js/hdjs.js'></script>\n";
-        $str .= "<script src='__HDPHP__/../hdjs/js/slide.js'></script>\n";
-        $str .= $this->_cal(null,null);
-        $str .= $bootstrap ? $this->_bootstrap(null,null) : "";
-        $str .= $this->_jsconst(null, null);
-        return $str;
+        $php = '';
+        $php .= "<script type='text/javascript' src='__HDPHP__/../hdjs/jquery-1.8.2.min.js'></script>\n";
+        $php .= "<link href='__HDPHP__/../hdjs/css/hdjs.css' rel='stylesheet' media='screen'>\n";
+        $php .= "<script src='__HDPHP__/../hdjs/js/hdjs.js'></script>\n";
+        $php .= "<script src='__HDPHP__/../hdjs/js/slide.js'></script>\n";
+        $php.="<script src='__HDPHP__/../hdjs/org/cal/lhgcalendar.min.js'></script>\n";
+        $php .= $bootstrap ? $this->_bootstrap(null, null) : "";
+        $php .= $this->_jsconst(null, null);
+        return $php;
     }
 }
 

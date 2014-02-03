@@ -37,7 +37,7 @@
                 continue;
             }
             //获取请求头
-            $heads = get_headers( $imgUrl );
+            $heads = get_headers( $imgUrl );print_r($heads);
             //死链检测
             if ( !( stristr( $heads[ 0 ] , "200" ) && stristr( $heads[ 0 ] , "OK" ) ) ) {
                 array_push( $tmpNames , "error" );

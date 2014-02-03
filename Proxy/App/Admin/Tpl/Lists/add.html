@@ -1,0 +1,62 @@
+<load file="__PUBLIC__/header.html">
+		<title>视频列表</title>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/move.css">
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/public.css">
+		<script type="text/javascript" src="__PUBLIC__/Js/jquery.zclip.min.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/Js/public.js"></script>
+		<script type="text/javascript" src="__ROOT__/Player/Cmp/cmp.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/Js/move.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				$(".play").click(function(){
+					var list_website = "$hd.config.LIST_WEBSITE";
+					var list_fix = "$hd.co.fig.LIST_FIX";
+					var ptr = $(this).parents("tr");
+					var path = list_website + ptr.children("td:nth-child(6)").html() + ptr.children("td:nth-child(3)").html() + list_fix;
+					path = path.replace(/<wbr>/ig,"");
+					play(path,0);
+				});
+			});
+		</script>
+		<script type="text/javascript" src="__PUBLIC__/Js/cmp.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/Js/copy.js"></script>
+	</head>
+	<body>
+		<table class="tab">
+			<thead>
+				<tr>
+					<th colspan="2">增加/编辑列表</th>
+				</tr>
+			</thead>
+			<tbody>
+				<form action="{|U('Admin/Lists/add')}" method="post">
+					<tr>
+						<td width="8%">影片名称：</td>
+						<td><input type="text" name="vname" value=""></td>
+					</tr>
+					<tr>
+						<td width="8%">影片分类：</td>
+						<td>
+							<select name="cate-one">
+								<option value="0">请选择分类</option>
+								<list from="$categorytop" name="n">
+									<option value="{$n.entitle}">{$n.cntitle}</option>
+								</list>
+							</select>
+							<select name="cate-two" class="hidden"></select>
+						</td>
+					</tr>
+					<tr>
+						<td width="8%">影片内容：</td>
+						<td><ueditor name="xml"></td>
+					</tr>
+					<tr>
+						<td colspan="2" align="center">
+							<input type="submit" class="input_button" value="上传">
+						</td>
+					</tr>
+				</form>
+			</tbody>
+		</table>
+	</body>
+</html>

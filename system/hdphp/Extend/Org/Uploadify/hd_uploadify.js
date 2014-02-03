@@ -69,12 +69,12 @@ var hd_uploadify_options = {
         var html = "";
         var input_type = this.settings.input_type;
         html += "<li input_type='"+input_type+"' class='upload_thumb'style='width:" + this.settings.thumb_width + "px;'><div class='delUploadFile'></div>";
-        html += "<img src='" + data.url + "' path='" + data.url + "' width='" + this.settings.thumb_width + "' height='" + this.settings.thumb_height + "'/>";
+        html += "<img src='" + data.url + "' path='" + data.path + "' width='" + this.settings.thumb_width + "' height='" + this.settings.thumb_height + "'/>";
         //显示alt文本框
         if (this.settings.showalt) {
             html += "<div class='upload_title'><input style='padding:3px 0px;width:" + (this.settings.thumb_width) + "px' type='text' name='" + upload_file_id.substr(13) + "[" + _index + "][alt]' value='"+data.name+"' onblur=\"if(this.value=='')this.value='"+data.name+"'\" onfocus=\"this.value=''\"/></div>";
         }
-        html += "<input type='hidden' t='file'   name='" + upload_file_id.substr(13) + "[" + _index + "][path]' value='" + data.path + "'/>";
+        html += "<input type='hidden' t='file'   name='" + upload_file_id.substr(13) + "[" + _index + "][path]' value1111='" + data.path + "'/>";
         //缩略图表单
         if (data.thumb.length > 0) {
             for (var i = 0, total = data.thumb.length; i < total; i++) {

@@ -30,6 +30,28 @@ $arr = array(
 		"CODE_LEN"                      => 1,           //文字数量
 		"CODE_FONT_SIZE"                => 22,          //字体大小
 		"CODE_FONT_COLOR"               => "",          //字体颜色
+		/********************************缓存********************************/
+	    'CACHE_TYPE'                    => 'file',      //类型:file memcache redis
+	    "CACHE_ZIP"						=> true,
+	    'CACHE_TIME'                    => 3600,        //全局默认缓存时间 0为永久缓存
+	    'CACHE_MEMCACHE'                => array(       //多个服务器设置二维数组
+	        'host'      => '127.0.0.1',     //主机
+	        'port'      => 11211,           //端口
+	        'timeout'   => 1,               //超时时间(单位为秒)
+	        'weight'    => 1,               //权重
+	        'pconnect'  => 1,               //持久连接
+	    ),
+	    'CACHE_REDIS'                   => array( //多个服务器设置二维数组
+	        'host'      => '127.0.0.1',     //主机
+	        'port'      => 6379,            //端口
+	        'password'  => '',              //密码
+	        'timeout'   => 1,               //超时时间
+	        'Db'        => 0,               //数据库
+	        'pconnect'  => 0,               //持久连接
+	    ),
+	    'CACHE_SELECT_TIME'             => -1,          //SQL SELECT查询缓存时间 -1为不缓存 0为永久缓存
+	    'CACHE_SELECT_LENGTH'           => 30,          //缓存最大条数
+	    'CACHE_TPL_TIME'                => -1,          //模板缓存时间 -1为不缓存 0为永久缓存
 		/********************************URL路由设置********************************/
 		"route" => array(
 			
@@ -37,5 +59,5 @@ $arr = array(
 		/********************************其它*********************************/
 		"COOKIE_TIME"					=> time() + 3600 * 24 * 30,
 );
-return array_merge(include 'web.php', include 'player.php',$arr);
+return array_merge(include 'web.php', include 'player.php', include 'upload.php',$arr);
 ?>

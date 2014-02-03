@@ -1,4 +1,3 @@
-@charset "utf-8";
 @import url("public.css");
 /*头部开始*/
 .header {
@@ -7,32 +6,35 @@
 	overflow: hidden;
 }
 /*注册与登录信息栏开始*/
-.header .top-bar-right {
+.header .top-bar {
 	color: #336699;
 	height: auto;
 	width: 100%;
-	float: right;
 	overflow: hidden;
-	text-align: right;
 	background-color: #F2F9F9;
-	margin: 0px 5px;
+	padding: 0px 10px;
 	font-family: "Arial", "Helvetica", "sans-serif";
 	font-size: 14px;
 	line-height: 200%;
 }
-.header .top-bar-right a {
+.header .top-bar a {
 	color:#336699;
 }
-.header .top-bar-right a:hover {
+.header .top-bar a:hover {
 	background:none repeat scroll 0 0 #003399;
 	color:#FFF;
 	text-decoration:none;
 }
-.header .top-bar-right #register {
-	float: right;
-	margin-right: 30px;
+.header .top-bar .left {
+	margin: 0px;
+	padding: 0px;
+	padding-left: 10px;
+	float: left;
 }
-.header .top-bar-right #login {
+.header .top-bar .right {
+	margin: 0px;
+	padding: 0px;
+	padding-right: 15px;
 	float: right;
 }
 /*注册与登录信息栏结束*/
@@ -108,10 +110,22 @@
     font-size: 14px;
     margin: 275px 0 30px 0;
 }
-#reg-wrap .reg-left .reg-l-bottom a {
+#reg-wrap .reg-left .reg-l-bottom li {
+	background: none;
+	position: relative;
+}
+#reg-wrap .reg-left .reg-l-bottom li a {
 	text-decoration: none;
 	color: #0082CB;
 	padding-right: 5px;
+}
+#reg-wrap .reg-left .reg-l-bottom .qq_login {
+	display: block;
+	height: 24px;
+	width: 120px;
+	background: url(../images/qq_login.png) 0px 0px no-repeat;
+	position: absolute;
+	left: 10px;
 }
 #register .reg-right{
 	width: 370px;
@@ -190,17 +204,7 @@
 	display: none;
 	text-align: center;
 }
-#login .login-form{
-	height: auto;
-	overflow: hidden;
-	width: 460px;
-}
-#login .login-form #login-msg {
-	display: block;
-    height: 24px;
-    line-height: 24px;
-    color: #f00;
-}
+/*登录头部开始*/
 #login .login-title {
 	background-position: 0px -167px;
 	width: 460px;
@@ -225,10 +229,22 @@
 #login .login-title a:hover {
 	background-position: -262px -130px;
 }
-#login .login-form li {
+/*登录头部结束*/
+#login .login-form{
+	height: auto;
+	overflow: hidden;
+	width: 460px;
+}
+#login .login-form #login-msg {
+	display: block;
+    height: 24px;
+    line-height: 24px;
+    color: #f00;
+}
+#login .login-form ul li {
 	margin: 10px 0;
 }
-#login .login-form li label{
+#login .login-form ul li label{
 	color: #000000;
     font-size: 14px;
     height: 41px;
@@ -238,7 +254,7 @@
     width: 60px;
     font-family: "arial","宋体","sans-serif";
 }
-#login .login-form li .input {
+#login .login-form ul li .input {
     line-height: 38px;
     width: 250px;
     /*padding-left: 5px;
@@ -247,10 +263,10 @@
     background: url(btn.png) no-repeat scroll -2px -159px;*/
     font: 14px/20px "arial","simsun";
 }
-#login .login-form .login-auto {
+#login .login-form ul .login-auto {
 	text-align: left;
 }
-#login .login-form .login-auto label {
+#login .login-form ul .login-auto label {
 	font-size: 12px;
     height: 30px;
     line-height: 30px;
@@ -261,7 +277,7 @@
     margin-left: 115px;
     _float:left;
 }
-#regis-now {
+#login .login-form ul .login-auto #regis-now {
     display: inline-block;
     height: 24px;
     line-height: 24px;
@@ -272,7 +288,7 @@
     _display : block;
     _margin-left:70px;
 }
-#login-btn {
+#login .login-form ul #login-btn {
 	border: 0 none;
     height: 39px;
     margin-left: 35px;
@@ -280,8 +296,15 @@
     background-position: 0px -2px;
     margin-bottom: 20px;
 }
-#login .login-form li .login-btn-cur {
+#login .login-form ul li .login-btn-cur {
 	background-position: 0 -63px;
+}
+#login .login-form ul li .qq_login {
+	display: block;
+	margin: 10px 170px;
+	height: 24px;
+	width: 120px;
+	background: url(../images/qq_login.png) 0px 0px no-repeat;
 }
 /*登录框结束*/
 /*背景遮罩*/
@@ -291,8 +314,8 @@
     top : 0;
     left : 0;
     z-index : 998;
+    display: none;
     background-color : #000000;
-
 }
 /*背景遮罩结束*/
 /*采集页LOGO及输入框开始*/

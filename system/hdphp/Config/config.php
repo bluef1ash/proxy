@@ -21,7 +21,7 @@ return array(
     'DB_PASSWORD'                   => '',          //数据库密码
     'DB_DATABASE'                   => '',          //数据库名称
     'DB_PREFIX'                     => '',          //表前缀
-    'DB_BACKUP'                     => ROOT_PATH . 'backup/'.time(), //数据库备份目录
+    'DB_BACKUP'                     => ROOT_PATH . 'backup/', //数据库备份目录
     /********************************表单TOKEN令牌********************************/
     'TOKEN_ON'                      => FALSE,       //令牌状态
     'TOKEN_NAME'                    => '__TOKEN__', //令牌的表单name

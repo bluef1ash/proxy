@@ -44,17 +44,14 @@ class ProxyControl extends Control {
 		} elseif (strpos ( $url, "funshion.com" ) > 0) { // 风行
 			$tvtype = "Funshion";
 			$id = substr ( $url, 32 );
-			$collect = A ( "Data/" . $tvtype . "/listpage", array (
-					$id 
-			) );
+			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
 		} elseif (strpos ( $url, "fengyunzhibo.com" ) > 0) { // 风云直播
 			$tvtype = "Fengyunzhibo";
 			$collect = A ( "Data/Live/fengyun", array ( $url ) );
 		} elseif (strpos ( $url, "iqiyi.com" ) > 0) { // 爱奇艺
 			$tvtype = "Iqiyi";
 			$page = file_data ( $url );
-			if (! preg_match ( '/"albumId"\s*:\s*(\d+),/iUs', $page, $arr ))
-				preg_match ( '/data-drama-albumid="(\d+)"/iUs', $page, $arr );
+			preg_match ( '/(?:"albumId"\s*:\s*|data-player-albumid="|data-drama-albumid=")(\d+)(?:,|")/iUs', $page, $arr );
 			$id = $arr [1];
 			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
 		} elseif (strpos ( $url, "ku6.com" ) > 0) { // 酷6
@@ -64,11 +61,15 @@ class ProxyControl extends Control {
 			$page = file_data ( $url );
 			preg_match ( "/pid\s*:\s*(?:'|\")?(\d{4,6})(?:'|\")?\s*(?:,|(?:,\/\/专辑ID)|(?:\/\/专辑ID))/iUs", $page, $arr );
 			$id = $arr [1];
-			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
+			if (preg_match("/vid\s*:\s*(\d{7}),\s*\/\/视频ID.*trylook:[1-9]\d*,\/\/十分钟试看/iUs", $page, $arr)) {
+				$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id, $arr[1] ) );
+			}else{
+				$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
+			}
 		} elseif (strpos ( $url, "m1905.com" ) > 0) { // M1905
 			$tvtype = "M1905";
 			$page = file_data ( $url );
-			preg_match ( "/vid\s*:\s*'(\d{4,8})',/iUs", $page, $arr );
+			preg_match ( "/vid\s*:\s*(?:'|\")(\d{4,8})(?:'|\"),/iUs", $page, $arr );
 			$id = $arr [1];
 			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
 		} elseif (strpos ( $url, "pps.tv" ) > 0) { // PPS
@@ -129,11 +130,11 @@ class ProxyControl extends Control {
 		if ($auto_disabled)
 			$update = "static";
 		if ($update == "auto")
-			$xml = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n<list>\n<m list_src=\"{" . strtolower(  $tvtype ) . "}" . $id . '" label="' . $vName . "\" />\n</list>";
+			$xml = "<list>\n<m list_src=\"{" . strtolower(  $tvtype ) . "}" . $id . '" label="' . $vName . "\" />\n</list>";
 		return array (
 			"auto_disabled" => $auto_disabled,
 			"xml" => "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n" . $xml,
-			"vName" => $vName 
+			"vName" => $vName
 		);
 	}
 	/**
@@ -151,10 +152,7 @@ class ProxyControl extends Control {
 		} else {
 			$ur = $arr [1] . '/' . $arr [2];
 		}
-		$xml = file_data ( $ur, array (
-				"gbk",
-				"utf-8" 
-		) );
+		$xml = file_data ( $ur, array (	"gbk", "utf-8" ) );
 		$yy_u = "[flash]http://afp.qiyi.com/main/c?db=qiyiafp&bid=1,1,1&cid=1,1,1&sid=0&url=http://player.qlyewu.com/cmp.swf?&url=config/6400.xml&lists=" . $ur . "&.swf|626|500[/flash]";
 		$yy_url = $yy_u . "\n\n" . $xml;
 		return $yy_url;

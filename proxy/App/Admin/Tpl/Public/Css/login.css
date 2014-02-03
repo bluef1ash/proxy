@@ -8,7 +8,6 @@ body{
 	background: #016BA9;
 	overflow: hidden;
 }
-
 input{
 	border: none;
 	background:none;
@@ -22,7 +21,6 @@ li{
 	position: relative;
 	margin: 0 auto;
 }
-
 #divBox form{
 /*	display: none;*/
 	overflow: hidden;
@@ -51,7 +49,6 @@ li{
 	left: 250px;
 	position: absolute;
 	z-index: -1;
-
 }
 #divBox .four_bj p{
 
@@ -64,7 +61,6 @@ li{
 	position : absolute;
 	top      : 700px;
 	left     : 80px;
-
 }
 #divBox .four_bj p.f_rt{
 	background: url(../Images/Adminbj_03_02.bmp) no-repeat;
@@ -73,7 +69,6 @@ li{
 	position : absolute;
 	top      : 700px;
 	left     : 80px;
-
 }
 #divBox .four_bj p.f_lb{
 	background: url(../Images/Adminbj_03_03.bmp) no-repeat;
@@ -82,7 +77,6 @@ li{
 	position : absolute;
 	top      : 700px;
 	left     : 80px;
-
 }
 #divBox .four_bj p.f_rb{
 	background: url(../Images/Adminbj_03_04.bmp) no-repeat;
@@ -92,19 +86,21 @@ li{
 	top      : 700px;
 	left     : 80px;
 }
-#divBox form #userName{
-	position: absolute;
-	left: 93px;
-	top: 96px;
-	height: 12px;
-	width: 112px;
+#divBox form #username{
+	border: none;
+	height: 11px;
+    left: 96px;
+    position: absolute;
+    top: 98px;
+    width: 114px;
 }
 #divBox form #psd{
-	position: absolute;
-	left: 93px;
-	top: 123px;
-	height: 12px;
-	width: 110px;
+	border: none;
+    height: 11px;
+    left: 93px;
+    position: absolute;
+    top: 127px;
+    width: 117px;
 }
 #divBox form #sub{
 	position: absolute;
@@ -115,11 +111,12 @@ li{
 	cursor:pointer;
 }
 #divBox form #verify{
-	position: absolute;
-	left: 90px;
-	top: 156px;
-	height: 12px;
-	width: 28px;
+    height: 15px\9;
+    height: 20px;
+    left: 93px;
+    position: absolute;
+    top: 158px;
+    width: 42px;
 }
 /*提示信息*/
 ul#peo{

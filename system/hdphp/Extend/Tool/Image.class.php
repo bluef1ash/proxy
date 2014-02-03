@@ -234,7 +234,7 @@ class Image
     public function water($img, $outImg = '', $pos = '', $waterImg = '', $pct = '', $text = "")
     {
         //验证原图像
-        if (!$this->check($img) || !$this->waterOn)
+        if (!$this->check($img))
             return false;
         //验证水印图像
         $waterImg = $waterImg ? $waterImg : $this->waterImg;

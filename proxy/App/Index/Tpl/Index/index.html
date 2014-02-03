@@ -24,7 +24,7 @@ function startgo(url){
 				<input id="kw" type="text" name="websiteText" value="请填入需采集的视频地址">
 				<input class="bn-srh" type="submit" value="开始">
 				<if value="{$hd.session.username} && {$hd.session.uid}">
-					<a href="javascript:re('kw');" id="re">替换地址</a>
+					<a href="javascript:re('kw');" id="re" title="替换地址">替换地址</a>
 				</if>
 				<span id="inf"></span>
 			</div>
@@ -71,7 +71,7 @@ function startgo(url){
 				<li><a href="#" title="有问必答">有问必答</a></li>
 			</ul>
 			<p class="sitefx">
-				<strong>地址示例：</strong><a href="javascript:startgo('http://www.letv.com/ptv/vplay/1488765.html');">http://www.letv.com/ptv/vplay/1488765.html</a>
+				<strong>地址示例：</strong><a href="javascript:startgo('http://www.letv.com/ptv/vplay/1488765.html');" title="地址示例">http://www.letv.com/ptv/vplay/1488765.html</a>
 			</p>
 			<!-- 辅助手册结束 -->
 			<!-- 常用视频网站开始 -->
@@ -83,32 +83,32 @@ function startgo(url){
 				</thead>
 				<tbody>
 					<tr>
-						<td><a href="#">电影</a></td>
-						<td><a href="#">电视剧</a></td>
-						<td><a href="#">动漫</a></td>
-						<td><a href="#">综艺</a></td>
-						<td><a href="#">音乐专辑</a></td>
+						<td><a href="#" title="电影">电影</a></td>
+						<td><a href="#" title="电视剧">电视剧</a></td>
+						<td><a href="#" title="动漫">动漫</a></td>
+						<td><a href="#" title="综艺">综艺</a></td>
+						<td><a href="#" title="音乐专辑">音乐专辑</a></td>
 					</tr>
 					<tr>
-						<td><a href="javascript:curl('http://www.youku.com/')">优酷网</a></td>
-						<td><a href="javascript:curl('http://www.tudou.com/')">土豆网</a></td>
-						<td><a href="javascript:curl('http://www.iqiyi.com/')">爱奇艺</a></td>
-						<td><a href="javascript:curl('http://tv.sohu.com/')">搜狐视频</a></td>
-						<td><a href="javascript:curl('http://v.qq.com/')">腾讯视频</a></td>
+						<td><a href="javascript:curl('http://www.youku.com/')" title="优酷网">优酷网</a></td>
+						<td><a href="javascript:curl('http://www.tudou.com/')" title="土豆网">土豆网</a></td>
+						<td><a href="javascript:curl('http://www.iqiyi.com/')" title="爱奇艺">爱奇艺</a></td>
+						<td><a href="javascript:curl('http://tv.sohu.com/')" title="搜狐视频">搜狐视频</a></td>
+						<td><a href="javascript:curl('http://v.qq.com/')" title="腾讯视频">腾讯视频</a></td>
 					</tr>
 					<tr>
-						<td><a href="javascript:curl('http://www.letv.com/')">乐视网</a></td>
-						<td><a href="javascript:curl('http://www.cntv.cn/')">CNTV</a></td>
-						<td><a href="javascript:curl('http://www.56.com/')">56网</a></td>
-						<td><a href="javascript:curl('#')">网易公开课</a></td>
-						<td><a href="javascript:curl('http://www.kankan.com/')">迅雷看看</a></td>
+						<td><a href="javascript:curl('http://www.letv.com/')" title="乐视网">乐视网</a></td>
+						<td><a href="javascript:curl('http://www.cntv.cn/')" title="CNTV">CNTV</a></td>
+						<td><a href="javascript:curl('http://www.56.com/')" title="56网">56网</a></td>
+						<td><a href="javascript:curl('#')" title="网易公开课">网易公开课</a></td>
+						<td><a href="javascript:curl('http://www.kankan.com/')" title="迅雷看看">迅雷看看</a></td>
 					</tr>
 					<tr>
-						<td><a href="javascript:curl('http://video.sina.com.cn/movie/')">新浪大片</a></td>
-						<td><a href="javascript:curl('http://www.pps.tv/')">PPS</a></td>
-						<td><a href="javascript:curl('http://www.yinyuetai.com/')">音悦台</a></td>
-						<td><a href="javascript:curl('http://www.pptv.com/')">PPTV</a></td>
-						<td><a href="javascript:curl('http://www.m1905.com/')">电影网</a></td>
+						<td><a href="javascript:curl('http://video.sina.com.cn/movie/')" title="新浪大片">新浪大片</a></td>
+						<td><a href="javascript:curl('http://www.pps.tv/')" title="PPS">PPS</a></td>
+						<td><a href="javascript:curl('http://www.yinyuetai.com/')" title="音悦台">音悦台</a></td>
+						<td><a href="javascript:curl('http://www.pptv.com/')" title="PPTV">PPTV</a></td>
+						<td><a href="javascript:curl('http://www.m1905.com/')" title="电影网">电影网</a></td>
 					</tr>
 				</tbody>
 			</table>

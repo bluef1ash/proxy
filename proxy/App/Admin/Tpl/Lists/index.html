@@ -2,19 +2,21 @@
 		<title>视频列表</title>
 		<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/move.css">
 		<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/public.css">
-		<script type="text/javascript" src="__PUBLIC__/Js/public.js"></script>
 		<script type="text/javascript" src="__PUBLIC__/Js/jquery.zclip.min.js"></script>
-		<script type="text/javascript" src="{$hd.config.CMP_ROOT}cmp.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/Js/public.js"></script>
+		<script type="text/javascript" src="__ROOT__/Player/Cmp/cmp.js"></script>
 		<script type="text/javascript" src="__PUBLIC__/Js/move.js"></script>
 		<script type="text/javascript">
+			var prefix = "{$prefix}";
+			var player_file = "{$hd.config.CMP_FILE}";
 			$(function(){
 				$(".play").click(function(){
-					var list_website = "$hd.config.LIST_WEBSITE";
-					var list_fix = "$hd.co.fig.LIST_FIX";
 					var ptr = $(this).parents("tr");
-					var path = list_website + ptr.children("td:nth-child(6)").html() + ptr.children("td:nth-child(3)").html() + list_fix;
+					var dates = /(\d{4}-\d{2})-\d{2}\s+\d{2}:\d{2}:\d{2}/ig.exec(ptr.children("td:nth-child(8)").html())[1].replace("-", "") + "/";
+					var path = LIST_WEBSITE + ptr.children("td:nth-child(7)").html() + dates + ptr.children("td:nth-child(3)").html() + LIST_FIX;
 					path = path.replace(/<wbr>/ig,"");
-					play(path,0);
+					var vname = ptr.children("td:nth-child(2)").html();
+					play(path, vname);
 				});
 			});
 		</script>
@@ -31,6 +33,7 @@
 				<td>中文影片名称</td>
 				<td>英文影片名称</td>
 				<td>上传用户</td>
+				<td>上传用户所属频道</td>
 				<td>中文分类名称</td>
 				<td>英文分类名称</td>
 				<td>上传时间</td>
@@ -42,6 +45,7 @@
 					<td>{$n.cnname}</td>
 					<td>{$n.enname}</td>
 					<td>{$n.username}</td>
+					<td>{$n.userunion}</td>
 					<td>{$n.cntitleF}/{$n.cntitle}/</td>
 					<td>{$n.entitleF}/{$n.entitle}/</td>
 					<td>{$n.uploadtime|date:"Y-m-d h:i:s", @@}</td>
@@ -49,7 +53,7 @@
 						<a href="#" class="copy">复制链接</a>
 						<a href="#" class="play">播放</a>
 						<a href="{|U('Admin/Lists/alter', array('vid'=>$n['vid']))}" class="alter">修改</a>
-						<a href="{|U('Admin/Lists/move', array('vid'=>$n['vid']))}" class="move">移动文件</a>
+						<a href="#" class="move">移动文件</a>
 						<a href="{|U('Admin/Lists/delete', array('vid'=>$n['vid']))}" class="del">删除</a>
 					</td>
 				</tr>
@@ -60,11 +64,12 @@
 			{$page}
 		</div>
 		<!-- 弹出分类框开始 -->
-			<div id="category">
-				<p class="title">
-					<span>请选择分类</span>
-					<a href="" class="close-window"></a>
-				</p>
+		<div id="category">
+			<p class="title">
+				<span>请选择分类</span>
+				<a href="" class="close-window"></a>
+			</p>
+			<form action="{|U('Admin/Lists/move')}">
 				<div class="sel">
 					<p>选择一个合适的分类：</p>
 					<select name="cate-one" size="16">
@@ -76,9 +81,11 @@
 				</div>
 				<p class="bottom">
 					<input type="hidden" name="vid" value="">
-					<input type="submit" id="ok" value="上传">
+					<input type="submit" id="ok" value="移动">
 				</p>
-			</div>
-			<!-- 弹出分类框结束 -->
+			</form>
+		</div>
+		<div id="background"></div>
+		<!-- 弹出分类框结束 -->
 	</body>
 </html>

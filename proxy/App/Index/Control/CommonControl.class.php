@@ -2,7 +2,7 @@
 /**
  * 公共控制器
  */
-class CommonControl extends Control{
+class CommonControl extends AuthControl{
 	/**
 	 * 加载页面
 	 */

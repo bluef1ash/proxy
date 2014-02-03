@@ -2,16 +2,21 @@
 /**
  * 爱奇艺采集控制器
  */
-class IqiyiControl extends Control {
+class IqiyiControl extends AuthControl {
 	/**
 	 * 默认执行
-	 * @return [type] [description]
 	 */
 	public function index() {
 		header ( 'Content-type:text/xml;charset:utf-8;filename:爱奇艺代理.xml' ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
-		if (Q ( "get.id" )) { // 是否向地址栏传递URL参数
-			echo $this->listpage ( Q ( "get.id" ) )["xml"]; // 写入XML内容
+		if ( $id = Q ("get.id")) {
+			if ($xml = S("funshion_" . $id)) {
+				echo $xml;
+			}else{
+				$xml = $this->listpage($id)["xml"];
+				S($id, $xml, 3600, array("prefix" => "funshion_"));
+				echo $xml;
+			}
 		} elseif (Q( "get.page" )) { // 是否向地址栏传递PAGE参数
 			$url = file_data ( "http://list.iqiyi.com/www/2/------------2-1-" . Q( "get.page" ) . "-1---.html" ); // 采集奇艺电视剧页面
 			preg_match_all ( '/<a\s+href="(.+)" class="title">.*<\/a>/iUs', $url, $arr ); // 正则表达式

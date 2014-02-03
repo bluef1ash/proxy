@@ -2,7 +2,7 @@
 /**
  * 公共控制器
  */
-class CommonControl extends Control{
+class CommonControl extends AuthControl{
 	/**
 	 * 初始化
 	 */
@@ -47,16 +47,7 @@ class CommonControl extends Control{
 		//p(include $path);
 		unset($_POST["config"]);
 		$post = Q("post.");
-		$array = array();
-		foreach ($post as $key => $value) {
-			if(strpos($value, ",") > 0){
-				$arr = explode(",", $value);
-				$array[$key] = $arr;
-				unset($post[$key]);
-			}
-		}
-		$array = array_merge($post, $array);
-		$config = array_merge(include $path, array_change_key_case($array, CASE_UPPER));
+		$config = array_merge(include $path, array_change_key_case($post, CASE_UPPER));
 		$str = "<?php\r\nif (!defined(\"HDPHP_PATH\"))exit(\"No direct script access allowed\");\r\nreturn " . var_export($config, true) . ";\r\n?>";
 		if(file_put_contents($path, $str)){
 			$this->success("修改成功！");

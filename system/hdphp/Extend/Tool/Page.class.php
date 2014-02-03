@@ -48,7 +48,7 @@ class Page
     {
         $this->totalRow = $total; //总条数
         $this->arcRow = empty($row) ? C("PAGE_SHOW_ROW") : $row; //每页显示条数
-        $this->pageRow = empty($pageRow) ? C('PAGE_ROW') : $pageRow; //显示页码数量
+        $this->pageRow = (empty($pageRow) ? C('PAGE_ROW') : $pageRow)-1; //显示页码数量
         $this->totalPage = ceil($this->totalRow / $this->arcRow); //总页数
         self::$staticTotalPage = $this->totalPage; //总页数
         self::$pageNumLabel = empty($pageNumLabel) ? self::$pageNumLabel : $pageNumLabel; //替换标签
@@ -313,13 +313,20 @@ class Page
         return $show;
     }
 
-    //页码风格
-    public function show($s = '')
+    /**
+     * 显示页码
+     * @param string $style 风格
+     * @param int $pageRow 页码显示行数
+     * @return string
+     */
+    public function show($style = '', $pageRow = null)
     {
-        if (empty($s)) {
-            $s = C('PAGE_STYLE');
+        if (empty($style)) {
+            $style = C('PAGE_STYLE');
         }
-        switch ($s) {
+        //页码显示行数
+        $this->pageRow = is_null($pageRow)? $this->pageRow:$pageRow-1 ;
+        switch ($style) {
             case 1 :
                 return "{$this->count()}{$this->first()}{$this->pre()}{$this->pres()}{$this->strList()}{$this->nexts()}{$this->next()}{$this->end()}
                 {$this->nowPage()}{$this->select()}{$this->input()}{$this->picList()}";
