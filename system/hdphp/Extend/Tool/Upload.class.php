@@ -163,6 +163,8 @@ class Upload
         $arr['filename'] = $info['filename'];
         $arr['size'] = $file['size'];
         $arr['ext'] = $file['ext'];
+        $dir= str_ireplace("\\", "/", dirname($arr['path']));
+        $arr['dir']=substr($dir, "-1") == "/" ? $dir : $dir . "/";
         return $arr;
     }
 

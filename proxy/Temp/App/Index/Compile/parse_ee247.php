@@ -30,6 +30,8 @@
 		CONTROLTPL = 'http://localhost/proxy/./Proxy/App/Index/Tpl/Index';
 		STATIC = 'http://localhost/proxy/Static';
 		PUBLIC = 'http://localhost/proxy/./Proxy/App/Index/Tpl/Public';
+		HISTORY = 'http://localhost/proxy/';
+		HTTPREFERER = 'http://localhost/proxy/';
 </script>
 		<link href="http://localhost/proxy/System/hdphp/Extend/Org/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"><script src="http://localhost/proxy/System/hdphp/Extend/Org/bootstrap/js/bootstrap.min.js"></script>
   <!--[if lte IE 6]>
@@ -301,7 +303,7 @@
 											<label>
 												<input name="ctype" type="radio" value="plural">
 												多集</label>
-										<a href="" id="delete_tmp" title="清除缓存数据">清除缓存</a>
+										<a href="javascript:void(0)" id="delete_tmp" title="清除缓存数据">清除缓存</a>
 									</span>
 								</li>
 							</ul>
@@ -349,6 +351,9 @@
 			</li>
 			<li>
 				<input class="sub" type="button" id="play" value="播放">
+			</li>
+			<li>
+				<input class="sub" type="button" id="validate_xml" value="检测列表语法">
 			</li>
 			<?php if($_SESSION['username'] && $_SESSION['uid'] && $_SESSION['usergroup'] == 1){?>
 				<!-- 上传开始 -->

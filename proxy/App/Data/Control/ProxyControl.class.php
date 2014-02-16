@@ -2,7 +2,7 @@
 /**
  * 总控采集控制器
  */
-class ProxyControl extends Control {
+class ProxyControl extends CommonControl {
 	/**
 	 * 采集分配
 	 * @param string $url URL地址
@@ -89,10 +89,14 @@ class ProxyControl extends Control {
 			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
 		} elseif (strpos ( $url, "qq.com" ) > 0) { // 腾讯
 			$tvtype = "Qq";
-			$page = file_data ( $url );
-			if (! preg_match ( '/<div class="mod_play">\n*\s*<a href="(.*)" class="btn_play_big" title=".*"><span>.*<\/span><\/a>/iUs', $page, $arr ))
-				preg_match ( "/<a target='_blank' rel='bookmark' title='.*' href='(.*)'>/iUs", $page, $arr );
-			$id = 'http://v.qq.com' . $arr [1];
+			if (strpos($url, "cover") > -1) {
+				$id = $url;
+			}else{
+				$page = file_data ( $url );
+				if (! preg_match ( '/<div class="mod_play">\n*\s*<a href="(.*)" class="btn_play_big" title=".*"><span>.*<\/span><\/a>/iUs', $page, $arr ))
+					preg_match ( "/<a target='_blank' rel='bookmark' title='.*' href='(.*)'>/iUs", $page, $arr );
+				$id = 'http://v.qq.com' . $arr [1];
+			}
 			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
 		} elseif (strpos ( $url, "sohu.com" ) > 0) { // 搜狐
 			$tvtype = "Sohu";

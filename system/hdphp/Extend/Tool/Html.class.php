@@ -16,7 +16,7 @@
  * @package     tools_class
  * @author      后盾向军 <houdunwangxj@gmail.com>
  */
-final class html
+final class Html
 {
 
     /**
@@ -33,24 +33,26 @@ final class html
     static public function make($control, $method, $field)
     {
         if (!class_exists($control) or !method_exists($control, $method)) {
-            halt("静态生成需要的控制器{$control}或方法{$method}不存在");
+            DEBUG && halt("静态生成需要的控制器{$control}或方法{$method}不存在");
         }
         if (!isset($field['_html'])) {
-            halt("请指定静态文件参数'_html',请参考后盾HD框架手册");
+            DEBUG && halt("请指定静态文件参数'_html',请参考后盾HD框架手册");
         }
         $obj = NULL;
         if (!$obj) $obj = new $control;
         //************创建GET数据****************
+        $html =$field['_html'];
+        unset($field['_html']);
         $_GET = array_merge($_GET, $field);
-        $htmlPath = dirname($field['_html']); //生成静态目录
-        if (!dir_create($htmlPath)) { //创建生成静态的目录
-            halt("创建目录失败，请检查目录权限");
+        if (!dir_create(dirname($html))) {
+            //创建生成静态的目录
+            DEBUG && halt("创建目录失败，请检查目录权限");
             return false;
         }
         ob_start();
         $obj->$method(); //执行控制器方法
         $content = ob_get_clean();
-        file_put_contents($field['_html'], $content);
+        file_put_contents($html, $content);
         return true;
     }
 

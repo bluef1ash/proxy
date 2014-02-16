@@ -2,7 +2,7 @@
 /**
  * 上传控制器
  */
-class UploadControl extends AuthControl {
+class UploadControl extends CommonControl {
 	/**
 	 * 上传后处理
 	 */
@@ -25,10 +25,9 @@ class UploadControl extends AuthControl {
 		$xml_d = htmlspecialchars_decode($xml);
 		$vName = Q ( "post.vname" );
 		$cateone = Q ( "post.cate-one" );
-		$catetwo = Q ( "post.cate-two" ) ? Q ( "post.cate-two" ) . "/"  : "";
+		$catetwo = Q ( "post.cate-two" ) ? Q ( "post.cate-two" ) : "";
+		$cate = $catetwo ? $catetwo : $cateone;
 		$userunion = Q ( "post.userunion" ) ? Q ( "post.userunion" ) : Q ( "session.userunion" );
-		if (! $vName || ! $cateone || ! $xml || ! $userunion )
-			$this->error("上传内容或名称不得为空！");
 		$uploadKeywords = explode(",",  C("UPLOAD_KEYWORDS"));
 		foreach ($uploadKeywords as $value) {
 			if (strpos($vName, $value) > -1 || strpos($xml_d, $value) > -1){
@@ -43,51 +42,43 @@ class UploadControl extends AuthControl {
 				break;
 			}
 		}
-		$years = date ( "Ym" ) . "/";
-		$filepath = C ( "LIST_UPDATE_PATH" ) . $cateone . "/" . $catetwo . $years;
-		$envName = string::pinyin ( $vName );
+		if (! $vName || ! $cateone || ! $xml || ! $userunion )
+			$this->error("上传内容或名称不得为空！");
 		$fix = C ( "LIST_FIX" );
-		$file = $filepath . $envName . $fix;
 		$category = M ( "category" );
-		$cate = $catetwo ? Q ( "post.cate-two" ) : $cateone;
-		$cid = $category->field ( "cid,cntitle" )->where ( array( "entitle" => $cate ) )->find ();
+		$video = M("video");
+		$cid = $category->where ( array( "entitle" => $cate ) )->getField ( "cid,cntitle" );
 		$db = array (
 			"content" => $xml,
 			"cnname" => $vName,
-			"enname" => $envName,
 			"uploadtime" => time (),
 			"uid" => Q ( "session.uid" ),
-			"cid" => $cid ["cid"],
-			"filepath" => htmlspecialchars($file)
+			"cid" => $cid ["cid"]
 		);
 		$replace = 0;
-		if (! file_exists ( $filepath )) {
-			if (! dir::create( $filepath ) )
-				$this->error( "目录不能写入服务器！" );
-		}
-		if (file_exists ( $file )) {
-			$vid = M ( "video" )->field( "vid" )->where( array( "cnname" => $vName ) )->find()["vid"];
-			session ( "xml", $vid );
+		if ($vid = $video->where(array("cnname" => $vName))->getField("vid")) {
+			$vid = $vid["vid"];
+			session ( "vid", $vid );
 			session ( "xml", $xml_d );
 			session ( "cnname", $vName );
-			session ( "enname", $envName );
-			session ( "filepath", $file );
-			session ( "cid", $cid ["cid"] );
+			session ( "cid", $cid["cid"] );
 			$replace = 1;
 		} else {
-			file_put_contents ( $file, htmlspecialchars_decode ( $xml ) );
-			M ( "video" )->add ( $db );
-			M ( "user" )->inc ( "count", "uid=" . Q ( "session.uid" ), 1 );
+			if ($video->create()) {
+				$video->add ( $db );
+				$vid = $video->getInsertId();
+				M ( "user" )->inc ( "count", "uid=" . Q ( "session.uid" ), 1 );
+			}else{
+				$this->error("添加失败！");
+			}
 		}
-		$dingjiyangshi = preg_replace ( "/{影片名称}/iUs", str_pad ( $vName, C ( "DING_VNAME_SPACE" ), " " ), C ( "DINGJI_STYLE" ) );
-		$erjiyangshi = preg_replace ( "/(.*){首拼字母}(.*){影片类别}(.*){影片名称}(.*)/iUs", "\\1" . getinitial ( $vName ) . "\\2" . $cid ["cntitle"] . "\\3" . str_pad ( $vName, C ( "ER_VNAME_SPACE" ), " " ) . "\\4", C ( "ERJI_STYLE" ) );
-		$biaoji = $catetwo ? "{" . ucfirst ( str_replace("/", "", $catetwo ) ) ."}" : "{" . ucfirst ( $cateone ) . "}";
+		$unionStyle = $this->union_style($vName, $cid["cntitle"], 0);
 		$prefix = $this->upload_prefix();
 		$assign = array (
 			"vname" => $vName,
-			"path" => $biaoji . $years . $envName . $fix,
-			"dingji" => $dingjiyangshi,
-			"erji" => $erjiyangshi,
+			"vid" => $vid,
+			"dingji" => $unionStyle[0],
+			"erji" => $unionStyle[1],
 			"userunion" => $userunion,
 			"replace" => $replace,
 			"prefix" => $prefix
@@ -102,9 +93,8 @@ class UploadControl extends AuthControl {
 		if (Q ( "get.error" ) == 1) {
 			session ("xml", null );
 			session ( "cnname", null );
-			session ( "enname", null );
-			session ( "filepath", null );
 			session ( "cid", null );
+			session ( "vid", null );
 			$this->error ( "替换失败！" );
 		}
 		if (! IS_AJAX)
@@ -112,29 +102,24 @@ class UploadControl extends AuthControl {
 		$uid = Q ( "post.uid" );
 		$data = Q ( "session.xml" );
 		$title = Q ( "session.cnname" );
-		$enname = Q ( "session.enname" );
-		$file = Q ( "session.filepath" );
-		if ($uid && $file && $data && $title && $enname) {
-			if (file_put_contents ( $file, htmlspecialchars_decode ( $data ) )) {
-				$db = array (
-					"content" => $data,
-					"cnname" => $title,
-					"enname" => $envname,
-					"uploadtime" => time (),
-					"uid" => Q ( "session.uid" ),
-					"cid" => Q ( "session.cid" )
-				);
-				M ( "video" )->where ( array( "vid" => Q ( "session.vid" ) ) )->update ( $db );
-				echo 1;
-			}
+		$cid = Q ( "session.cid" );
+		if ($uid && $data && $title) {
+			$db = array (
+				"content" => $data,
+				"cnname" => $title,
+				"uploadtime" => time (),
+				"uid" => Q ( "session.uid" ),
+				"cid" => $cid
+			);
+			M ( "video" )->where ( array( "vid" => Q ( "session.vid" ) ) )->update ( $db );
+			echo 1;
 		} else {
 			echo 0;
 		}
 		session ("xml", null );
 		session ( "cnname", null );
 		session ( "cid", null );
-		session ( "enname", null );
-		session ( "filepath", null );
+		session ( "vid", null );
 	}
 	/**
 	 * 获取父级分类

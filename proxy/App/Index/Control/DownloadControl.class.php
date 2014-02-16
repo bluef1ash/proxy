@@ -11,11 +11,10 @@ class DownloadControl extends Control {
 			$this->error ( "页面不存在！" );
 		$xml = Q ( "post.data" );
 		$vName = Q ( "post.vname" );
-		$temp = 'D:'.DIRECTORY_SEPARATOR.'wamp'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR;
 		$file = 'list.xml';
-		file_put_contents ( $temp.$file, $xml );
-		xiazai (  $temp, $file, $vName . '.xml' );
-		unlink ( $temp . $file );
+		file_put_contents ( TEMP_PATH . $file, $xml );
+		xiazai (  TEMP_PATH, $file, $vName . '.xml' );
+		unlink ( TEMP_PATH . $file );
 	}
 }
 ?>

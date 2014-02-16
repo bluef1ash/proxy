@@ -24,14 +24,14 @@ class CategoryControl extends CommonControl{
 			$data = array(
 				"cntitle" => Q ( "post.cntitle" ),
 				"entitle" => $entitle,
-				"pid"	=> $pid,
+				"pid"	=> $pid
 				);
 			$category = M("category");
 			$father = array();
 			while ($pid>0){
 				$title = $category->field("entitle,pid")->where(array("cid"=>$pid))->find();
-				$father[] = $title["entitle"]."/";
-				$pid = $title["pid"]; 
+				$father[] = $title["entitle"] . "/";
+				$pid = $title["pid"];
 			}
 			$father = array_reverse($father);
 			$fatherStr = "";
@@ -39,9 +39,9 @@ class CategoryControl extends CommonControl{
 				$fatherStr .= $value;
 			}
 			$add = $category->add($data);
-			$lists_path = C("LIST_UPDATE_PATH").$fatherStr;
-			if (!file_exists($lists_path.$entitle."/")){
-				$mkdir = mkdir($lists_path.$entitle);
+			$lists_path = C("LIST_UPDATE_PATH") . $fatherStr;
+			if (!file_exists($lists_path.$entitle . "/")){
+				$mkdir = mkdir($lists_path . $entitle);
 			}else {
 				$mkdir = 0;
 				$this->error("目录不可读写！");
@@ -65,14 +65,14 @@ class CategoryControl extends CommonControl{
 			$pid = $category->field("pid,entitle")->where(array("cid"=>$cid))->find();
 			$father =$category->field("entitle")->where(array("pid"=>$pid["pid"]))->find();
 			$update = $category->where(array("cid"=>$cid))->update(array("cntitle"=>$cntitle, "entitle"=>$entitle));
-			$lists_path = C("LIST_UPDATE_PATH").$father["entitle"]."/";
-			$rename = rename($lists_path.$pid["entitle"], $lists_path.$entitle);
+			$lists_path = C("LIST_UPDATE_PATH") . $father["entitle"] . "/";
+			$rename = rename($lists_path . $pid["entitle"], $lists_path . $entitle);
 			unset($_POST);
 			if (!$update && !$rename)
-				$this->error("添加失败！");
+				$this->error("修改失败！");
 			$this->success("修改成功！");
 		}
-		$cid = $this->_GET("cid", "intval");
+		$cid = Q("get.cid", null, "intval");
 		$cate = M("category")->where(array("cid"=>$cid))->find();
 		$this->assign("cate", $cate);
 		$this->display();

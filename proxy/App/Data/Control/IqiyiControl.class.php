@@ -2,7 +2,7 @@
 /**
  * 爱奇艺采集控制器
  */
-class IqiyiControl extends AuthControl {
+class IqiyiControl extends CommonControl {
 	/**
 	 * 默认执行
 	 */
@@ -10,26 +10,31 @@ class IqiyiControl extends AuthControl {
 		header ( 'Content-type:text/xml;charset:utf-8;filename:爱奇艺代理.xml' ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
 		if ( $id = Q ("get.id")) {
-			if ($xml = S("funshion_" . $id)) {
+			$xml = $this->cache_collect("iqiyi_" . $id);
+			if ($xml != 1 && !$xml) {
 				echo $xml;
 			}else{
-				$xml = $this->listpage($id)["xml"];
-				S($id, $xml, 3600, array("prefix" => "funshion_"));
+				$xml = $this->listpage($id);
+				$xml = $xml["xml"];
+				$this->cache_collect($id, 1, $xml, "iqiyi_");
 				echo $xml;
 			}
 		} elseif (Q( "get.page" )) { // 是否向地址栏传递PAGE参数
 			$url = file_data ( "http://list.iqiyi.com/www/2/------------2-1-" . Q( "get.page" ) . "-1---.html" ); // 采集奇艺电视剧页面
 			preg_match_all ( '/<a\s+href="(.+)" class="title">.*<\/a>/iUs', $url, $arr ); // 正则表达式
 			foreach ( $arr [1] as $value ) { // 循环输出剧集XML列表
-				echo $this->listpage ( $value )["xml"];
+				$xml = $this->listpage ( $value );
+				echo $xml["xml"];
 			}
 		} elseif (Q( "get.vname" )) {
-			echo $this->listpage ( Q( "get.vname" ) )["vName"];
+			$vName = $this->listpage ( Q( "get.vname" ) );
+			echo $vName["vName"];
 		} else { // 没有向地址栏进行传递参数
+			$lists = "";
 			for($i = 1; $i <= 10; $i ++) { // 循环输出奇艺电视剧排行
 				$lists .= "<m list_src=" . U( "Data/Iqiyi/index", array( "page" => $i ) ) . '" label="奇艺电视剧 第' . $i . "页\" />\n";
 			}
-			echo "<list>\n".$lists."</list>";
+			echo "<list>\n" . $lists . "</list>";
 		}
 	}
 	/**

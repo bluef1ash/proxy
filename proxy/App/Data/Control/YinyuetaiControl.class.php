@@ -2,18 +2,26 @@
 /**
  * 音悦台采集控制器
  */
-class YinyuetaiControl extends Control {
+class YinyuetaiControl extends CommonControl {
 	/**
 	 * 默认执行
-	 * @return [type] [description]
 	 */
 	public function index() {
 		header ( 'Content-type:text/xml;charset:utf-8;filename:音悦台代理.xml' ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
-		if (Q ( "get.id" )) {
-			echo $this->listpage ( Q ( "get.id" ) )["xml"];
+		if ($id = Q ( "get.id" )) {
+			$xml = $this->cache_collect("yinyuetai_" . $id);
+			if ($xml != 1 && !$xml) {
+				echo $xml;
+			}else{
+				$xml = $this->listpage($id);
+				$xml = $xml["xml"];
+				$this->cache_collect($id, 1, $xml, "yinyuetai_");
+				echo $xml;
+			}
 		} elseif (Q ( "get.vname" )) {
-			echo $this->listpage ( Q ( "get.vname" ) )["vName"];
+			$vName = $this->listpage ( Q ( "get.vname" ) );
+			echo $vName["vName"];
 		} else {
 			$xml = "";
 			for($i = 1; $i <= 3; $i ++) {
@@ -39,9 +47,9 @@ class YinyuetaiControl extends Control {
 		$vName = explode ( " ", $ar [1] )[0];
 		$xml = "<m type=\"\" src=\"" . $arr [1] . "\" stream=\"true\" label='" . $vName . "' />\n";
 		return array (
-				"xmlm" => $xml,
-				"xml" => "<list>\n" . $xml . '</list>',
-				"vName" => $vName 
+			"xmlm" => $xml,
+			"xml" => "<list>\n" . $xml . '</list>',
+			"vName" => $vName
 		);
 	}
 }

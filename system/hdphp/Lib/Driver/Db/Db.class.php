@@ -367,27 +367,6 @@ abstract class Db implements DbInterface
         return is_array($result) && !empty($result) ? intval(current($result[0])) : NULL;
     }
 
-    /**
-     * 判断表名是否存在
-     * @param $table 表名
-     * @param bool $full 是否加表前缀
-     * @return bool
-     */
-    public function isTable($table, $full = true)
-    {
-        //不为全表名时加表前缀
-        if (!$full)
-            $table = C('DB_PREFIX') . $table;
-        $table = strtolower($table);
-        $info = $this->query('show tables');
-        foreach ($info as $n => $d) {
-            if ($table == current($d)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     //查找最大的值
     public function max($data)
     {
@@ -420,7 +399,26 @@ abstract class Db implements DbInterface
         return is_array($result) && !empty($result) ? current($result[0]) : NULL;
     }
 
-
+    /**
+     * 判断表名是否存在
+     * @param $table 表名
+     * @param bool $full 是否加表前缀
+     * @return bool
+     */
+    public function isTable($table, $full = true)
+    {
+        //不为全表名时加表前缀
+        if (!$full)
+            $table = C('DB_PREFIX') . $table;
+        $table = strtolower($table);
+        $info = $this->query('show tables');
+        foreach ($info as $n => $d) {
+            if ($table == current($d)) {
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * 过滤非法字段
      * @param mixed $opt

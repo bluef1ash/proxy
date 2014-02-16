@@ -2,28 +2,36 @@
 /**
  * PPS采集控制器
  */
-class PpsControl extends Control {
+class PpsControl extends CommonControl {
 	/**
 	 * 默认执行
-	 * @return [type] [description]
 	 */
 	public function index() {
 		header ( 'Content-type:text/xml;charset:utf-8;filename:PPS代理.xml' ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
-		$fname = 'http://' . $_SERVER ["SERVER_NAME"] . $_SERVER ["PHP_SELF"]; // 文件HTTP完整路径
-		if (Q ( "GET.id" )) { // 是否向地址栏传递URL参数
-			echo $this->listpage ( Q ( "GET.id" ) )["xml"]; // 写入XML内容
-		} elseif (Q ( "GET.page" )) { // 是否向地址栏传递PAGE参数
-			$url = file_data ( 'http://v.pps.tv/v_list/c_tv_p_' . Q ( "GET.page" ) . '.html' ); // 采集奇艺电视剧页面
+		if ( $id = Q ( "get.id" )) {
+			$xml = $this->cache_collect("pps_" . $id);
+			if ($xml != 1 && !$xml) {
+				echo $xml;
+			}else{
+				$xml = $this->listpage($id);
+				$xml = $xml["xml"];
+				$this->cache_collect($id, 1, $xml, "pps_");
+				echo $xml;
+			}
+		} elseif (Q ( "get.page" )) { // 是否向地址栏传递PAGE参数
+			$url = file_data ( 'http://v.pps.tv/v_list/c_tv_p_' . Q ( "get.page" ) . '.html' ); // 采集奇艺电视剧页面
 			preg_match_all ( '/<a target="_blank" title="(.*)" href="(.*)">.*<\/a>/iUs', $url, $arr ); // 正则表达式
 			foreach ( $arr [1] as $value ) { // 循环输出剧集XML列表
 				foreach ( $arr [2] as $v ) {
-					$xml .= "<m label=\"" . $value . "\">\n" . $this->listpage ( $v )["xml"] . "</m>\n";
+					$lists = $this->listpage ( $v );
+					$xml .= "<m label=\"" . $value . "\">\n" . $lists["xml"] . "</m>\n";
 				}
 			}
 			echo "<list>\n" . $xml . '<list>';
-		} elseif (Q ( "GET.vname" )) {
-			echo listpage ( Q ( "GET.vname" ))["vName"];
+		} elseif (Q ( "get.vname" )) {
+			$vName = $this->listpage ( Q ( "get.vname" ));
+			echo $vName["vName"];
 		} else { // 没有向地址栏进行传递参数
 			for($i = 1; $i <= 10; $i ++) {
 				$lists .= '<m list_src=\"' . U( "Data/Pps/index", array( "page" => $i ) ) . '" label="PPS电视剧 第' . $i . "页\" />\n";
@@ -58,13 +66,15 @@ class PpsControl extends Control {
 				//$d_echo = $value->d_echo;
 				if (!empty($value->url_key)){
 					$vName = $content[0]->title;
-					$xml .= $this->single ( $value->url_key )["xml"];
+					$lists = $this->single ( $value->url_key );
+					$xml .= $lists["xml"];
 				}else{
 					//echo $value[0]->title;
-					preg_match("/.*?-(.*?)/iUs", $value[0]->title,$arr);
+					preg_match("/.*?-(.*?)/iUs", $value[0]->title, $arr);
 					$vName = $arr[1];
 					foreach ($value as $v){
-						$xml .= $this->single ( $v->url_key )["xml"];
+						$lists = $this->single ( $v->url_key );
+						$xml .= $lists["xml"];
 					}
 				}
 			}

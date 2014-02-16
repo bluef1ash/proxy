@@ -1,2 +1,2 @@
 <?php die('forbidden'); ?>
-{"appid":"101006840","appkey":"77916004bec8f7df765917480c7b85f2","callback":"http://proxy.qlyewu.com/Passport/Qqlogin/callback","scope":"get_user_info","errorReport":true,"storageType":"file","host":"localhost","user":"root","password":"root","database":"test"}
+{"appid":"101006840","appkey":"77916004bec8f7df765917480c7b85f2","callback":"http://proxy.qlyewu.com/Passport/Qqlogin/callback","scope":"get_user_info,get_info,add_t,del_t,add_pic_t,get_repost_list,get_other_info,get_fanslist,get_idollist,add_idol,del_idol","errorReport":true,"storageType":"file","host":"localhost","user":"root","password":"root","database":"test"}

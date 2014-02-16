@@ -117,7 +117,7 @@
 											<label>
 												<input name="ctype" type="radio" value="plural">
 												多集</label>
-										<a href="" id="delete_tmp" title="清除缓存数据">清除缓存</a>
+										<a href="javascript:void(0)" id="delete_tmp" title="清除缓存数据">清除缓存</a>
 									</span>
 								</li>
 							</ul>
@@ -153,6 +153,9 @@
 			</li>
 			<li>
 				<input class="sub" type="button" id="play" value="播放">
+			</li>
+			<li>
+				<input class="sub" type="button" id="validate_xml" value="检测列表语法">
 			</li>
 			<if value="{$hd.session.username} && {$hd.session.uid} && {$hd.session.usergroup} eq 1">
 				<!-- 上传开始 -->

@@ -131,7 +131,7 @@ abstract class Control
     {
         $this->getViewObj();
         //执行视图对象中的display同名方法
-        return $this->view->display($tplFile, $cacheTime, $cachePath = null, $contentType, $charset, $show);
+        return $this->view->display($tplFile, $cacheTime, $cachePath, $contentType, $charset, $show);
     }
 
     /**
@@ -147,7 +147,7 @@ abstract class Control
     protected function fetch($tplFile = null, $cacheTime = null, $cachePath = null, $contentType = "text/html", $charset = "", $show = true)
     {
         $this->getViewObj();
-        return $this->view->fetch($tplFile, $cacheTime, $cachePath = null, $contentType, $charset);
+        return $this->view->fetch($tplFile, $cacheTime, $cachePath, $contentType, $charset);
     }
 
     /**

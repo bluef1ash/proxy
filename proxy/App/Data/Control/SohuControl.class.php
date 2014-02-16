@@ -2,16 +2,23 @@
 /**
  * 搜狐视频采集控制器
  */
-class SohuControl extends Control {
+class SohuControl extends CommonControl {
 	/**
 	 * 默认执行
-	 * @return [type] [description]
 	 */
 	public function index() {
 		header ( 'Content-type:text/xml;charset:utf-8;filename:搜狐代理.xml' ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
-		if (Q ( "get.id" )) { // 是否向地址栏传递URL参数
-			echo $this->listpage ( Q ( "get.id" ) )["xml"]; // 写入XML内容
+		if ( $id = Q ( "get.id" )) {
+			$xml = $this->cache_collect("sohu_" . $id);
+			if ($xml != 1 && !$xml) {
+				echo $xml;
+			}else{
+				$xml = $this->listpage($id);
+				$xml = $xml["xml"];
+				$this->cache_collect($id, 1, $xml, "sohu_");
+				echo $xml;
+			}
 		} elseif (Q ( "get.hottel" )) { // 是否向地址栏传递PAGE参数
 			$interface = file_data ( 'http://tv.sohu.com/frag/vrs_inc/phb_tv_day_' . Q ( "get.hottel" ) . '.js' ); // 采集电视剧页面
 			$interface = substr ( $interface, 18 );
@@ -20,11 +27,13 @@ class SohuControl extends Control {
 			foreach ( $videos as $value ) {
 				$sid = $value->sid;
 				$tvName = $value->tv_name;
-				$xml .= '<m label="' . $tvName . "\">\n" . $this->listpage ( $sid )["xml"] . "</m>\n";
+				$lists = $this->listpage ( $sid );
+				$xml .= '<m label="' . $tvName . "\">\n" . $lists["xml"] . "</m>\n";
 			}
 			echo "<list>\n" . $xml . '</list>';
 		} elseif (Q ( "get.vname" )) {
-			echo $this->listpage ( Q ( "get.vname" ) )["vName"];
+			$vName = $this->listpage ( Q ( "get.vname" ) );
+			echo $vName["vName"];
 		} else { // 没有向地址栏进行传递参数
 			$interface = file_data ( 'http://tv.sohu.com/frag/vrs_inc/phb_tv_day_10.js' ); // 采集电视剧页面
 			$interface = substr ( $interface, 18 );

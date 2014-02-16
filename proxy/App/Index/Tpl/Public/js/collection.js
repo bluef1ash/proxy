@@ -16,7 +16,7 @@ $(function(){
 			}
 		}else{
 			$.dialog({
-			    "msg" : "您的浏览器不支持这功能，请升级浏览器！",
+			    "message" : "您的浏览器不支持这功能，请升级浏览器！",
 	    		"type" : "error",
 	    		"timeout" : 2
 			});
@@ -26,7 +26,7 @@ $(function(){
 			sessionStorage.removeItem("collection");
 		}else {
 			$.dialog({
-				"msg" : "您的浏览器不支持这功能，请升级浏览器！",
+				"message" : "您的浏览器不支持这功能，请升级浏览器！",
 				"type" : "error",
 				"timeout" : 2
 			});
@@ -42,7 +42,7 @@ $(function(){
 			$("#collection_type").css("display","none");
 			sessionStorage.removeItem("collection");
 			$.dialog({
-				"msg" : "清除成功！",
+				"message" : "清除成功！",
 				"type" : "success",
 				"timeout" : 2
 			});

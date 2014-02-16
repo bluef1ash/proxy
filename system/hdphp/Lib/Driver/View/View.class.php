@@ -28,16 +28,21 @@ abstract class View
         if (is_null($file)) {
             $file = TPL_PATH . CONTROL . '/' . METHOD;
         } else if (!strstr($file, '/')) {
-            $file = TPL_PATH . CONTROL.'/'.$file;
+            $file = TPL_PATH . CONTROL . '/' . $file;
         }
         //添加模板后缀
         if (!preg_match('@\.[a-z]+$@', $file))
             $file .= C('TPL_FIX');
         //将目录全部转为小写
-        if (!is_file($file)) {
-            halt("模板不存在:$file"); //模版文件不存在
+        if (is_file($file)) {
+            return $file;
+        } else {
+            //模版文件不存在
+            if (DEBUG)
+                halt("模板不存在:$file");
+            else
+                return null;
         }
-        return $file;
     }
 
 }

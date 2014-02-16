@@ -644,7 +644,7 @@
 /*视频显示结束*/
 /*功能按钮开始*/
 .main .buttons {
-	width: 386px;
+	width: 350px;
 	text-align: center;
 	margin:10px auto;
 	height: auto;
@@ -653,10 +653,6 @@
 .main .buttons li{
 	float: left;
 	padding: 0px 30px;
-}
-.main .buttons #upload {
-	clear:both;
-	line-height:2.5em;
 }
 .main .buttons li ul li {
 	margin: 5px 5px;

@@ -2,19 +2,26 @@
 /**
  * 优酷视频采集控制器
  */
-class YoukuControl extends Control {
+class YoukuControl extends CommonControl {
 	/**
 	 * 默认执行
-	 * @return [type] [description]
 	 */
 	public function index() {
 		header ( 'Content-type:text/xml;charset:utf-8;filename:优酷代理.xml' ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
-		if ( Q ( "get.id" ) ) { // 是否向地址栏传递URL参数
-			if (Q ( "get.link" )) {
-				echo $this->listpage ( Q ( "get.id" ), true )["xml"];
+		if ($id = Q ( "get.id" ) ) { // 是否向地址栏传递URL参数
+			$xml = $this->cache_collect("youku_" . $id);
+			if ($xml != 1 && !$xml) {
+				echo $xml;
 			}else{
-				echo $this->listpage ( Q ( "get.id" ) )["xml"]; // 写入XML内容
+				if (Q ( "get.link" )) {
+					$xml = $this->listpage ( $id, true );
+				}else{
+					$xml = $this->listpage ( $id ); // 写入XML内容
+				}
+				$xml = $xml["xml"];
+				$this->cache_collect($id, 1, $xml, "youku_");
+				echo $xml;
 			}
 		} elseif (Q ( "get.page" )) { // 是否向地址栏传递PAGE参数
 			$top = file_data ( 'http://tv.youku.com/top/' ); // 采集电视剧排行页面
@@ -22,11 +29,13 @@ class YoukuControl extends Control {
 			$combine = array_combine ( $arrTop [1], $arrTop [2] );
 			$xml = "";
 			foreach ( $combine as $key => $value ) { // 循环输出剧集XML列表
-				$xml .= '<m label="' . $key . "\">\n" . $this->listpage ( 'http://www.youku.com/show_page/id_' . $value . '.html', $value )["xmlm"] . "</m>\n";
+				$lists = $this->listpage ( 'http://www.youku.com/show_page/id_' . $value . '.html', $value );
+				$xml .= '<m label="' . $key . "\">\n" . $lists["xmlm"] . "</m>\n";
 			}
 			echo "<list>\n" . $xml . '</list>';
-		} elseif (Q ( "GET.vname" )) {
-			echo $this->listpage ( Q ( "GET.vname" ) )["vName"];
+		} elseif (Q ( "get.vname" )) {
+			$vName = $this->listpage ( Q ( "get.vname" ) );
+			echo $vName["vName"];
 		}  else { // 没有向地址栏进行传递参数
 			for($i = 1; $i <= 10; $i ++) { // 循环输出电视剧排行
 				$lists .= '<m list_src="' . U("Data/Youku/index", array( "page" => $i )) . '" label="优酷电视剧 第' . $i . "页\" />\n";

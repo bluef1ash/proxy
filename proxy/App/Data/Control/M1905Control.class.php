@@ -2,24 +2,34 @@
 /**
  * M1905电影网采集控制器
  */
-class M1905Control extends Control{
+class M1905Control extends CommomControl{
 	/**
 	 * 默认执行
-	 * @return [type] [description]
 	 */
 	public function index(){
 		header ( 'Content-type:text/xml;charset:utf-8;filename:M1905电影网代理.xml' ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
-		if ( Q ( "get.id" )) {
-			echo $this->listpage ( Q ( "get.id" ) )["xml"];
+		if ( $id = Q ( "get.id" )) {
+			$xml = $this->cache_collect("m1905_" . $id);
+			if ($xml != 1 && !$xml) {
+				echo $xml;
+			}else{
+				$xml = $this->listpage($id);
+				$xml = $xml["xml"];
+				$this->cache_collect($id, 1, $xml, "m1905_");
+				echo $xml;
+			}
 		} elseif ( Q ( "get.vname" ) ) {
-			echo $this->listpage ( Q ( "get.vname" ) )["vName"];
+			$vName = $this->listpage ( Q ( "get.vname" ) );
+			echo $vName["vName"];
 		} else {
 			$url = file_data ( 'http://www.m1905.com/vod/rank/t0a99o3.shtml');
 			$preg = '/<dt class="li03 oh"><a href="http:\/\/www.m1905.com\/vod\/info\/(\d{4,8})\.shtml" target="_blank" title=".*" class=" pl28">.*<\/a><\/dt>/iUs';
 			preg_match_all ( $preg, $url, $arr );
+			$xml = "";
 			foreach ( $arr [1] as $value ) {
-				$xml .= $this->listpage ( $value )["xml_m"];
+				$lists = $this->listpage ( $value );
+				$xml .= $lists["xml_m"];
 			}
 			echo "<list>\n" . $xml . '</list>';
 		}

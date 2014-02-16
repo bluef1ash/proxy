@@ -92,7 +92,8 @@ function U($pathinfo, $args = array())
                 }
             }
     }
-    $varsAll = array_merge($data, $gets); //合并GET参数
+    //合并GET参数
+    $varsAll = array_merge($data, $gets);
     $url = '';
     switch ($urlType) {
         case 1:
@@ -178,6 +179,31 @@ function dir_create($dirName, $auth = 0755)
         is_dir($dir) or @mkdir($dir, $auth, true);
     }
     return is_dir($dirPath);
+}
+
+/**
+ * 日期格式化
+ * 使用自定义标签时格式化标准ISO日期
+ * @param int $time
+ * @param string $format
+ * @return bool|string
+ */
+function hd_date($time, $format = 'Y-m-d')
+{
+    return date($format, $time);
+}
+
+/**
+ * 截取长度
+ * 使用自定义标签时截取字符串
+ * @param $string 字符串
+ * @param int $len 长度
+ * @param string $end 结尾符
+ * @return string
+ */
+function hd_substr($string, $len = 20, $end = '...')
+{
+    return mb_substr($string, 0, $len, 'utf-8') . $end;
 }
 
 /**
@@ -538,7 +564,7 @@ function halt($error)
         }
     } else {
         //错误显示url
-        if ($_url= C('ERROR_URL')) {
+        if ($_url = C('ERROR_URL')) {
             go($_url);
         } else {
             $e['message'] = C('ERROR_MESSAGE');
@@ -602,7 +628,7 @@ function _404($msg = "", $url = "")
     if ($url)
         go($url);
     else
-       set_http_state(404);
+        set_http_state(404);
     exit;
 }
 
@@ -689,6 +715,7 @@ function tag($tag, $attr = array(), $content = "")
     if (!empty($tags) && is_array($tags)) { //如果配置文件中存在标签定义
         foreach ($tags as $k) { //加载其他模块或应用中的标签库
             $arr = explode('.', $k); //如果拆分后大于1的为其他模块或应用的标签定义
+
             if (import($k)) {
                 $tagClass[] = array_pop($arr); //压入标签库类
             }

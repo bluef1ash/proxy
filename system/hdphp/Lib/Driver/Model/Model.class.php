@@ -928,17 +928,7 @@ class Model
     {
         $str = str_replace("\r", "\n", $str);
         $sqlArr = explode(";\n", trim($str));
-        $sql = array();
-        $num = 0;
         foreach ($sqlArr as $s) {
-            $query = explode("\n", trim($s));
-            $sql[$num] = '';
-            foreach ($query as $q) {
-                $sql[$num] .= $q[0] == '#' || $q[0] . $q[1] == '--' ? '' : $q;
-            }
-            $num++;
-        }
-        foreach ($sql as $s) {
             $this->exe($s);
         }
         return true;

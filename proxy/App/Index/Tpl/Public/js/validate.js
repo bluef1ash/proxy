@@ -214,4 +214,39 @@ $(function(){
 			$(this).select();
 		}
 	});
+	$("#validate_xml").click(function(){
+		var txt = "editxml";
+		// code for IE
+		if (window.ActiveXObject){
+			var xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+			xmlDoc.async = "false";
+			xmlDoc.loadXML(document.all(txt).value);
+			if(xmlDoc.parseError.errorCode!=0){
+			    var message = "错误代码：" + xmlDoc.parseError.errorCode + "\n" + "错误位置：" + xmlDoc.parseError.reason + "错误行数：" + xmlDoc.parseError.line;
+	    		alert(message);
+	    	} else {
+				$.dialog({
+					"message" : "语法没有问题！",
+			    	"type" : "success",
+			    	"timeout" : 2
+				});
+	    	}
+	  	}else if (document.implementation.createDocument){
+	  		// code for Mozilla, Firefox, Opera, etc.
+			var parser = new DOMParser();
+			var text = document.getElementById(txt).value;
+			var xmlDoc = parser.parseFromString(text, "text/xml");
+			if (xmlDoc.documentElement.nodeName == "parsererror"){
+				alert(xmlDoc.documentElement.childNodes[0].nodeValue);
+	    	}else{
+			    $.dialog({
+					"message" : "语法没有问题！",
+			    	"type" : "success",
+			    	"timeout" : 2
+				});
+	    	}
+		}else{
+			alert('Your browser cannot handle XML validation');
+		}
+	});
 });

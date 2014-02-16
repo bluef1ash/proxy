@@ -2,7 +2,7 @@
 /**
  * CNTV采集控制器
  */
-class CntvControl extends AuthControl{
+class CntvControl extends CommonControl{
 	/**
 	 * 默认执行
 	 */
@@ -10,23 +10,26 @@ class CntvControl extends AuthControl{
 		header ( 'Content-type:text/xml;charset:utf-8;filename:CNTV代理.xml' ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
 		if ( $id = Q ("get.id")) {
-			if ($xml = S("cntv_" . $id)) {
+			$xml = $this->cache_collect("cntv_" . $id);
+			if ($xml != 1 && !$xml) {
 				echo $xml;
 			}else{
-				$xml = $this->listpage($id)["xml"];
-				S($id, $xml, 3600, array("prefix" => "cntv_"));
+				$xml = $this->listpage($id);
+				$xml = $xml["xml"];
+				$this->cache_collect($id, 1, $xml, "cntv_");
 				echo $xml;
 			}
 		} elseif ( Q ("get.vname") ) {
-			echo $this->listpage ( Q ("get.vname") )["vName"];
+			$vName = $this->listpage ( Q ("get.vname") );
+			echo $vName["vName"];
 		} else {
 			$url = file_data ( 'http://dianshiju.cntv.cn/list/all/index.shtml');
 			$preg = '/<h3><a title=".*" href="(.*)" target = "_blank">.*<\/a><\/h3>/iUs';
 			preg_match_all ( $preg, $url, $arr );
 			foreach ( $arr [1] as $value ) {
-				$xml .= $this->listpage ( $value )["xml_m"];
+				$xml .= $this->listpage ( $value );
 			}
-			echo "<list>\n" . $xml . '</list>';
+			echo "<list>\n" . $xml["xml_m"] . '</list>';
 		}
 	}
 	/**

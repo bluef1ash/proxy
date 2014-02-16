@@ -2,10 +2,9 @@
 /**
  * PPTV采集控制器
  */
-class SanliulingControl extends Control {
+class SanliulingControl extends CommonControl {
 	/**
 	 * 获取360云盘真实地址
-	 * @return [type] [description]
 	 */
 	public function yunpan() {
 		//http://awsyupt4tp.l20.yunpan.cn/lk/QUanibVsqJAd8
@@ -34,7 +33,7 @@ class SanliulingControl extends Control {
 		$page = file_data($id);
 		preg_match("/name : '(.*)\.flv|\.mp4?',/iUs", $page, $arr);
 		$vName = $arr[1];
-		$xml = '<m type="" src="'.U("data/sanliuling/yunpan", array("id"=>$ids[1])).'" label="'.$vName."\" />\n";
+		$xml = '<m type="" src="'.U("Data/Sanliuling/yunpan", array("id"=>$ids[1])).'" label="'.$vName."\" />\n";
 		return array("xml"=>"<list>\n".$xml."</list>","vName"=>$vName);
 	}
 }

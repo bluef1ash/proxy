@@ -11,7 +11,7 @@ class ListsControl extends CommonControl{
 		$categorytop = $category->where ( array( "pid" => 0 ) )->select ();
 		$this->assign ( "categorytop", $categorytop );
 		$db = K("video");
-		$count = $db->count();
+		$count = $db->counts();
 		$page = new page($count, 10, 4, 2);
 		$video = $db->field("vid,cnname,enname,uploadtime,py_video.cid,username,cntitle,entitle,pid,userunion")->order(array("uploadtime" => "desc"))->select($page->limit());
 		$array = $category->select();
@@ -35,14 +35,14 @@ class ListsControl extends CommonControl{
 		if (!Q ( "get.vid" ))
 			$this->error("页面不存在！");
 		$vid = Q("get.vid", null, "intval");
-		$video = K("video")->where(array("vid"=>$vid))->field("vid,enname,entitle")->find();
+		$video = K("video")->field("vid,enname,entitle,pid")->where(array("vid"=>$vid))->find();
 		$category = M("category")->select();
-		$father = father_cate($category, $video["pid"]);
+		$father = Data::parentChannel($category, $video[0]["pid"]);
 		$video["entitleF"] = $father[0]["entitle"];
-		$file = C("LIST_UPDATE_PATH").$video["entitleF"]."/".$video["entitle"]."/".$video["enname"].C("LIST_FIX");
+		$file = C("LIST_UPDATE_PATH") . $video[0]["entitleF"] . "/" . $video[0]["entitle"] . "/" . $video[0]["enname"] . C("LIST_FIX");
 		$unfile = unlink($file);
 		if (!$unfile)
-			$this->error("删除失败！ ");
+			$this->error("删除失败！");
 		$undb = M("video")->where(array("vid"=>$vid))->delete();
 		$this->success('删除成功！');
 	}
@@ -83,20 +83,9 @@ class ListsControl extends CommonControl{
 	public function move(){
 		if (!$vid = Q("post.vid", null, "intval") || !$cateone = Q("post.cate-one"))
 			$this->error("页面不存在！");
-		$catetwo = Q ( "post.cate-two" ) ? Q ( "post.cate-two" ) . "/"  : "";
+		$catetwo = Q ( "post.cate-two" ) ? Q ( "post.cate-two" ) : $cateone;
 		$video = M("video");
-		$oldFilepath = $video->field("filepath")->where(array("vid" => $vid))->find()["filepath"];
-		$array = explode($oldFilepath, "/");
-		if($catetwo){
-			$years = $array[6];
-			$filename = $array[7];
-		}else{
-			$years = $array[5];
-			$filename = $array[6];
-		}
-		$newFilepath = C ( "LIST_UPDATE_PATH" ) . $cateone . "/" . $catetwo . $years . "/" . $filename;
-		if (rename($oldFilepath, $newFilepath)) {
-			$video->update(array("vid" => $vid, "filepath" => htmlspecialchars($newFilepath)));
+		if ($video->update(array("vid" => $vid, "cid" => $cid))) {
 			$this->success("移动成功！");
 		}else{
 			$this->error("移动失败！");

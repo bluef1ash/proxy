@@ -2,9 +2,7 @@
 /**
  * 直播采集控制器
  */
-class LiveControl extends Control {
-	public function index() {
-	}
+class LiveControl extends CommonControl {
 	/**
 	 * 获取风云直播ID
 	 * @param  string $url 直播URL
@@ -17,8 +15,6 @@ class LiveControl extends Control {
 	}
 	/**
 	 * 跳转风云直播
-	 * @param  string $id 直播ID
-	 * @return [type]     [description]
 	 */
 	public function getfy() {
 		if (! IS_GET)
@@ -26,14 +22,9 @@ class LiveControl extends Control {
 		$id = Q ( "get.id" );
 		$file = "http://resource.ws.kukuplay.com/players/2013/09/04/40806/fengyun.swf?cid=" . $id;
 		go($file);
-		// header("Content-Type: application/x-shockwave-flash");
-		/*
-		 * echo '<script type="text/javascript"> location="http://resource.ws.kukuplay.com/players/2013/09/04/40806/fengyun.swf?cid='.Q ( "get.id" ).'"; </script>';
-		 */
 	}
 	/**
 	 * 电视台回播
-	 * @return [type] [description]
 	 */
 	public function huibo() {
 		header ( 'Content-type:text/xml;charset:utf-8;filename:回播代理.xml' ); // 定义文件头
@@ -44,7 +35,7 @@ class LiveControl extends Control {
 			echo $this->cctv_date ( Q ( "get.name" ), Q ( "get.date" ) );
 		elseif (Q ( "get.channel" ) && Q ( "get.playtime" ))
 			$this->cctv_play ( Q ( "get.channel" ), Q ( "get.playtime" ) );
-		else 
+		else
 			echo $this->defaultXml ();
 	}
 	/**

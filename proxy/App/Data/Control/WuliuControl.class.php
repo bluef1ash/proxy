@@ -2,7 +2,7 @@
 /**
  * 56视频采集控制器
  */
-class WuliuControl extends Control {
+class WuliuControl extends CommonControl {
 	/**
 	 * 默认执行
 	 */
@@ -10,22 +10,24 @@ class WuliuControl extends Control {
 		header ( 'Content-type:text/xml;charset:utf-8;filename:56代理.xml' ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
 		if ($id = Q ( "get.id" )) { // 是否向地址栏传递URL参数
-			$xml = $this->cache_collect("tudou_" . $id);
+			$xml = $this->cache_collect("56_" . $id);
 			if ($xml != 1 && !$xml) {
 				echo $xml;
 			}else{
 				if (preg_match("/^\d{4,6}$/iUs", $id)){
-					$xml = $this->listpage ( $id )["xml"];
+					$xml = $this->listpage ( $id );
 				}else{
-					$xml = $this->one($id)["xml"];
+					$xml = $this->one($id);
 				}
-				$this->cache_collect($id, 1, $xml, "tudou_");
+				$xml = $xml["xml"];
+				$this->cache_collect($id, 1, $xml, "56_");
 				echo $xml;
 			}
 		} elseif (Q ( "get.top" )) {
 			echo $this->top ( Q ( "get.top" ) );
 		} elseif (Q ( "get.vname" )) {
-			echo $this->listpage ( Q ( "get.vname" ) )["vName"];
+			$vName = $this->listpage ( Q ( "get.vname" ) );
+			echo $vName["vName"];
 		} else { // 没有向地址栏进行传递参数
 			echo $this->top ( 1 );
 		}
@@ -43,7 +45,8 @@ class WuliuControl extends Control {
 		$vName = $obj->name;
 		foreach ( $data as $value ) {
 			// $wd = str_replace ( '_wd4', '', $url );
-			$xml .= $this->one($value->vid)["lists"];
+			$lists = $this->one($value->vid);
+			$xml .= $lists["lists"];
 		}
 		return array("xml"=>"<list>\n".$xml.'</list>',"vName"=>$vName);
 	}

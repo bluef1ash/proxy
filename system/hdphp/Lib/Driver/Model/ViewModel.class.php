@@ -114,6 +114,13 @@ class ViewModel extends Model
         $this->setJoinTable();
         return parent::max($args);
     }
+    //max
+    public function sum($args = "")
+    {
+        //设置表关联
+        $this->setJoinTable();
+        return parent::sum($args);
+    }
     //avg
     public function avg($args = "")
     {

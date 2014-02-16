@@ -2,7 +2,7 @@
 /**
  * 风行采集控制器
  */
-class FunshionControl extends Control {
+class FunshionControl extends CommonControl {
 	/**
 	 * 默认执行
 	 */
@@ -14,18 +14,21 @@ class FunshionControl extends Control {
 			if ($xml != 1 && !$xml) {
 				echo $xml;
 			}else{
-				$xml = $this->listpage($id)["xml"];
+				$xml = $this->listpage($id);
+				$xml = $xml["xml"];
 				$this->cache_collect($id, 1, $xml, "funshion_");
 				echo $xml;
 			}
 		} elseif ( Q ("get.vname") ) {
-			echo $this->listpage ( Q ("get.vname") )["vName"];
+			$vName = $this->listpage ( Q ("get.vname") );
+			echo $vName["vName"];
 		} else {
 			$url = file_data ( 'http://www.funshion.com/rank/fs250/' );
 			$preg = '/<\/i><a href="(.*)" title="(.*)">.*<\/a><span>/iUs';
 			preg_match_all ( $preg, $url, $arr );
 			foreach ( $arr [1] as $value ) {
-				$xml .= $this->listpage ( "http://www.funshion.com" . $value )["xml_m"];
+				$lists = $this->listpage ( "http://www.funshion.com" . $value );
+				$xml .= $lists["xml_m"];
 			}
 			echo "<list>\n" . $xml . '</list>';
 		}

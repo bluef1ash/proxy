@@ -24,18 +24,22 @@ class LetvControl extends CommonControl {
 					if (preg_match("/vid\s*:\s*(\d{7}),\s*\/\/视频ID.*trylook:[1-9]\d*,\/\/十分钟试看/iUs", $page, $arr))
 						$vip = $arr[1];
 				}
-				$xml = $this->listpage ( $pid, $vip )["xml"];
+				$xml = $this->listpage ( $pid, $vip );
+				$xml = $xml["xml"];
 				$this->cache_collect($id, 1, $xml, "letv_");
 				echo $xml;
 			}
 		} elseif ( Q("get.vname") ) {
-			echo $this->listpage ( Q("get.vname") )["vName"];
+			$vName = $this->listpage ( Q("get.vname") );
+			echo $vName["vName"];
 		} else {
 			$url = file_data ( 'http://top.letv.com/tvhp.html', true );
 			$preg = '/<span class="s2"><a href="(http:\/\/so.letv.com\/tv\/\d+.html)" title=".*" target="_blank">(.*)<\/a><\/span>/iUs';
 			preg_match_all ( $preg, $url, $arr );
+			$xml = "";
 			foreach ( $arr [1] as $value ) {
-				$xml .= $this->listpage ( $value );
+				$lists = $this->listpage ( $value );
+				$xml .= $lists["xml_m"];
 			}
 			echo "<list>\n" . $xml . '</list>';
 		}
@@ -55,17 +59,20 @@ class LetvControl extends CommonControl {
 			$v = json_encode( array( "vid" => $vip ) );
 			array_unshift($videoInfo, json_decode( $v ));
 		}
-		foreach ( $videoInfo as $value ) {
+		foreach ($videoInfo as $value) {
 			$vid = $value->vid;
-			$interface = 'http://app.letv.com/v.php?id=' . $vid;
-			$interface = file_data ( $interface );
-			$src = preg_match ( '/<tal><!\[CDATA\[(.*)\]\]><\/tal>.*"storeuri":"(.*)"/iUs', $interface, $arr );
-			$name = $arr[1]; // 视频名称
-			$src = str_replace ( "\/", "/", $arr [2] );
-			$flv = 'http://g3.letv.cn/' . $src;
-			$xml .= '<m type="" src="' . $flv . '?start={start_bytes}" stream="true" label="' . $name . "\" />\n";
+			$interface = file_data('http://www.letv.com/v_xml/' . $vid . '.xml');
+			preg_match('/<playurl><!\[cdata\[(.*)\]\]><\/playurl>/iUs', $interface, $data);
+			$json = json_decode($data[1]);
+			$name = $json->title;
+			$dispatch = $json->dispatch;
+			$flv = array();
+			foreach ($dispatch as $key => $value) {
+				$flv[$key] = 'http://g3.letv.cn/' . $value[2];
+			}
+			$xml .= '<m type="" src="' . $flv["1000"] . '?start={start_bytes}" stream="true" label="' . $name . "\" />\n";
 		}
-		return array("xml"=>"<list>\n" . $xml . '</list>',"vName"=>$vName);
+		return array("xml" => "<list>\n" . $xml . '</list>',"vName" => $vName);
 	}
 }
 ?>

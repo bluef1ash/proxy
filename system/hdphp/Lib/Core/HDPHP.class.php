@@ -82,12 +82,11 @@ final class HDPHP
         //自动加载文件列表
         $files = C('AUTO_LOAD_FILE');
         if (is_array($files) && !empty($files)) {
-            foreach ($files as $f) {
-                $file = $f . '.php';
+            foreach ($files as $file) {
                 require_array(array(
                     LIB_PATH . $file,
                     COMMON_LIB_PATH . $file
-                )) || require_cache($f);
+                )) || require_cache($file);
             }
         }
     }

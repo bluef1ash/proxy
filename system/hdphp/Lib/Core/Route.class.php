@@ -177,6 +177,9 @@ final class Route
         defined("__CONTROL_TPL__") or define("__CONTROL_TPL__", __TPL__  .'/'. CONTROL);
         defined("__STATIC__") or define("__STATIC__", __ROOT__ . '/Static');
         defined("__PUBLIC__") or define("__PUBLIC__", __TPL__ . '/Public');
+        //历史页码
+        $history= isset($_SERVER["HTTP_REFERER"])?$_SERVER["HTTP_REFERER"]:null;
+        define("__HISTORY__",$history);
     }
 
     /**

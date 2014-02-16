@@ -1,5 +1,6 @@
 <?php
 class videoModel extends ViewModel {
+	public $table = "video";
 	public $view = array(
 		"user" => array(
 			"type" => INNER_JOIN,
@@ -12,5 +13,8 @@ class videoModel extends ViewModel {
 			"on" => "category.cid=video.cid"
 		)
 	);
+	public function counts(){
+		return $this->count();
+	}
 }
 ?>

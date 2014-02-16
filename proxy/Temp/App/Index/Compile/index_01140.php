@@ -30,6 +30,7 @@
 		CONTROLTPL = 'http://localhost/proxy/./Proxy/App/Index/Tpl/Index';
 		STATIC = 'http://localhost/proxy/Static';
 		PUBLIC = 'http://localhost/proxy/./Proxy/App/Index/Tpl/Public';
+		HISTORY = 'http://localhost/';
 		HTTPREFERER = 'http://localhost/';
 </script>
 		<link href="http://localhost/proxy/System/hdphp/Extend/Org/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"><script src="http://localhost/proxy/System/hdphp/Extend/Org/bootstrap/js/bootstrap.min.js"></script>

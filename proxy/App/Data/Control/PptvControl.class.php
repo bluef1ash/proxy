@@ -2,23 +2,26 @@
 /**
  * PPTV采集控制器
  */
-class PptvControl extends Control{
+class PptvControl extends CommonControl{
 	/**
 	 * 默认执行
-	 * @return [type] [description]
 	 */
 	public function index(){
 		header ( 'Content-type:text/xml;charset:utf-8;filename:PPTV代理.xml' ); // 定义文件头
-		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式 
-		if (IS_GET) { // 是否向地址栏进行传参
-			if ( Q ( "get.id" )) {
-				$id = Q ( "get.id" );
- 				echo $this->listpage ( $id )["xml"];
-			} elseif ( Q ( "get.vname" ) ) {
-				echo $this->listpage ( Q ( "get.vname" ) )["vName"];
-			} else {
-				echo "<list>\n<m type='' src='' label='参数错误' /></list>";
+		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
+		if ( $id = Q ( "get.id" )) {
+			$xml = $this->cache_collect("pptv_" . $id);
+			if ($xml != 1 && !$xml) {
+				echo $xml;
+			}else{
+				$xml = $this->listpage($id);
+				$xml = $xml["xml"];
+				$this->cache_collect($id, 1, $xml, "pptv_");
+				echo $xml;
 			}
+		} elseif ( Q ( "get.vname" ) ) {
+			$vName = $this->listpage ( Q ( "get.vname" ) );
+			echo $vName["vName"];
 		} else {
 			$url = file_data ( 'http://dianshiju.cntv.cn/list/all/index.shtml');
 			$preg = '/<h3><a title=".*" href="(.*)" target = "_blank">.*<\/a><\/h3>/iUs';
@@ -35,61 +38,23 @@ class PptvControl extends Control{
 	 * @return array     视频列表及视频名称
 	 */
 	public function listpage($id){
-		if (preg_match("/^\d{4,8}$/iUs", $id)){
-			$page = file_data("http://www.pptv.com/page/".$id.".html");
-			preg_match('/<span class="crumb_current">.*\s*(.*)\s*<\/span>/iUs', $page, $ar);
-			preg_match_all('<span class="txt"><a  start_time=".*" href="http:\/\/v\.pptv\.com\/show\/(\w+)\.html" title="(.*)" target="_play">.*<\/a><\/span>', $page, $arr);
-			$xml = "";
-			foreach ($arr[1] as $value){
-				$xml .= $this->one($value)["xml_m"];
-			}
-			$vName = $ar[1];
-		}else {
-			$page = file_data("http://v.pptv.com/show/" . $id . ".html");
-			preg_match("/var webcfg\s*=\s*(.*)\n*<\/script>/iUs", $page, $arr);
-			p($arr);
-			$vName = json_decode($arr[1])->title;
-			$xml = '<m type="video" src="proxy:cdn,'.U("Data/Pptv/proxy").",".U("Data/Pptv/proxy", array("vid"=>$id)).'" label="'."\" />\n";
-		}
+		$referer = "http://player.pplive.cn/ikan/1.0.5.26/player4player2.swf";
+		$user_agent = Q("server.HTTP_USER_AGENT");
+		$purl = "http://api.v.pptv.com/api/openapi/player.open.json?id=" . $id . "&from=0&version=";
+		$json = json_decode(file_data($purl, array(), 0, "", $referer, $user_agent));
+		$ppid = $json->data->pptv->id;
+		$vName = $json->data->pptv->title;
+		$ppurl = "http://client-play.pplive.cn/chplay3-0-" . $ppid . ".xml";
+		$ppstr = file_data($ppurl, array(), 0, "", $referer, $user_agent);
+		$xml = simplexml_load_string($ppstr);
+		$rid = $xml->channel[rid];
+		$sh = $xml->uh;
+		$iurl = "http://" . $sh . ":81/" .$rid;
+		$xml .= '<m type="2" src="' . $iurl . '" label="' . $vName . "\" />\n";
 		return array(
 			"xml" => "<list>\n" . $xml . "</list>",
 			"vName" => $vName
 		);
-	}
-	/**
-	 * 单个视频代理
-	 * @return string 返回XML数据
-	 */
-	public function proxy(){
-		header("Content-type:text/xml;charset=utf-8");
-		if(Q("get.vid")){
-			$this->pptv_vid(Q("get.vid"));
-		}elseif(Q("data")){
-			$this->pptv_data(Q("data"));
-		}
-	}
-	/**
-	 * 解析IP地址
-	 * @param  string $data XML数据
-	 * @return [type]       [description]
-	 */
-	private function pptv_data($data){
-		$obj=simplexml_load_string($data);
-		$rid=(string) $obj->channel[rid];
-		$ip=(string)  $obj->dt->sh;
-		$rid=strtr($rid,array('%'=>'__'));
-		echo 'http://'.$ip.':81/'.$rid;
-	}
-	/**
-	 * 找到XML数据
-	 * @param  string $vid 视频VID
-	 * @return [type]      [description]
-	 */
-	private function pptv_vid($vid){
-		if(!is_numeric($vid))
-			$vid=json_decode(file_data('http://api.v.pptv.com/api/openapi/player.open.json?id='.$vid.'&from=0&version='))->data->pptv->id;
-		$xmlUrl='http://client-play.pplive.cn/chplay3-0-'.$vid.'.xml';
-		header("location:".$xmlUrl);
 	}
 }
 ?>
