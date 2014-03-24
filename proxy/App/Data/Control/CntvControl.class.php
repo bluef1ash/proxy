@@ -7,16 +7,21 @@ class CntvControl extends CommonControl{
 	 * 默认执行
 	 */
 	public function index(){
-		header ( 'Content-type:text/xml;charset:utf-8;filename:CNTV代理.xml' ); // 定义文件头
+		header ( "Content-type:text/xml;charset:utf-8;filename:CNTV代理.xml" ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
 		if ( $id = Q ("get.id")) {
-			$xml = $this->cache_collect("cntv_" . $id);
-			if ($xml != 1 && !$xml) {
+			preg_match("/\/([\w]{15,20})\.shtml/iUs", $id, $arr);
+			$xml = $this->cache_collect("cntv_" . $arr[1]);
+			if ($xml != 1 && $xml) {
 				echo $xml;
 			}else{
 				$xml = $this->listpage($id);
 				$xml = $xml["xml"];
-				$this->cache_collect($id, 1, $xml, "cntv_");
+				if ($cachetime = Q("get.cachetime", null, "intval")){
+					$this->cache_collect($id, 1, $xml, "cntv_", "file", $cachetime, ROOT_PATH . "Cache/Auto");
+				} else {
+					$this->cache_collect($id, 1, $xml, "cntv_");
+				}
 				echo $xml;
 			}
 		} elseif ( Q ("get.vname") ) {
@@ -35,7 +40,6 @@ class CntvControl extends CommonControl{
 	/**
 	 * 合并列表
 	 * @param  string $id 单个影片ID
-	 * @return [type]     [description]
 	 */
 	public function merge($id = ""){
 		if (Q("get.id"))
@@ -58,8 +62,8 @@ class CntvControl extends CommonControl{
 	}
 	/**
 	 * 制作列表
-	 * @param  string $id 视频ID
-	 * @return array     视频列表及视频名称
+	 * @param string $id 视频ID
+	 * @return array 视频列表及视频名称
 	 */
 	public function listpage($id){
 		if (strpos($id, "http://")>-1){
@@ -78,7 +82,7 @@ class CntvControl extends CommonControl{
 			$vName = $this->merge($id);
 			$xml = '<m type="merge" src="'.U("merge",array("id"=>$id)).'" label="'.$vName."\" />\n";
 		}
-		return array("xml"=>"<list>\n".$xml."</list>","vName"=>$vName);
+		return array("xml" => "<list>\n" . $xml . "</list>", "lists" => $xml, "vName" => $vName);
 	}
 }
 ?>

@@ -2,6 +2,13 @@
 //栏目模型
 class CategoryModel extends Model{
 	public $table = "category";
+	/**
+	 * 获取顶级栏目
+	 */
+	public function tops(){
+		$categorytop = $this->where ( array( "pid" => 0 ) )->select ();
+		return $categorytop;
+	}
 	//添加栏目
 	public function add_category(){
 		//create就是对数据执行自动验证（当然还有更多功能，后面说...)

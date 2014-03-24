@@ -1,0 +1,40 @@
+<load file="__PUBLIC__/header.html">
+		<title>搜索结果</title>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/public.css">
+		<script type="text/javascript" src="__PUBLIC__/Js/public.js"></script>
+	</head>
+	<body>
+		<table class="tab">
+			<tr>
+				<td class="th" colspan="20">频道列表</td>
+			</tr>
+			<tr class="tableTop">
+				<td class="tdLittle1">ID</td>
+				<td>顶级频道样式</td>
+				<td>顶级频道空格数</td>
+				<td>下级频道样式</td>
+				<td>下级频道空格数</td>
+				<td>所属频道ID</td>
+				<td>操作</td>
+			</tr>
+			<list from="$union" name="n">
+				<tr>
+					<td>{$n.unid}</td>
+					<td>{$n.top_style}</td>
+					<td>{$n.top_number}</td>
+					<td>{$n.down_style}</td>
+					<td>{$n.down_number}</td>
+					<td>{$n.uuid}</td>
+					<td>
+						<a href="{|U('Admin/Union/add', array('unid'=>$n['unid']))}" class="alter">修改</a>
+						<a href="{|U('Admin/Union/delete', array('unid'=>$n['unid']))}" class="del">删除</a>
+					</td>
+				</tr>
+			</list>
+		</table>
+		<div class="page">
+			共{$count}条 &nbsp;
+			{$page}
+		</div>
+	</body>
+</html>

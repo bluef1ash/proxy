@@ -15,17 +15,18 @@ class CommonControl extends AuthControl{
 	 * 频道样式
 	 */
 	public function union_style($vName, $category, $number){
+		$union = M("union")->field("top_style,top_number,down_style,down_number")->where(array("uuid" => Q("session.uuid")))->find();
 		$array = array(
-			C ( "DINGJI_STYLE" ),
-			C("ERJI_STYLE")
+			$union["top_style"],
+			$union["down_style"]
 		);
-		$space = C ( "DING_VNAME_SPACE" );
+		$space = $union["top_number"];
 		for ($i = 0; $i < count($array); $i++) {
 			$array[$i] = str_replace("{影片名称}", str_pad ( $vName, $space, " " ), $array[$i]);
 			$array[$i] = str_replace("{集数}", $number, $array[$i]);
 			$array[$i] = str_replace("{首拼字母}", getinitial ( $vName ), $array[$i]);
 			$array[$i] = str_replace("{影片类别}", $category, $array[$i]);
-			$space = C ( "ER_VNAME_SPACE" );
+			$space = $union["down_number"];
 		}
 		return $array;
 	}

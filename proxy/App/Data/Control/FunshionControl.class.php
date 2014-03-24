@@ -7,16 +7,20 @@ class FunshionControl extends CommonControl {
 	 * 默认执行
 	 */
 	public function index() {
-		header ( 'Content-type:text/xml;charset:utf-8;filename:风行代理.xml' ); // 定义文件头
+		header ( "Content-type:text/xml;charset:utf-8;filename:风行代理.xml" ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
 		if ($id = Q("get.id")) {
 			$xml = $this->cache_collect("funshion_" . $id);
-			if ($xml != 1 && !$xml) {
+			if ($xml != 1 && $xml) {
 				echo $xml;
 			}else{
 				$xml = $this->listpage($id);
 				$xml = $xml["xml"];
-				$this->cache_collect($id, 1, $xml, "funshion_");
+				if ($cachetime = Q("get.cachetime", null, "intval")){
+					$this->cache_collect($id, 1, $xml, "funshion_", "file", $cachetime, ROOT_PATH . "Cache/Auto");
+				} else {
+					$this->cache_collect($id, 1, $xml, "funshion_");
+				}
 				echo $xml;
 			}
 		} elseif ( Q ("get.vname") ) {
@@ -72,7 +76,7 @@ class FunshionControl extends CommonControl {
 			$obj = json_decode ( $url );
 			$xml = '<m type="2" src="' . $obj->playlist [0]->urls [0] . '?start={start_bytes}" stream="true" label="' . $label . '"/>' . "\n";
 		}
-		return array("xml"=>"<list>\n".$xml."</list>","xml_m"=>$xml,"vName"=>$title);
+		return array("xml" => "<list>\n" . $xml . "</list>", "lists" => $xml, "vName" => $title);
 	}
 }
 ?>

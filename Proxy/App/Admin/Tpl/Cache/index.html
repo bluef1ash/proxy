@@ -1,0 +1,62 @@
+<load file="__PUBLIC__/header.html">
+		<title>缓存控制</title>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/public.css">
+		<style type="text/css">
+			.table input{
+				height: 28px;
+				vertical-align: middle;
+			}
+		</style>
+	</head>
+	<body>
+		<table class="tab">
+			<thead>
+				<tr>
+					<th colspan="3" class="th">缓存控制</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td align="right" width="45%">清理列表缓存：</td>
+					<td>
+						<a href="__APP__/Cache/delete?temp=./Cache/Static/">开始清理</a>
+					</td>
+					<td>清理数据库缓存列表</td>
+				</tr>
+				<tr>
+					<td align="right" width="45%">清理自动采集缓存：</td>
+					<td>
+						<a href="__APP__/Cache/delete?temp=./Cache/Auto/">开始清理</a>
+					</td>
+					<td>清理设定缓存时间的缓存文件</td>
+				</tr>
+				<tr>
+					<td align="right" width="45%">清理默认缓存：</td>
+					<td>
+						<a href="__APP__/Cache/delete?temp=./Cache/Data/">开始清理</a>
+					</td>
+					<td>清理系统自动缓存的文件</td>
+				</tr>
+				<tr>
+					<td align="right" width="45%">清理Memcache缓存：</td>
+					<td>
+						<form action="{|U:'Admin/Cache/del_memcache'}" method="post">
+							Memcache地址：<input type="text" name="host" value="127.0.0.1"><br>
+							Memcache端口：<input type="text" name="port" value="11211"><br>
+							清理过期时间的缓存（单位：秒）：<input type="text" name="time" value="0"><br>
+							<input type="submit" value="开始清理">
+						</form>
+					</td>
+					<td>注意：此功能将清除所有的Memcache缓存！</td>
+				</tr>
+				<tr>
+					<td align="right" width="45%">清理网站缓存：</td>
+					<td>
+						<a href="__APP__/Cache/delete?temp=CACHE_PATH">开始清理</a>
+					</td>
+					<td>清理后将注销！如没有特殊必要，不必清理！</td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+</html>

@@ -7,16 +7,20 @@ class IqiyiControl extends CommonControl {
 	 * 默认执行
 	 */
 	public function index() {
-		header ( 'Content-type:text/xml;charset:utf-8;filename:爱奇艺代理.xml' ); // 定义文件头
+		header ( "Content-type:text/xml;charset:utf-8;filename:爱奇艺代理.xml" ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
 		if ( $id = Q ("get.id")) {
 			$xml = $this->cache_collect("iqiyi_" . $id);
-			if ($xml != 1 && !$xml) {
+			if ($xml != 1 && $xml) {
 				echo $xml;
 			}else{
 				$xml = $this->listpage($id);
 				$xml = $xml["xml"];
-				$this->cache_collect($id, 1, $xml, "iqiyi_");
+				if ($cachetime = Q("get.cachetime", null, "intval")){
+					$this->cache_collect($id, 1, $xml, "iqiyi_", "file", $cachetime, ROOT_PATH . "Cache/Auto");
+				} else {
+					$this->cache_collect($id, 1, $xml, "iqiyi_");
+				}
 				echo $xml;
 			}
 		} elseif (Q( "get.page" )) { // 是否向地址栏传递PAGE参数
@@ -39,10 +43,11 @@ class IqiyiControl extends CommonControl {
 	}
 	/**
 	 * 生成列表
-	 * @param  string $id 视频ID
-	 * @return array     视频列表及视频名称
+	 * @param string $id 视频ID
+	 * @param int $type 是否使用插件，0为使用，1为不使用
+	 * @return array 视频列表及视频名称
 	 */
-	public function listpage($aid) {
+	public function listpage($aid, $type = 1) {
 		$interface = file_data ( 'http://dispatcher.video.qiyi.com/mini/pl/' . $aid . '/' ); // 采集接口
 		$interface = substr ( $interface, 13 ); // 获取JSON
 		$obj = json_decode ( $interface ); // JSON解码
@@ -52,9 +57,29 @@ class IqiyiControl extends CommonControl {
 		foreach ( $data as $value ) { // 遍历数组
 			$vid = $value->videoId; // 获取单个视频ID
 			$title = $value->title; // 获取单个视频名称
-			$xml .= '<m type="qiyi" src="http://cache.video.qiyi.com/v/' . $vid . '" label="' . $title . "\" />\n"; // 写入XML内容
+			$tvid = $value->tvId;
+			if ($type) {
+				$xml .= '<m type="" src="' . $this->single($tvid) . '&start={start_bytes}" stream="true" label="' . $title . "\" />\n";
+			} else {
+				$xml .= '<m type="qiyi" src="http://cache.video.qiyi.com/v/' . $vid . '" label="' . $title . "\" />\n"; // 写入XML内容
+			}
 		}
-		return array("xml"=>"<list>\n" . $xml . '</list>',"vName"=>$vName); // 输出剧集头和剧集列表
+		return array("xml" => "<list>\n" . $xml . '</list>', "lists" => $xml, "vName" => $vName); // 输出剧集头和剧集列表
+	}
+	/**
+	 * 无插件单集列表
+	 * @param string $id 视频ID
+	 * @return string $c 视频URL
+	 */
+	public function single($vid){
+		$interface = file_data('http://cache.m.iqiyi.com/jp/qmt/' . $vid . '/');
+		preg_match_all('/m4u":"([^"]+)","vd":1,/iUs', $interface, $arr);
+		foreach ($arr[1] as $value){
+			$v1 = file_data('' . $value . '');
+			preg_match('/l":"([^"]+)","t/iUs', $v1, $v2);
+			$c = $v2[1];
+		}
+		return $c;
 	}
 }
 ?>

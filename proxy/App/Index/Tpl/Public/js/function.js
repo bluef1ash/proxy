@@ -1,13 +1,13 @@
 function dialog (obj) {
-	obj.css( {
+	obj.removeClass('hidden').css( {
 		left : ( $( window ).width() - obj.width() ) / 2,
 		top : $( document ).scrollTop() + ( $( window ).height() - obj.height() ) / 2
 	} ).fadeIn();
 	$( '#background' ).css( {
 		opacity : 0.3,
     	filter : 'Alpha(Opacity = 30)',
-		'height' : $( document ).height()
-	} ).show();
+		height : $( document ).height()
+	} ).removeClass('hidden').show();
 }
 $.fn.autosize = function(){
 	$(this).height('0px');

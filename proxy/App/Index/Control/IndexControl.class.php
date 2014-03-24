@@ -2,7 +2,7 @@
 /**
  * 前台主页控制器
  */
-class IndexControl extends Control {
+class IndexControl extends CommonControl {
 	/**
 	 * 首页
 	 */
@@ -14,7 +14,7 @@ class IndexControl extends Control {
 	 */
 	public function parse() {
 		// 类别
-		$categorytop = M ( "category" )->where ( "pid=0" )->select ();
+		$categorytop = M ( "category" )->where (array( "pid" => 0 ))->select ();
 		$this->assign ( "categorytop", $categorytop );
 		// 采集
 		if (Q ( "post.websiteText" )) {

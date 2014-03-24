@@ -21,48 +21,51 @@ class UploadControl extends CommonControl {
 				break;
 			}
 		}
-		$xml = Q ( "post.xml" );
-		$xml_d = htmlspecialchars_decode($xml);
 		$vName = Q ( "post.vname" );
 		$cateone = Q ( "post.cate-one" );
 		$catetwo = Q ( "post.cate-two" ) ? Q ( "post.cate-two" ) : "";
 		$cate = $catetwo ? $catetwo : $cateone;
-		$userunion = Q ( "post.userunion" ) ? Q ( "post.userunion" ) : Q ( "session.userunion" );
+		$cachetime = Q("post.cachetime", null, "intval");
+		$uuid = Q ( "post.uuid" ) ? Q ( "post.uuid" ) : Q ( "session.uuid" );
+		$xml = Q("post.xml");
+		$xml = $this->upload_video($xml);
 		$uploadKeywords = explode(",",  C("UPLOAD_KEYWORDS"));
 		foreach ($uploadKeywords as $value) {
-			if (strpos($vName, $value) > -1 || strpos($xml_d, $value) > -1){
+			if (strpos($vName, $value) > -1 || strpos($xml, $value) > -1){
 				$this->error("上传内容有非法关键字！");
 				break;
 			}
 		}
 		$uploadUrl = explode(",",  C("UPLOAD_URL"));
 		foreach ($uploadUrl as $value) {
-			if (strpos($xml_d, $value) > -1){
+			if (strpos($xml, $value) > -1){
 				$this->error("上传内容有非法视频地址！");
 				break;
 			}
 		}
-		if (! $vName || ! $cateone || ! $xml || ! $userunion )
+		if (! $vName || ! $cateone || ! $xml || ! $uuid )
 			$this->error("上传内容或名称不得为空！");
 		$fix = C ( "LIST_FIX" );
 		$category = M ( "category" );
 		$video = M("video");
-		$cid = $category->where ( array( "entitle" => $cate ) )->getField ( "cid,cntitle" );
+		$cid = $category->field ( "cid,cntitle" )->where ( array( "entitle" => $cate ) )->find();
 		$db = array (
 			"content" => $xml,
 			"cnname" => $vName,
 			"uploadtime" => time (),
+			"cachetime" => $cachetime,
 			"uid" => Q ( "session.uid" ),
-			"cid" => $cid ["cid"]
+			"cid" => $cid["cid"]
 		);
 		$replace = 0;
-		if ($vid = $video->where(array("cnname" => $vName))->getField("vid")) {
+		if ($vid = $video->field("vid")->where(array("cnname" => $vName))->find()) {
 			$vid = $vid["vid"];
-			session ( "vid", $vid );
-			session ( "xml", $xml_d );
-			session ( "cnname", $vName );
-			session ( "cid", $cid["cid"] );
-			$replace = 1;
+			$replace = array(
+				"vid" => $vid,
+				"content" => $xml,
+				"cachetime" => $cachetime,
+				"cid" => $cid["cid"]
+			);
 		} else {
 			if ($video->create()) {
 				$video->add ( $db );
@@ -79,10 +82,10 @@ class UploadControl extends CommonControl {
 			"vid" => $vid,
 			"dingji" => $unionStyle[0],
 			"erji" => $unionStyle[1],
-			"userunion" => $userunion,
-			"replace" => $replace,
+			"uuid" => $uuid,
 			"prefix" => $prefix
 		);
+		$this->assign ( "replace", $replace );
 		$this->assign ( "assign", $assign );
 		$this->display ();
 	}
@@ -90,36 +93,33 @@ class UploadControl extends CommonControl {
 	 * 重复文件，异步上传
 	 */
 	public function reajax() {
-		if (Q ( "get.error" ) == 1) {
-			session ("xml", null );
-			session ( "cnname", null );
-			session ( "cid", null );
-			session ( "vid", null );
+		if (Q ( "get.error" ) == 1)
 			$this->error ( "替换失败！" );
-		}
 		if (! IS_AJAX)
 			$this->error ( "页面不存在！" );
+		$vid = Q ( "post.vid" );
 		$uid = Q ( "post.uid" );
-		$data = Q ( "session.xml" );
-		$title = Q ( "session.cnname" );
-		$cid = Q ( "session.cid" );
-		if ($uid && $data && $title) {
+		$content = Q ( "post.content" );
+		$cachetime = Q("post.cachetime");
+		$cnname = Q ( "post.cnname" );
+		$cid = Q ( "post.cid" );
+		if ($vid && $uid && $content && $cnname) {
 			$db = array (
-				"content" => $data,
-				"cnname" => $title,
+				"vid" => $vid,
+				"content" => $content,
+				"cnname" => $cnname,
+				"cachetime" => $cachetime,
 				"uploadtime" => time (),
-				"uid" => Q ( "session.uid" ),
+				"uid" => $uid,
 				"cid" => $cid
 			);
-			M ( "video" )->where ( array( "vid" => Q ( "session.vid" ) ) )->update ( $db );
+			$video = M ( "video" );
+			if( $video->create() )
+				$video->update ( $db );
 			echo 1;
 		} else {
 			echo 0;
 		}
-		session ("xml", null );
-		session ( "cnname", null );
-		session ( "cid", null );
-		session ( "vid", null );
 	}
 	/**
 	 * 获取父级分类

@@ -2,7 +2,7 @@
 /**
  * 登录控制器
  */
-class LoginControl extends Control{
+class LoginControl extends CommonControl{
 	/**
 	 * AJAX 异步登录验证
 	 */
@@ -26,12 +26,12 @@ class LoginControl extends Control{
 			$this->error("页面不存在！");
 		$username = Q("post.username");
 		$pwd = Q("post.pwd", null, "md5");
-		$user = M("user")->where(array("username"=>$username))->field("password,userlock,uid,userunion,usergroup")->find();
+		$user = K("user")->where(array("username"=>$username))->field("password,userlock,uid,uuid,usergroup")->find();
 		if(empty($user))
 			$this->error("用户不存在！");
 		if($pwd != $user["password"])
 			$this->error("用户名或者密码错误！");
-		if($user["userlock"] == 1)
+		if($user["userlock"])
 			$this->error("您已经被锁定，请联系管理员！");
 		//$this->eve_exp($user["uid"]);
 		$loginData = array(
@@ -48,7 +48,7 @@ class LoginControl extends Control{
 			setcookie(session_name(), session_id(), C("COOKIE_TIME"), "/");
 		session("username", $username);
 		session("uid", $user["uid"]);
-		session("userunion",$user["userunion"]);
+		session("uuid",$user["uuid"]);
 		session("usergroup",$user["usergroup"]);
 		$this->success("登录成功！正在跳转...");
 

@@ -19,8 +19,14 @@ class UserControl extends CommonControl{
 	public function alterpassword(){
 		if (!IS_POST)
 			$this->error("页面不存在！");
-		$data = array("password" => Q("post.pwd", null, "md5"));
-		M("user")->where(array("uid"=>Q("session.uid")))->update($data);
+		$data = array("userunion" => Q("post.userunion", null, "intval"));
+		if ($password = Q("post.pwd", null, "md5") || $pwded = Q("post.pwded", null, "md5")) {
+			if ($password != $pwded) {
+				$this->error("密码错误！");
+			}
+			$data["password"] = $password;
+		}
+		M("user")->where(array("uid" => Q("session.uid")))->update($data);
 		$this->success("修改成功！");
 	}
 }

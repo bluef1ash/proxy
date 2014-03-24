@@ -24,32 +24,15 @@ class CategoryControl extends CommonControl{
 			$data = array(
 				"cntitle" => Q ( "post.cntitle" ),
 				"entitle" => $entitle,
-				"pid"	=> $pid
-				);
-			$category = M("category");
-			$father = array();
-			while ($pid>0){
-				$title = $category->field("entitle,pid")->where(array("cid"=>$pid))->find();
-				$father[] = $title["entitle"] . "/";
-				$pid = $title["pid"];
+				"pid" => $pid
+			);
+			if ($category->create()){
+				if ($category->add($data)) {
+					$this->success("添加成功！");
+				}else{
+					$this->error("添加失败！");
+				}
 			}
-			$father = array_reverse($father);
-			$fatherStr = "";
-			foreach ($father as $value){
-				$fatherStr .= $value;
-			}
-			$add = $category->add($data);
-			$lists_path = C("LIST_UPDATE_PATH") . $fatherStr;
-			if (!file_exists($lists_path.$entitle . "/")){
-				$mkdir = mkdir($lists_path . $entitle);
-			}else {
-				$mkdir = 0;
-				$this->error("目录不可读写！");
-			}
-			unset($_POST);
-			if (!$add && !$mkdir)
-				$this->error("添加失败！");
-			$this->success("添加成功！");
 		}
 		$this->display();
 	}
@@ -61,21 +44,17 @@ class CategoryControl extends CommonControl{
 			$cid = Q ( "post.cid", null, "intval");
 			$cntitle = Q ( "post.cntitle" );
 			$entitle = Q ( "post.entitle" );
-			$category = M("category");
-			$pid = $category->field("pid,entitle")->where(array("cid"=>$cid))->find();
-			$father =$category->field("entitle")->where(array("pid"=>$pid["pid"]))->find();
-			$update = $category->where(array("cid"=>$cid))->update(array("cntitle"=>$cntitle, "entitle"=>$entitle));
-			$lists_path = C("LIST_UPDATE_PATH") . $father["entitle"] . "/";
-			$rename = rename($lists_path . $pid["entitle"], $lists_path . $entitle);
-			unset($_POST);
-			if (!$update && !$rename)
+			if (M("category")->update(array("cid" => $cid,"cntitle" => $cntitle, "entitle" => $entitle))){
+				$this->success("修改成功！");
+			}else{
 				$this->error("修改失败！");
-			$this->success("修改成功！");
+			}
+		}else{
+			$cid = Q("get.cid", null, "intval");
+			$cate = M("category")->where(array("cid"=>$cid))->find();
+			$this->assign("cate", $cate);
+			$this->display();
 		}
-		$cid = Q("get.cid", null, "intval");
-		$cate = M("category")->where(array("cid"=>$cid))->find();
-		$this->assign("cate", $cate);
-		$this->display();
 	}
 	/**
 	 * 删除分类
@@ -96,14 +75,14 @@ class CategoryControl extends CommonControl{
 		if(IS_POST){
 			$cntitle = Q ( "post.cntitle" );
 			$entitle = Q ( "post.entitle" );
-			$lists_path = C("LIST_UPDATE_PATH").$entitle;
-			if(file_exists($lists_path) && !is_writable($lists_path))
-				$this->error("文件夹已存在，或者目录不可读写！");
-			$mkdir = mkdir($lists_path);
-			$add = M("category")->add(array("title"=>$title));
-			if (!$add && !$mkdir)
-				$this->error("添加失败！");
-			$this->success("添加成功！");
+			$category = M("category");
+			if ($category->create()){
+				if ($category->add(array("cntitle" => $cntitle, "entitle" => $entitle))) {
+					$this->success("添加成功！");
+				}else{
+					$this->error("添加失败！");
+				}
+			}
 		}
 		$this->display();
 	}

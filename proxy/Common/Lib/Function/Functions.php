@@ -3,30 +3,36 @@
  * 采集
  * @param string $url URL地址
  * @param array $charset 更改编码数组，依次为原字符编码、转换的字符编码
- * @param int $oFFset 头包含输出
- * @param string $PostDat 通过POST传递字符串
+ * @param int $header 头包含输出
+ * @param string $post_fields 通过POST传递字符串
  * @param string $referer 在HTTP请求中包含一“referer”头的字符串
- * @param string $useragent 包含一个'user-agent'头的字符串
+ * @param string $user_agent 包含一个'user-agent'头的字符串
+ * @param array $http_header 包含请求头数组
  * @return string|mixed 返回内容
  */
-function file_data($url, $charset = array(), $oFFset = 0, $PostDat = "", $referer = "", $useragent = "" ) { // 获取视频函数
-	$ch=curl_init();
+function file_data($url, $charset = array(), $header = 0, $post_fields = "", $referer = "", $user_agent = "", $http_header = array(), $add_array_header = array()) { // 获取视频函数
+	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_HEADER, $oFFset);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    if ($referer != "")
-    	curl_setopt($ch, CURLOPT_REFERER, $referer);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
-    if ($useragent != "")
-	    curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
-    if ($PostDat != ""){
+    if ($header)
+	    curl_setopt($ch, CURLOPT_HEADER, $header);
+    if ($http_header && !empty($http_header))
+    	curl_setopt($ch, CURLOPT_HTTPHEADER, $http_header);
+    if ($add_array_header && !empty($add_array_header))
+    	curl_setopt($ch, CURLOPT_HTTPHEADER, $add_array_header);
+    if ($referer)
+    	curl_setopt($ch, CURLOPT_REFERER, $referer);
+    if ($user_agent)
+	    curl_setopt($ch, CURLOPT_USERAGENT, $user_agent);
+    if ($post_fields){
     	curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $PostDat);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
     }
 	$data = curl_exec ( $ch ); // 执行给定的cURL会话
 	curl_close ( $ch ); // 关闭CURL会话
 	if ($data) { // 采集成功
-		if ($charset)
+		if ($charset && !empty($charset))
 			return iconv ( $charset[0], $charset[1], $data ); // 检查是否需更改编码
 		return $data;
 	} else { // 采集失败
@@ -42,9 +48,7 @@ function file_data($url, $charset = array(), $oFFset = 0, $PostDat = "", $refere
 }
 /**
  * 汉字首字转首拼字母
- * 
- * @param string $str
- *        	要转换的字符串
+ * @param string $str 要转换的字符串
  * @return string 返回首拼字母
  */
 function getinitial($strs) {
@@ -149,9 +153,7 @@ function getinitial($strs) {
 }
 /**
  * unicode解码
- * 
- * @param string $str
- *        	要解码的字符串
+ * @param string $str 要解码的字符串
  * @return string 返回解码后的字符串
  */
 function unescape($str) {
@@ -170,13 +172,13 @@ function unescape($str) {
 }
 /**
  * 下载文件
- * @param string $file_dir 文件所在目录fer_size 
+ * @param string $file_dir 文件所在目录fer_size
  * @param string $file_name 文件名
  * @param string $file_zdname 文件头
  * @return boolean
  */
 function xiazai($file_dir, $file_name,$file_zdname){
-	$file_dir = chop ( $file_dir ); // 去掉路径中多余的空格                    // 得出要下载的文件的路径
+	$file_dir = chop ( $file_dir ); // 去掉路径中多余的空格，得出要下载的文件的路径
 	if ($file_dir != '') {
 		$file_path = $file_dir;
 		if (substr ( $file_dir, strlen ( $file_dir ) - 1, strlen ( $file_dir ) ) != '/')
@@ -209,12 +211,11 @@ function xiazai($file_dir, $file_name,$file_zdname){
 }
 /**
  * 返回数组维数（层级）
- * @author echo <chenj@nalashop.com>
  * @param array $arr
  * @return int
  */
 function GetArrLv($arr) {
-	//if (is_array($arr)) {
+	if (is_array($arr)) {
 		function AWRSetNull(&$val) {
 			$val = NULL;
 		}
@@ -230,15 +231,15 @@ function GetArrLv($arr) {
 		#数组层间距以 8 个空格列，这里要加 1 个是因为 print_r 打印的第一层左括号在行首
 		//return $max_size / 8 + 1;
 		return (max(array_map('strlen', current($ma))) - 1) / 8 + 1;
-	/*} else {
-		//return 0;
-	}*/
+	} else {
+		return 0;
+	}
 }
 /**
  * 添加数组元素
  * @param string $val 新元素键值
- * @param unknown $key 新元素键名
- * @param unknown $param
+ * @param string $key 新元素键名
+ * @param array $param
  */
 function addkey(&$val,$key, $param){
 	$val[$param["key"]] = $param["val"];

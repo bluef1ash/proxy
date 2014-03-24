@@ -11,7 +11,7 @@ $(function() {
 					$.each(data, function(i, k){
 						option += '<option value="' + k.entitle + '">' + k.cntitle + "</option>";
 				});
-					obj.next().html(option).show();
+					obj.next().removeClass('hidden').html(option).show();
 				} else {
 					obj.next().html("").hide();
 				}

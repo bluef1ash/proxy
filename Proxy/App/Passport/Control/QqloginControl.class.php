@@ -32,7 +32,7 @@ class QqloginControl extends Control{
 		$qc = new QC();
 		$callback = $qc->qq_callback();
 		$openid = $qc->get_openid();
-		$user = M("user")->field("uid,username,password,qqau,userlock,userunion,usergroup")->where(array("qqau" => $openid))->find();
+		$user = K("user")->field("uid,username,password,qqau,userlock,uuid,usergroup")->where(array("qqau" => $openid))->find();
 		session("qqau", $openid);
 		if (empty($user["qqau"])) {//首次登录或没有绑定账号
 			$qc = new QC($callback, $openid);
@@ -52,7 +52,7 @@ class QqloginControl extends Control{
 			// p($_POST);
 			session("username", $user["username"]);
 			session("uid", $user["uid"]);
-			session("userunion",$user["userunion"]);
+			session("uuid",$user["uuid"]);
 			session("usergroup",$user["usergroup"]);
 			$this->success("登录成功！正在跳转...", U(__WEB__));
 		}

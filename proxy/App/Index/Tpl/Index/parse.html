@@ -90,12 +90,10 @@
 				<p class="text"> 请输入所有 <a href="#" title="支持网站">支持网站</a> 的视频地址或专辑列表地址 </p>
 				<form action="{|U('Index/parse')}" method="post" name="collect">
 					<div class="input">
-						<input id="kw" type="text" name="websiteText" size="45" value="{$website}">
-							<input class="sub" type="submit" value="开始">
-							<if value="{$hd.session.username} && {$hd.session.uid}">
-								<a href="javascript:re("kw");" class="sub" id="re">替换地址</a>
-							</if>
-						<if value="{$hd.session.username} && {$hd.session.uid}">
+						<input id="kw" type="text" name="websiteText" size="45" class="form-control input inline" value="{$website}">
+						<input class="sub" type="submit" value="开始">
+						<if value="$hd.session.username && $hd.session.uid">
+							<a href="javascript:re('kw');" class="sub" id="re">替换地址</a>
 							<script type="text/javascript" src="__PUBLIC__/js/collection.js"></script>
 							<ul class="update_way">
 								<li>更新方式：
@@ -170,7 +168,7 @@
 		<!-- 显示XML代码开始 -->
 		<div id="lists">
 			<textarea id="editxml" wrap="virtual" name="xml">{$yyurl}{$collect.xml}</textarea>
-			<if value="!{$hd.session.username} && !{$hd.session.uid}">
+			<if value="!$hd.session.username && !$hd.session.uid">
 				<script type="text/javascript">
 					$(function(){
 						$("#editxml").attr("readonly","{$readonly}");
@@ -179,7 +177,7 @@
 			</if>
 		</div>
 		<!-- 显示XML代码结束 -->
-		<if value="{$hd.session.username} && {$hd.session.uid} && {$hd.session.usergroup} eq 1">
+		<if value="$hd.session.username && $hd.session.uid && $hd.session.usergroup eq 1">
 			<!-- 弹出分类框开始 -->
 			<div id="category">
 				<p class="title">
@@ -195,17 +193,33 @@
 					</select>
 					<select name="cate-two" size="16" class="hidden"></select>
 					<p class="vname">
-						<label>上传的文件名称：<input type="text" name="vname" size="10" value="{$collect.vName}"></label>
+						<label>上传的文件名称：<input type="text" name="vname" size="10" value="{$collect.vName}" class="form-control inline" style="width:200px"></label>
 						<label style="margin-left: 55px">公会ID：
-							<if value="{$hd.session.userunion}">
-								<input type="text" name="userunion" value="{$hd.session.userunion}" size="11">
+							<if value="$hd.session.uuid">
+								<input type="text" name="uuid" value="{$hd.session.uuid}" class="form-control inline" style="width:100px" size="11">
 							<else/>
-								<input type="text" name="userunion" value="请输入频道ID" size="11">
+								<input type="text" name="uuid" value="请输入频道ID" class="form-control input inline" size="11">
 							</if>
 						</label>
 					</p>
 				</div>
 				<p class="bottom">
+					缓存时间：
+					<select name="cachetime">
+						<option value="0">不缓存</option>
+						<option value="5">5分钟</option>
+						<option value="10">10分钟</option>
+						<option value="30">30分钟</option>
+						<option value="60">1小时</option>
+						<option value="90">2小时</option>
+						<option value="360">6小时</option>
+						<option value="720">12小时</option>
+						<option value="1440">24小时</option>
+						<option value="4320">3天</option>
+						<option value="7200">5天</option>
+						<option value="10080">7天</option>
+						<option value="-1">永久</option>
+					</select>
 					<input type="submit" id="ok" value="上传">
 				</p>
 			</div>

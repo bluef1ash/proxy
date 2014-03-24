@@ -7,11 +7,11 @@ class WuliuControl extends CommonControl {
 	 * 默认执行
 	 */
 	public function index() {
-		header ( 'Content-type:text/xml;charset:utf-8;filename:56代理.xml' ); // 定义文件头
+		header ( "Content-type:text/xml;charset:utf-8;filename:56代理.xml" ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
 		if ($id = Q ( "get.id" )) { // 是否向地址栏传递URL参数
 			$xml = $this->cache_collect("56_" . $id);
-			if ($xml != 1 && !$xml) {
+			if ($xml != 1 && $xml) {
 				echo $xml;
 			}else{
 				if (preg_match("/^\d{4,6}$/iUs", $id)){
@@ -20,7 +20,11 @@ class WuliuControl extends CommonControl {
 					$xml = $this->one($id);
 				}
 				$xml = $xml["xml"];
-				$this->cache_collect($id, 1, $xml, "56_");
+				if ($cachetime = Q("get.cachetime", null, "intval")){
+					$this->cache_collect($id, 1, $xml, "56_", "file", $cachetime, ROOT_PATH . "Cache/Auto");
+				} else {
+					$this->cache_collect($id, 1, $xml, "56_");
+				}
 				echo $xml;
 			}
 		} elseif (Q ( "get.top" )) {
@@ -35,7 +39,7 @@ class WuliuControl extends CommonControl {
 	/**
 	 * 生成列表
 	 * @param  string $id 视频ID
-	 * @return array     视频列表及视频名称
+	 * @return array 视频列表及视频名称
 	 */
 	public function listpage($id) {
 		$page = file_data ( "http://so.56.com/api_s/operaNew.php?key=&mid=" . $id . ".html" );
@@ -48,12 +52,12 @@ class WuliuControl extends CommonControl {
 			$lists = $this->one($value->vid);
 			$xml .= $lists["lists"];
 		}
-		return array("xml"=>"<list>\n".$xml.'</list>',"vName"=>$vName);
+		return array("xml" => "<list>\n" . $xml . '</list>', "lists" => $xml, "vName"=>$vName);
 	}
 	/**
 	 * 生成单个视频列表
 	 * @param  string $id 视频ID
-	 * @return array     视频列表及视频名称
+	 * @return array 视频列表及视频名称
 	 */
 	public function one($id) {
 		$content = file_data ( 'http://vxml.56.com/json/' . $id . '/?src=out' );

@@ -18,18 +18,18 @@ function startgo(url){
 	<!-- 主体开始 -->
 	<div class="main">
 		<!-- 采集地址表单开始 -->
-		<form action="{|U('Index/parse')}" method="post" name="collect">
+		<form action="{|U:'Index/Index/parse'}" method="post" name="collect">
 			<!-- 输入框及提交按钮开始 -->
 			<div class="nav-srh">
-				<input id="kw" type="text" name="websiteText" value="请填入需采集的视频地址">
+				<input id="kw" type="text" name="websiteText" value="请填入需采集的视频地址或视频名称">
 				<input class="bn-srh" type="submit" value="开始">
-				<if value="{$hd.session.username} && {$hd.session.uid}">
-					<a href="javascript:re('kw');" id="re" title="替换地址">替换地址</a>
+				<if value="$hd.session.username && $hd.session.uid">
+					<a href="javascript:re('kw');" class="btn btn-default" title="替换地址">替换地址</a>
 				</if>
 				<span id="inf"></span>
 			</div>
 			<!-- 输入框及提交按钮结束 -->
-			<if value="{$hd.session.username} && {$hd.session.uid}">
+			<if value="$hd.session.username && $hd.session.uid">
 				<!-- 采集合集功能开始 -->
 				<script type="text/javascript" src="__PUBLIC__/js/collection.js"></script>
 				<ul class="update_way">
@@ -71,7 +71,7 @@ function startgo(url){
 				<li><a href="#" title="有问必答">有问必答</a></li>
 			</ul>
 			<p class="sitefx">
-				<strong>地址示例：</strong><a href="javascript:startgo('http://www.letv.com/ptv/vplay/1488765.html');" title="地址示例">http://www.letv.com/ptv/vplay/1488765.html</a>
+				<strong>地址示例：</strong><a href="javascript:startgo('http://v.youku.com/v_show/id_XMzgyMDQ2NTQ4.html');" title="地址示例">http://v.youku.com/v_show/id_XMzgyMDQ2NTQ4.html</a>
 			</p>
 			<!-- 辅助手册结束 -->
 			<!-- 常用视频网站开始 -->

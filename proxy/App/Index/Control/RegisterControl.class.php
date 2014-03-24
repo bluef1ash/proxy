@@ -2,7 +2,7 @@
 /**
  * 注册控制器
  */
-class RegisterControl extends Control{
+class RegisterControl extends CommonControl{
 	/**
 	 * 异步检测用户名
 	 */
@@ -37,14 +37,25 @@ class RegisterControl extends Control{
 			$this->error("网站正在调整，停止注册，给您带来不便，非常歉意！");
 		if(!IS_POST)
 			$this->error("页面不存在");
+		$userunion = Q("post.userunion");
+		$union = M("union");
+		if($db = $union->field("sid")->where(array("uuid" => $userunion))->find()){
+			$sid = $db["sid"];
+		} else {
+			if ($union->create()) {
+				$union->add(array("uuid" => $userunion ));
+				$sid = $union->getInsertId();
+			}
+		}
 		$data = array(
 			"username"	=> Q("post.username"),
 			"password"	=> Q("post.pwd", null, "md5"),
-			"userunion" => Q("post.userunion"),
+			"userunion" => $sid,
 			"qqau"      => Q("post.qqau"),
 			"restime"	=> time()
 		);
-		M("user")->add($data);
+		if (M("user")->create())
+			M("user")->add($data);
 		$this->success("注册成功！");
 	}
 	/**

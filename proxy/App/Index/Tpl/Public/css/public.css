@@ -61,6 +61,9 @@ label{
 .error {
 	color:#F00;
 }
+.inline {
+	display: inline;
+}
 .hidden {
 	display: none;
 }

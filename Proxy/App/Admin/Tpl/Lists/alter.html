@@ -1,0 +1,22 @@
+<load file="__PUBLIC__/header.html">
+		<title>添加列表</title>
+		<script type="text/javascript">
+			if(confirm("文件已存在，是否替换？（一旦替换，原内容不可追回！请慎用！）")){
+				var uid = {$hd.session.uid};
+				var cid = {$replace.cid};
+				var cnname = "{$assign.vname}";
+				var vid = {$replace.vid};
+				var content = "{$replace.content}";
+				$.post(APP + "/Upload/reajax", {uid : uid, cid : cid, cnname : cnname, vid : vid, content : content}, function(data){
+					if(data){
+						alert("替换成功！");
+					}else{
+						location = APP + "/Upload/reajax?error=1";
+					}
+				});
+			}
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

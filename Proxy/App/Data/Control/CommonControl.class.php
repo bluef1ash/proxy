@@ -11,14 +11,22 @@ class CommonControl extends AuthControl {
 	 * @param string $prefix 缓存的前缀
 	 * @param string $mod 缓存模式
 	 * @param number $expire 缓存时间
+	 * @param string $dir 缓存目录
 	 * @return boolean string $result 读取模式时为读取的内容，写入模式时为0或1
 	 */
-	public function cache_collect($key, $set = 0, $value = "", $prefix = "", $mod = "file", $expire = 36000){
+	public function cache_collect($key, $set = 0, $value = "", $prefix = "", $mod = "file", $expire = 36000, $dir = ""){
 		if ($mod == "file"){
-			$driver = array(
-				"driver" => $mod,
-				"dir" => TEMP_PATH . "DataCache"
-			);
+			if ($dir) {
+				$driver = array(
+					"driver" => $mod,
+					"dir" => $dir
+				);
+			} else {
+				$driver = array(
+					"driver" => $mod,
+					"dir" => ROOT_PATH . "Cache/Data"
+				);
+			}
 		} elseif ($mod == "memcache") {
 			$driver = array(
 				"driver" => $mod,
@@ -33,7 +41,7 @@ class CommonControl extends AuthControl {
 		$driver["zip"] = true;
 		$driver["prefix"] = $prefix;
 		$driver["expire"] = $expire;
-		$cache = cache::init($driver);
+		$cache = Cache::init($driver);
 		if ($set) {
 			$result = $cache->$key = $value;
 		} else {

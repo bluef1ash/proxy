@@ -54,10 +54,11 @@ $arr = array(
 	    'CACHE_TPL_TIME'                => -1,          //模板缓存时间 -1为不缓存 0为永久缓存
 		/********************************URL路由设置********************************/
 		"route" => array(
-			
-		),                             //路由规则
+			//"/(\w+)/" => 'Index/Index/#1',
+			//"" => ""
+		),                                              //路由规则
 		/********************************其它*********************************/
 		"COOKIE_TIME"					=> time() + 3600 * 24 * 30,
 );
-return array_merge(include 'web.php', include 'player.php', include 'upload.php',$arr);
+return array_merge(include 'web.php', include 'player.php', include 'upload.php', $arr);
 ?>

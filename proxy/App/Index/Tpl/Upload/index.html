@@ -1,14 +1,19 @@
 <load file="__PUBLIC__/header.html">
 	<title>当前上传视频：{$assign.vname}</title>
-	<if value="{$assign.replace}">
+	<if value="{$replace}">
 		<script type="text/javascript">
 			if(confirm("文件已存在，是否替换？（一旦替换，原内容不可追回！请慎用！）")){
 				var uid = {$hd.session.uid};
-				$.post(APP + "/Upload/reajax", {uid : uid}, function(data){
-					if(data == 1){
+				var cid = {$replace.cid};
+				var cnname = "{$assign.vname}";
+				var cachetime = {$replace.cachetime};
+				var vid = {$replace.vid};
+				var content = "{$replace.content}";
+				$.post("{|U:'Index/Upload/reajax'}", {uid : uid, cid : cid, cnname : cnname, cachetime : cachetime, vid : vid, content : content}, function(data){
+					if(data){
 						alert("替换成功！");
 					}else{
-						location = APP + "/Upload/reajax?error=1";
+						location = "{|U:'Index/Upload/reajax',array('error' => 1)}";
 					}
 				});
 			}
@@ -100,7 +105,7 @@
 		<ul class="site">
 			<li>
 				视频地址：
-				<span>[flash]{$assign.prefix}{$hd.config.CMP_FILE}?url=config/{$assign.userunion}.xml&lists={Sjlb}{$assign.vid}.xml&.swf|626|500[/flash]</span>
+				<span>[flash]{$assign.prefix}{$hd.config.CMP_FILE}?url=config/{$assign.uuid}.xml&lists={$hd.config.LIST_VAR}{$assign.vid}{$hd.config.LIST_FIX}&.swf|626|500[/flash]</span>
 				<input type="button" id="urlbut" class="sub" value="复制">
 			</li>
 			<li>

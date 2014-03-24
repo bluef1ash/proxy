@@ -7,16 +7,20 @@ class YinyuetaiControl extends CommonControl {
 	 * 默认执行
 	 */
 	public function index() {
-		header ( 'Content-type:text/xml;charset:utf-8;filename:音悦台代理.xml' ); // 定义文件头
+		header ( "Content-type:text/xml;charset:utf-8;filename:音悦台代理.xml" ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
 		if ($id = Q ( "get.id" )) {
 			$xml = $this->cache_collect("yinyuetai_" . $id);
-			if ($xml != 1 && !$xml) {
+			if ($xml != 1 && $xml) {
 				echo $xml;
 			}else{
 				$xml = $this->listpage($id);
 				$xml = $xml["xml"];
-				$this->cache_collect($id, 1, $xml, "yinyuetai_");
+				if ($cachetime = Q("get.cachetime", null, "intval")){
+					$this->cache_collect($id, 1, $xml, "yinyuetai_", "file", $cachetime, ROOT_PATH . "Cache/Auto");
+				} else {
+					$this->cache_collect($id, 1, $xml, "yinyuetai_");
+				}
 				echo $xml;
 			}
 		} elseif (Q ( "get.vname" )) {
@@ -38,7 +42,7 @@ class YinyuetaiControl extends CommonControl {
 	/**
 	 * 生成列表
 	 * @param  string $id 视频ID
-	 * @return array     视频列表及视频名称
+	 * @return array 视频列表及视频名称
 	 */
 	public function listpage($id) {
 		$page = file_data ( "http://v.yinyuetai.com/video/" . $id );
@@ -46,11 +50,7 @@ class YinyuetaiControl extends CommonControl {
 		preg_match ( '/title\s*:\s*"(.*)",/iUs', $page, $ar );
 		$vName = explode ( " ", $ar [1] )[0];
 		$xml = "<m type=\"\" src=\"" . $arr [1] . "\" stream=\"true\" label='" . $vName . "' />\n";
-		return array (
-			"xmlm" => $xml,
-			"xml" => "<list>\n" . $xml . '</list>',
-			"vName" => $vName
-		);
+		return array ("lists" => $xml, "xml" => "<list>\n" . $xml . '</list>', "vName" => $vName);
 	}
 }
 ?>

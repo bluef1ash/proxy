@@ -8,6 +8,7 @@ function cmp_loaded() {
 function play (url, vname) {
 	vars = {
         api : "cmp_loaded",
+		url : "http://proxy.qlyewu.com/Player/Cmp/config.xml",
 		lists : url
     };
 	var htm = CMP.create("cmp", "100%", "100%", CMP4, vars, {wmode : "transparent"});

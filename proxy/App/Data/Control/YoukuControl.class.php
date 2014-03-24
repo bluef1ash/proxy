@@ -7,11 +7,11 @@ class YoukuControl extends CommonControl {
 	 * 默认执行
 	 */
 	public function index() {
-		header ( 'Content-type:text/xml;charset:utf-8;filename:优酷代理.xml' ); // 定义文件头
+		header ( "Content-type:text/xml;charset:utf-8;filename:优酷代理.xml" ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
 		if ($id = Q ( "get.id" ) ) { // 是否向地址栏传递URL参数
 			$xml = $this->cache_collect("youku_" . $id);
-			if ($xml != 1 && !$xml) {
+			if ($xml != 1 && $xml) {
 				echo $xml;
 			}else{
 				if (Q ( "get.link" )) {
@@ -20,16 +20,20 @@ class YoukuControl extends CommonControl {
 					$xml = $this->listpage ( $id ); // 写入XML内容
 				}
 				$xml = $xml["xml"];
-				$this->cache_collect($id, 1, $xml, "youku_");
+				if ($cachetime = Q("get.cachetime", null, "intval")){
+					$this->cache_collect($id, 1, $xml, "youku_", "file", $cachetime, ROOT_PATH . "Cache/Auto");
+				} else {
+					$this->cache_collect($id, 1, $xml, "youku_");
+				}
 				echo $xml;
 			}
 		} elseif (Q ( "get.page" )) { // 是否向地址栏传递PAGE参数
 			$top = file_data ( 'http://tv.youku.com/top/' ); // 采集电视剧排行页面
-			preg_match_all ( '#<a title="(.*)" href="http://www.youku.com/show_page/id_(\w+\-*\=*).html" charset="[0-9\-]+" target="_blank">.*</a>#iUs', $top, $arrTop ); // 正则表达式
+			preg_match_all ( '#<a title="(.*)" href="http://www.youku.com/show_page/id_(\w+).html" charset="[0-9\-]+" target="_blank">.*</a>#iUs', $top, $arrTop ); // 正则表达式
 			$combine = array_combine ( $arrTop [1], $arrTop [2] );
 			$xml = "";
 			foreach ( $combine as $key => $value ) { // 循环输出剧集XML列表
-				$lists = $this->listpage ( 'http://www.youku.com/show_page/id_' . $value . '.html', $value );
+				$lists = $this->listpage ( $value );
 				$xml .= '<m label="' . $key . "\">\n" . $lists["xmlm"] . "</m>\n";
 			}
 			echo "<list>\n" . $xml . '</list>';
@@ -47,7 +51,7 @@ class YoukuControl extends CommonControl {
 	 * 生成列表
 	 * @param  string $id 视频ID
 	 * @param blean $link 是否使用合并插件
-	 * @return array     视频列表及视频名称
+	 * @return array 视频列表及视频名称
 	 */
 	public function listpage( $id, $link = false ) {
 		if (preg_match("/^[0-9a-z]+$/",$id,$arr)){
@@ -66,7 +70,7 @@ class YoukuControl extends CommonControl {
 				$combine = array_combine($ar[1], $ar[2]);
 				foreach ($combine as $k => $v) {
 					if( $link ){
-						$xml .= '<m type="merge" src="' . U("data/youku/merge", array( "id" => $v )) . '" label="' . $k . '" />'."\n";
+						$xml .= '<m type="merge" src="' . U("Data/Youku/merge", array( "id" => $v )) . '" label="' . $k . '" />'."\n";
 					}else{
 						$xml .= '<m type="youku" src="' . $v . '" label="' . $k . '" />'."\n";
 					}
@@ -78,12 +82,12 @@ class YoukuControl extends CommonControl {
 			$vName = explode("—", $arr [1]);
 			$vName = $vName[0];
 			if ($link) {
-				$xml = '<m type="merge" src="' . U("data/youku/merge", array( "id" => $id )) . '" label="' . $vName . '" />'."\n";
+				$xml = '<m type="merge" src="' . U("Data/Youku/merge", array( "id" => $id )) . '" label="' . $vName . '" />'."\n";
 			}else{
 				$xml = '<m type="youku" src="' . $id . '" label="' . $vName . "\" />\n";
 			}
 		}
-		return array("xmlm"=>$xml,"xml"=>"<list>\n" . $xml . '</list>',"vName"=>$vName);
+		return array("lists" => $xml, "xml" => "<list>\n" . $xml . '</list>', "vName" => $vName);
 	}
 	/**
 	 * 插件代理所用
@@ -119,7 +123,7 @@ class YoukuControl extends CommonControl {
 		$vlist = $json->vlist;
 		$xml = '<m starttype="0" label="' . $vidEncoded . '" type="mp4" bytes="' . $streamsizes . '" duration="'.$seconds.'" bg_video="" lrc="">'."\n";
 		foreach ($vlist as $value) {
-			$xml .= '<u bytes="' . $value->size . '" duration="' . $value->seconds . '" src="' . $value->link . '?start={start_seconds}" />'."\n";
+			$xml .= '<u bytes="' . $value->size . '" duration="' . $value->seconds . '" src="' . $value->link . '" />'."\n";
 		}
 		$xml .= '</m>';
 		header ( 'Content-type:text/xml;charset:utf-8;filename:优酷真实代理.xml' );

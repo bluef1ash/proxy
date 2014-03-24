@@ -9,10 +9,9 @@ function cmp_loaded() {
 }
 function list_xml(append){
 	var xml = list_xmls;
-	if(xml){
+	if (xml)
 		cmpo.list_xml(xml, append);
-	}
-    cmpo.sendEvent("view_play",1);
+    cmpo.sendEvent("view_play", 1);
 }
 function play(url, xml){
 	if (url) {
@@ -20,8 +19,8 @@ function play(url, xml){
 			api: "cmp_loaded",
 			lists: url
 		};
-	}else {
-		list_xmls = xml;
+	} else {
+		list_xmls = $.trim(xml);
 		var vars = {
 			api: "cmp_loaded",
 			list_delete : 1

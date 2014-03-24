@@ -30,15 +30,8 @@ $(function(){
 	$("input[name=pwd]", alterpassword).blur(function(){
 		var pwd = $(this).val();
 		var span = $(this).parent().next();
-		//不能为空
-		if(pwd == ""){
-			msg = "密码不能为空！";
-			span.html(msg).addClass("error");
-			validate.pwd = false;
-			return;
-		}
 		//正则判断
-		if(!/^\w{6,20}$/g.test(pwd)){
+		if(!/^\w{6,20}$/g.test(pwd) && pwd != ""){
 			msg = "密码必须由6-20个字母，数字，或者下划线组成！";
 			span.html(msg).addClass("error");
 			validate.pwd = false;
@@ -53,13 +46,6 @@ $(function(){
 	$("input[name=pwded]", alterpassword).blur(function(){
 		var pwded = $(this).val();
 		var span = $(this).parent().next();
-		//确认密码不能为空
-		if(pwded == ""){
-			msg = "请确认密码！";
-			span.html(msg).addClass("error");
-			validate.pwded = false;
-			return;
-		}
 		//两次密码是否相同
 		if(pwded != $("input[name=pwd]", alterpassword).val()){
 			msg = "两次密码不一致！";
@@ -83,7 +69,7 @@ $(function(){
 			return;
 		}
 		//异步验证码判断
-		$.post(WEB + "/Register/ajax_code", {verify : verify}, function(status){
+		$.post(WEB + "/Index/Register/ajax_code", {verify : verify}, function(status){
 			if(status) {
 				msg = "";
 				span.html(msg).removeClass("error");

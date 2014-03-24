@@ -13,12 +13,12 @@ class ProxyControl extends CommonControl {
 		if (! $url)
 			$this->error ( "页面不存在！" );
 		$auto_disabled = 0;
-		if (strpos ( $url,  "yunpan.cn" ) > 0) { // 360
+		if (strpos ( $url,  "yunpan.cn" ) > -1) { // 360
 			$tvtype = "yunpan";
 			$auto_disabled = 1;
 			$id = $url;
 			$collect = A ( "Data/Sanliuling/listpage", array ( $id ) );
-		} elseif (strpos ( $url, "56.com" ) > 0) { // 56
+		} elseif (strpos ( $url, "56.com" ) > -1) { // 56
 			$tvtype = "Wuliu";
 			if (preg_match ( "/\/(\d{4,6})\.html/iUs", $url, $arr )) {
 				$collect = A ( "Data/" . $tvtype . "/listpage", array ( $arr [1] ) );
@@ -26,12 +26,12 @@ class ProxyControl extends CommonControl {
 				$collect = A ( "Data/" . $tvtype . "/one", array ( $arr [1] ) );
 			}
 			$id = $arr [1];
-		} elseif (strpos ( $url, "baidu.com" ) > 0) { // 百度
+		} elseif (strpos ( $url, "baidu.com" ) > -1) { // 百度
 			$tvtype = "Baidu";
 			$auto_disabled = 1;
 			$id = $url;
 			$collect = A ( "Data/" . $tvtype . "/wangpan", array ( $id ) );
-		} elseif (strpos ( $url, "cntv.cn" ) > 0) { // CNTV
+		} elseif (strpos ( $url, "cntv.cn" ) > -1) { // CNTV
 			$tvtype = "Cntv";
 			if (strpos ( $url, "video" ) > - 1) {
 				$page = file_data ( $url );
@@ -41,44 +41,51 @@ class ProxyControl extends CommonControl {
 				$id = $url;
 			}
 			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
-		} elseif (strpos ( $url, "funshion.com" ) > 0) { // 风行
+		} elseif (strpos ( $url, "400gb.com" ) > -1) { // 城通
+			$tvtype = "Chengtong";
+			$id = intval(substr($url, 26));
+			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
+		} elseif (strpos ( $url, "funshion.com" ) > -1) { // 风行
 			$tvtype = "Funshion";
 			$id = substr ( $url, 32 );
 			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
-		} elseif (strpos ( $url, "fengyunzhibo.com" ) > 0) { // 风云直播
+		} elseif (strpos ( $url, "fengyunzhibo.com" ) > -1) { // 风云直播
 			$tvtype = "Fengyunzhibo";
 			$collect = A ( "Data/Live/fengyun", array ( $url ) );
-		} elseif (strpos ( $url, "iqiyi.com" ) > 0) { // 爱奇艺
+		} elseif (strpos ( $url, "iqiyi.com" ) > -1) { // 爱奇艺
 			$tvtype = "Iqiyi";
 			$page = file_data ( $url );
 			preg_match ( '/(?:"albumId"\s*:\s*|data-player-albumid="|data-drama-albumid=")(\d+)(?:,|")/iUs', $page, $arr );
 			$id = $arr [1];
 			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
-		} elseif (strpos ( $url, "ku6.com" ) > 0) { // 酷6
+		} elseif (strpos ( $url, "ku6.com" ) > -1) { // 酷6
 			$tvtype = "Ku6";
-		} elseif (strpos ( $url, "letv.com" ) > 0) { // 乐视
+		} elseif (strpos ( $url, "letv.com" ) > -1) { // 乐视
 			$tvtype = "Letv";
 			$page = file_data ( $url );
-			preg_match ( "/pid\s*:\s*(?:'|\")?(\d{4,6})(?:'|\")?\s*(?:,|(?:,\/\/专辑ID)|(?:\/\/专辑ID))/iUs", $page, $arr );
-			$id = $arr [1];
-			if (preg_match("/vid\s*:\s*(\d{7}),\s*\/\/视频ID.*trylook:[1-9]\d*,\/\/十分钟试看/iUs", $page, $arr)) {
-				$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id, $arr[1] ) );
-			}else{
-				$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
+			if (strpos($url, "vplay") > -1) {
+				preg_match ( '/title:"(.*)",\/\/视频名称.*vid:(\d+),\/\/视频ID/iUs', $page, $arr );
+				$id = $arr[2];
+				$name = $arr[1];
+			} else {
+				preg_match ( '/<div class="showPic" data-itemhldr="a" data-statectn="n_showPic">.*<a href="http:\/\/www\.letv\.com\/ptv\/vplay\/(\d+)\.html" title="(.*)" target="_blank">.*<div class="play"><span class="s-p">立即观看<\/span><span class="s-d"><\/span>/iUs', $page, $arr );
+				$id = $arr [1];
+				$name = $arr[2];
 			}
-		} elseif (strpos ( $url, "m1905.com" ) > 0) { // M1905
+			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id, $name ) );
+		} elseif (strpos ( $url, "m1905.com" ) > -1) { // M1905
 			$tvtype = "M1905";
 			$page = file_data ( $url );
 			preg_match ( "/vid\s*:\s*(?:'|\")(\d{4,8})(?:'|\"),/iUs", $page, $arr );
 			$id = $arr [1];
 			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
-		} elseif (strpos ( $url, "pps.tv" ) > 0) { // PPS
+		} elseif (strpos ( $url, "pps.tv" ) > -1) { // PPS
 			$tvtype = "Pps";
 			$page = file_data ( $url );
 			preg_match ( '/sid:\s?"?(\d+)"?,/iUs', $page, $arr );
 			$id = $arr [1];
 			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
-		} elseif (strpos ( $url, "pptv.com" ) > 0) { // PPTV
+		} elseif (strpos ( $url, "pptv.com" ) > -1) { // PPTV
 			$tvtype = "Pptv";
 			preg_match ( "/page|show\/(.*)\.html/iUs", $url, $arr );
 			$id = $arr[1];
@@ -87,7 +94,7 @@ class ProxyControl extends CommonControl {
 			$tvtype = "Sina";
 			$id = substr ( $url, 38 );
 			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
-		} elseif (strpos ( $url, "qq.com" ) > 0) { // 腾讯
+		} elseif (strpos ( $url, "qq.com" ) > -1) { // 腾讯
 			$tvtype = "Qq";
 			if (strpos($url, "cover") > -1) {
 				$id = $url;
@@ -98,9 +105,9 @@ class ProxyControl extends CommonControl {
 				$id = 'http://v.qq.com' . $arr [1];
 			}
 			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
-		} elseif (strpos ( $url, "sohu.com" ) > 0) { // 搜狐
+		} elseif (strpos ( $url, "sohu.com" ) > -1) { // 搜狐
 			$tvtype = "Sohu";
-			if (strpos ( $url, ".shtml" ) > 0) {
+			if (strpos ( $url, ".shtml" ) > -1) {
 				$page = file_data ( $url, array ( "gbk", "utf-8" ) );
 			} else {
 				$page = file_data ( $url . 'index.shtml', array ( "gbk", "utf-8" ) );
@@ -108,7 +115,7 @@ class ProxyControl extends CommonControl {
 			preg_match ( '/var (?:(?:PLAYLIST_ID)|(?:playlistId))\s*=\s*"(\d+)";/iUs', $page, $arr );
 			$id = $arr[1];
 			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
-		} elseif (strpos ( $url, "tudou.com" ) > 0) { // 土豆
+		} elseif (strpos ( $url, "tudou.com" ) > -1) { // 土豆
 			$tvtype = "Tudou";
 			$id = $url;
 			$collect = A ( "Data/" . $tvtype . "/GetVideoId", array ( $id ) );
@@ -117,16 +124,20 @@ class ProxyControl extends CommonControl {
 			$auto_disabled = 1;
 			$id = substr ( $url, 24 );
 			$collect = A ( "Data/Qq/listpage", array ( $id ) );
-		} elseif (strpos ( $url, "xunlei.com" ) > 0) { // 迅雷
+		} elseif (strpos ( $url, "xunlei.com" ) > -1) { // 迅雷
 			$tvtype = "Xunlei";
-		} elseif (strpos ( $url, "yinyuetai.com" ) > 0) { // 音悦台
+		} elseif (strpos ( $url, "yinyuetai.com" ) > -1) { // 音悦台
 			$tvtype = "Yinyuetai";
 			$id = $url;
 			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
-		} elseif (strpos ( $url, "youku.com" ) > 0) { // 优酷
+		} elseif (strpos ( $url, "youku.com" ) > -1) { // 优酷
 			$tvtype = "Youku";
 			preg_match ( '#(?:http://)?(?:www|v)?\.youku\.com/(?:v_show|show_page)/id_(\w+\-*=*)\.html#iUs', $url, $arr );
 			$id = $arr [1];
+			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
+		} else {
+			$tvtype = "Soku";
+			$id = $url;
 			$collect = A ( "Data/" . $tvtype . "/listpage", array ( $id ) );
 		}
 		$xml = $collect ["xml"];
@@ -151,7 +162,7 @@ class ProxyControl extends CommonControl {
 			$this->error ( "页面不存在" );
 		$yy = unescape ( $url );
 		preg_match ( "/^(http:\/\/.*)\/[0-9A-Za-z]+\.swf.*lists=(.*\.(?:xml|swf|txt))(?:\&\.swf)?/iUs", $yy, $arr );
-		if (strpos ( "http://", $arr [2] ) > 0) {
+		if (strpos ( "http://", $arr [2] ) > -1) {
 			$ur = $arr [2];
 		} else {
 			$ur = $arr [1] . '/' . $arr [2];

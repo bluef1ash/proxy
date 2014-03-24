@@ -7,16 +7,20 @@ class SinaControl extends CommonControl{
 	 * 默认执行
 	 */
 	public function index(){
-		header ( 'Content-type:text/xml;charset:utf-8;filename:新浪代理.xml' ); // 定义文件头
+		header ( "Content-type:text/xml;charset:utf-8;filename:新浪代理.xml" ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
 		if ( $id = Q ( "get.id" )) {
 			$xml = $this->cache_collect("sina_" . $id);
-			if ($xml != 1 && !$xml) {
+			if ($xml != 1 && $xml) {
 				echo $xml;
 			}else{
 				$xml = $this->listpage($id);
 				$xml = $xml["xml"];
-				$this->cache_collect($id, 1, $xml, "sina_");
+				if ($cachetime = Q("get.cachetime", null, "intval")){
+					$this->cache_collect($id, 1, $xml, "sina_", "file", $cachetime, ROOT_PATH . "Cache/Auto");
+				} else {
+					$this->cache_collect($id, 1, $xml, "sina_");
+				}
 				echo $xml;
 			}
 		} elseif ( Q ( "get.vname" ) ) {
@@ -37,7 +41,6 @@ class SinaControl extends CommonControl{
 	/**
 	 * 合并列表
 	 * @param  string $id 单个影片ID
-	 * @return [type]     [description]
 	 */
 	public function merge(){
 		$id = Q ( "get.id" );
@@ -53,7 +56,7 @@ class SinaControl extends CommonControl{
 	/**
 	 * 生成列表
 	 * @param  string $id 视频ID
-	 * @return array     视频列表及视频名称
+	 * @return array 视频列表及视频名称
 	 */
 	public function listpage($id){
 		if (preg_match("/^\d+$/iUs", $id)){
@@ -70,7 +73,7 @@ class SinaControl extends CommonControl{
 				$xml .= '<m type="merge" src="'.U("proxy",array("id"=>$vid[1])).'" label="'.$vName." ".$value."\" />\n";
 			}
 		}
-		return array("xml"=>"<list>\n".$xml."</list>","vName"=>$vName);
+		return array("xml" => "<list>\n" . $xml . "</list>", "lists" => $xml, "vName"=>$vName);
 	}
 }
 ?>

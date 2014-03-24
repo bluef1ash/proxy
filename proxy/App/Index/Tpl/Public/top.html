@@ -29,16 +29,16 @@
 					<a href="Javascript:SetIndex(this)">设为首页</a> | <a href="Javascript:AddFavorite(WEB, 'YY智能采集')">加入收藏</a>
 				</p>
 				<p class="right">
-					<if value="{$hd.session.username} && {$hd.session.uid}">
+					<if value="$hd.session.username && $hd.session.uid">
 						您好，{$hd.session.username}！欢迎来到YY影视智能采集！<a href="{|U('Index/Login/out')}" id="exit" title="退出">退出</a> | <a href="{|U('Passport/Index/index')}" title="个人中心">个人中心</a>
 					<else/>
-						您好，欢迎来到YY影视智能采集！[<a href="#" title="登录" class="login">登录</a>] [<a href="#" title="免费注册" class="register">免费注册</a>]
+						您好，欢迎来到YY影视智能采集！[<a href="" title="登录" class="login">登录</a>] [<a href="" title="免费注册" class="register">免费注册</a>]
 					</if>
 					 | <a href="" title="新手入门">新手入门</a> <a href="#" title="偏好设置">偏好设置</a> <a href="{$hd.config.WEIBO}" title="微博">微博</a>
 				</p>
 			</div>
 			<!-- 注册与登录信息栏结束 -->
-			<if value="!{$hd.session.username} && !{$hd.session.uid}">
+			<if value="!$hd.session.username && !$hd.session.uid">
 				<!-- 注册与登录弹出框开始 -->
 				<!-- 注册框开始 -->
 				<div id="register" class="hidden">
@@ -64,23 +64,23 @@
 								<ul>
 									<li>
 										<label for="reg-uname">用户名</label>
-										<input type="text" name="username" id="reg-uname">
+										<input type="text" name="username" id="reg-uname" class="form-control inline">
 										<span>2-14个字符：字母、数字或中文</span> </li>
 									<li>
 										<label for="reg-pwd">密码</label>
-										<input type="password" name="pwd" id="reg-pwd">
+										<input type="password" name="pwd" id="reg-pwd" class="form-control inline">
 										<span>6-20个字符:字母、数字或下划线 _</span> </li>
 									<li>
 										<label for="reg-pwded">确认密码</label>
-										<input type="password" name="pwded" id="reg-pwded">
+										<input type="password" name="pwded" id="reg-pwded" class="form-control inline">
 										<span>请再次输入密码</span> </li>
 									<li>
 										<label for="reg-union">频道ID</label>
-										<input type="text" name="userunion" id="reg-union">
+										<input type="text" name="userunion" id="reg-union" class="form-control inline">
 										<span>2-10位字符：数字</span> </li>
 									<li>
 										<label for="reg-verify">验证码</label>
-										<input type="text" name="verify" id="reg-verify">
+										<input type="text" name="verify" id="reg-verify" class="form-control inline">
 										<img src="{|U('Index/Register/code')}" width="99" height="35" alt="验证码" id="verify-img">
 										<span>请输入图中的字母或数字，不区分大小写</span>
 									</li>
@@ -107,11 +107,11 @@
 							<ul>
 								<li>
 									<label for="login-acc">账号</label>
-									<input type="text" name="username" class="input" id="login-acc">
+									<input type="text" name="username" id="login-acc" class="form-control inline input">
 								</li>
 								<li>
 									<label for="login-pwd">密码</label>
-									<input type="password" name="pwd" class="input" id="login-pwd">
+									<input type="password" name="pwd" id="login-pwd" class="form-control inline input">
 								</li>
 								<li class="login-auto">
 									<label for="auto-login">

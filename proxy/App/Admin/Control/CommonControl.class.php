@@ -43,7 +43,7 @@ class CommonControl extends AuthControl{
 	 * 修改配置项
 	 */
 	public function edit(){
-		$path = COMMON_PATH . "config/" . Q ( "post.config" ) . ".php";
+		$path = COMMON_PATH . "Config/" . Q ( "post.config" ) . ".php";
 		//p(include $path);
 		unset($_POST["config"]);
 		$post = Q("post.");

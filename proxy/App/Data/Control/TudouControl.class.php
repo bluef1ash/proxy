@@ -7,16 +7,20 @@ class TudouControl extends CommonControl {
 	 * 默认执行
 	 */
 	public function index() {
-		header ( 'Content-type:text/xml;charset:utf-8;filename:土豆代理.xml' ); // 定义文件头
+		header ( "Content-type:text/xml;charset:utf-8;filename:土豆代理.xml" ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
 		if ( $id = Q ( "get.id" )) {
 			$xml = $this->cache_collect("tudou_" . $id);
-			if ($xml != 1 && !$xml) {
+			if ($xml != 1 && $xml) {
 				echo $xml;
 			}else{
 				$xml = $this->GetVideoId($id);
 				$xml = $xml["xml"];
-				$this->cache_collect($id, 1, $xml, "tudou_");
+				if ($cachetime = Q("get.cachetime", null, "intval")){
+					$this->cache_collect($id, 1, $xml, "tudou_", "file", $cachetime, ROOT_PATH . "Cache/Auto");
+				} else {
+					$this->cache_collect($id, 1, $xml, "tudou_");
+				}
 				echo $xml;
 			}
 		} elseif (Q ( "get.page" )) { // 是否向地址栏传递PAGE参数
@@ -48,7 +52,7 @@ class TudouControl extends CommonControl {
 	/**
 	 * 生成列表
 	 * @param  string $vid 视频ID
-	 * @return array     视频列表及视频名称
+	 * @return array 视频列表及视频名称
 	 */
 	public function listpage($vid){
 		$ids = explode('_', $vid);
@@ -81,7 +85,7 @@ class TudouControl extends CommonControl {
 				}
 			}
 		}
-		return array("xml"=>"<list>\n".$xml.'</list>',"vName"=>$vName);
+		return array("xml" => "<list>\n" . $xml . '</list>', "lists" => $xml, "vName"=>$vName);
 	}
 	/**
 	 * 判断视频类型

@@ -1,0 +1,65 @@
+<load file="__PUBLIC__/header.html">
+		<title>频道列表</title>
+		<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/public.css">
+		<script type="text/javascript" src="__PUBLIC__/Js/jquery.zclip.min.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/Js/public.js"></script>
+	</head>
+	<body>
+		<table class="tab">
+			<tr>
+				<td class="th" colspan="20">频道列表</td>
+			</tr>
+			<tr class="tableTop">
+				<td class="tdLittle1">ID</td>
+				<td>顶级频道样式</td>
+				<td>顶级频道空格数</td>
+				<td>下级频道样式</td>
+				<td>下级频道空格数</td>
+				<td>所属频道ID</td>
+				<td>操作</td>
+			</tr>
+			<list from="$union[0]" name="n">
+				<tr>
+					<td>{$n.unid}</td>
+					<td>{$n.top_style}</td>
+					<td>{$n.top_number}</td>
+					<td>{$n.down_style}</td>
+					<td>{$n.down_number}</td>
+					<td>{$n.uuid}</td>
+					<td>
+						<a href="{|U('Admin/Union/add', array('unid'=>$n['unid']))}" class="alter">修改</a>
+						<a href="{|U('Admin/Union/delete', array('unid'=>$n['unid']))}" class="del">删除</a>
+					</td>
+				</tr>
+			</list>
+		</table>
+		<div class="page">
+			共{$union[1]}条 &nbsp;
+			{$union[2]}
+		</div>
+		<!-- 弹出分类框开始 -->
+		<div id="category">
+			<p class="title">
+				<span>请选择分类</span>
+				<a href="" class="close-window"></a>
+			</p>
+			<form action="{|U('Admin/Lists/move')}">
+				<div class="sel">
+					<p>选择一个合适的分类：</p>
+					<select name="cate-one" size="16">
+						<list from="$categorytop" name="n">
+							<option value="{$n.entitle}">{$n.cntitle}</option>
+						</list>
+					</select>
+					<select name="cate-two" size="16" class="hidden"></select>
+				</div>
+				<p class="bottom">
+					<input type="hidden" name="vid" value="">
+					<input type="submit" id="ok" value="移动">
+				</p>
+			</form>
+		</div>
+		<div id="background"></div>
+		<!-- 弹出分类框结束 -->
+	</body>
+</html>

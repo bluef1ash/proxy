@@ -1,25 +1,67 @@
 <load file="__PUBLIC__/header.html">
 		<title>视频列表</title>
+		<style type="text/css">
+			#content{
+				height: 300px;
+				width: 99%;
+			}
+		</style>
 		<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/move.css">
 		<link rel="stylesheet" type="text/css" href="__PUBLIC__/Css/public.css">
 		<script type="text/javascript" src="__PUBLIC__/Js/jquery.zclip.min.js"></script>
 		<script type="text/javascript" src="__PUBLIC__/Js/public.js"></script>
 		<script type="text/javascript" src="__ROOT__/Player/Cmp/cmp.js"></script>
 		<script type="text/javascript" src="__PUBLIC__/Js/move.js"></script>
-		<script type="text/javascript">
-			$(function(){
-				$(".play").click(function(){
-					var list_website = "$hd.config.LIST_WEBSITE";
-					var list_fix = "$hd.co.fig.LIST_FIX";
-					var ptr = $(this).parents("tr");
-					var path = list_website + ptr.children("td:nth-child(6)").html() + ptr.children("td:nth-child(3)").html() + list_fix;
-					path = path.replace(/<wbr>/ig,"");
-					play(path,0);
-				});
-			});
-		</script>
 		<script type="text/javascript" src="__PUBLIC__/Js/cmp.js"></script>
 		<script type="text/javascript" src="__PUBLIC__/Js/copy.js"></script>
+		<if value="$hd.get.vid">
+			<script type="text/javascript">
+				$(function () {
+					var cachetime = {$result.cachetime};
+					var cache_select = $("select[name='cachetime']");
+					switch(cachetime){
+						case -1:
+							cache_select.val(-1);
+						break;
+						case 5:
+							cache_select.val(5);
+						break;
+						case 10:
+							cache_select.val(10);
+						break;
+						case 30:
+							cache_select.val(30);
+						break;
+						case 60:
+							cache_select.val(60);
+						break;
+						case 90:
+							cache_select.val(90);
+						break;
+						case 360:
+							cache_select.val(360);
+						break;
+						case 720:
+							cache_select.val(720);
+						break;
+						case 1440:
+							cache_select.val(1440);
+						break;
+						case 4320:
+							cache_select.val(4320);
+						break;
+						case 7200:
+							cache_select.val(7200);
+						break;
+						case 10080:
+							cache_select.val(10080);
+						break;
+						default:
+							cache_select.val(0);
+					}
+				});
+			</script>
+		</if>
 	</head>
 	<body>
 		<table class="tab">
@@ -29,27 +71,64 @@
 				</tr>
 			</thead>
 			<tbody>
-				<form action="{|U('Admin/Lists/add')}" method="post">
+				<form action="{|U('Admin/Lists/alter')}" method="post">
+					<if value="$result.cnname">
+						<tr>
+							<td width="8%">影片名称：</td>
+							<td><input type="text" name="vname" value="{$result.cnname}"></td>
+						</tr>
+					<else/>
+						<tr>
+							<td width="8%">影片名称：</td>
+							<td><input type="text" name="vname" value=""></td>
+						</tr>
+						<tr>
+							<td width="8%">影片分类：</td>
+							<td>
+								<select name="cate-one">
+									<option value="0">请选择分类</option>
+									<list from="$categorytop" name="n">
+										<option value="$n.entitle">{$n.cntitle}</option>
+									</list>
+								</select>
+								<select name="cate-two" class="hidden"></select>
+							</td>
+						</tr>
+					</if>
 					<tr>
-						<td width="8%">影片名称：</td>
-						<td><input type="text" name="vname" value=""></td>
-					</tr>
-					<tr>
-						<td width="8%">影片分类：</td>
+						<td width="8%">影片缓存：</td>
 						<td>
-							<select name="cate-one">
-								<option value="0">请选择分类</option>
-								<list from="$categorytop" name="n">
-									<option value="{$n.entitle}">{$n.cntitle}</option>
-								</list>
+							<select name="cachetime">
+								<option value="0">不缓存</option>
+								<option value="5">5分钟</option>
+								<option value="10">10分钟</option>
+								<option value="30">30分钟</option>
+								<option value="60">1小时</option>
+								<option value="90">2小时</option>
+								<option value="360">6小时</option>
+								<option value="720">12小时</option>
+								<option value="1440">24小时</option>
+								<option value="4320">3天</option>
+								<option value="7200">5天</option>
+								<option value="10080">7天</option>
+								<option value="-1">永久</option>
 							</select>
-							<select name="cate-two" class="hidden"></select>
 						</td>
 					</tr>
-					<tr>
-						<td width="8%">影片内容：</td>
-						<td><ueditor name="xml"></td>
-					</tr>
+					<if value="$hd.get.vid">
+						<tr>
+							<td width="8%">
+								影片内容：
+								<input type="hidden" name="vid" value="{$hd.get.vid}">
+							</td>
+							<td><textarea name="xml" id="content">{$result.content}</textarea></td>
+						</tr>
+					<else/>
+						<tr>
+							<td width="8%">影片内容：</td>
+							<td><textarea name="xml" id="content"></textarea></td>
+						</tr>
+					</if>
 					<tr>
 						<td colspan="2" align="center">
 							<input type="submit" class="input_button" value="上传">

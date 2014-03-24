@@ -7,16 +7,20 @@ class PpsControl extends CommonControl {
 	 * 默认执行
 	 */
 	public function index() {
-		header ( 'Content-type:text/xml;charset:utf-8;filename:PPS代理.xml' ); // 定义文件头
+		header ( "Content-type:text/xml;charset:utf-8;filename:PPS代理.xml" ); // 定义文件头
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"; // 输出XML格式
 		if ( $id = Q ( "get.id" )) {
 			$xml = $this->cache_collect("pps_" . $id);
-			if ($xml != 1 && !$xml) {
+			if ($xml != 1 && $xml) {
 				echo $xml;
 			}else{
 				$xml = $this->listpage($id);
 				$xml = $xml["xml"];
-				$this->cache_collect($id, 1, $xml, "pps_");
+				if ($cachetime = Q("get.cachetime", null, "intval")){
+					$this->cache_collect($id, 1, $xml, "pps_", "file", $cachetime, ROOT_PATH . "Cache/Auto");
+				} else {
+					$this->cache_collect($id, 1, $xml, "pps_");
+				}
 				echo $xml;
 			}
 		} elseif (Q ( "get.page" )) { // 是否向地址栏传递PAGE参数
@@ -46,15 +50,22 @@ class PpsControl extends CommonControl {
 	 */
 	public function single($sid) {
 		$interface = file_data ( 'http://dp.ugc.pps.tv/get_play_url_cdn.php?sid=' . $sid . '&flash_type=1' );
-		preg_match ( '#(.*)\?hd=\d+&all=\d+&title=(.*)&vtypeid#iUs', $interface, $arr );
+		preg_match ( '/(.*)\?hd=\d+&all=\d+&title=(.*)&vtypeid/iUs', $interface, $arr );
 		$vName = $arr [2];
-		$xml = '<m type="" src="' . $arr [1] . '?start={start_bytes}" stream="true" label="' . $vName . "\" />\n";
-		return array("xml"=>$xml,"vName"=>$vName);
+		if (strpos($arr[1], ".pfv") > -1) {
+			$src = $arr[1] . "?";
+		} else {
+			$json = json_decode(file_data($arr[1]));
+			$tvid = $json->tvid;
+			$src = A("Data/Iqiyi/single", array($tvid)) . "&";
+		}
+		$xml = '<m type="" src="' . $src . 'start={start_bytes}" stream="true" label="' . $vName . "\" />\n";
+		return array("xml" => $xml,"vName" => $vName);
 	}
 	/**
 	 * 生成列表
 	 * @param  string $id 视频ID
-	 * @return array     视频列表及视频名称
+	 * @return array 视频列表及视频名称
 	 */
 	public function listpage($id) {
 		if (preg_match("/^\d+$/iUs", $id)){
@@ -83,7 +94,7 @@ class PpsControl extends CommonControl {
 			$xml = $interface["xml"];
 			$vName = $interface["vName"];
 		}
-		return array("xml"=>"<list>\n" . $xml . '</list>',"vName"=>$vName);
+		return array("xml" => "<list>\n" . $xml . '</list>', "lists" => $xml, "vName"=>$vName);
 	}
 }
 ?>
